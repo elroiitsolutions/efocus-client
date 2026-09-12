@@ -123,8 +123,8 @@ export default function Footer() {
   ]
 
   return (
-    <footer className="bg-[#121214] text-[#ffffff] pt-[72px] pb-8 border-t border-[#222226]">
-      <div className="max-w-[1380px] mx-auto px-6">
+    <footer className="bg-[#121214] text-[#ffffff] pt-[36px] pb-0 border-t border-[#222226]">
+      <div className="site-container">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Column 1: About & Contact */}
           <div className="flex flex-col gap-6">
@@ -139,38 +139,38 @@ export default function Footer() {
 
             <div className="flex flex-col gap-3 text-[14px]">
               <div className="flex items-center gap-2">
-                <Mail size={16} className="text-[#B20602]" />
+                <Mail size={16} className="text-[#c8102e]" />
                 <span>
                   <strong>Sales Email:</strong>{" "}
                   <a
                     href="mailto:chandruravichandran1536@gmail.com"
-                    className="hover:text-[#B20602] transition-colors"
+                    className="hover:text-[#c8102e] transition-colors"
                   >
                     chandruravichandran1536@gmail.com
                   </a>
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <Phone size={16} className="text-[#B20602]" />
+                <Phone size={16} className="text-[#c8102e]" />
                 <span>
                   <strong>Phone / WhatsApp:</strong>{" "}
                   <a
                     href="tel:+917397242650"
-                    className="hover:text-[#B20602] transition-colors"
+                    className="hover:text-[#c8102e] transition-colors"
                   >
                     +91 7397 242 650
                   </a>
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <Globe size={16} className="text-[#B20602]" />
+                <Globe size={16} className="text-[#c8102e]" />
                 <span>
                   <strong>Web Catalogue:</strong>{" "}
                   <a
                     href="https://efocusinds.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-[#B20602] transition-colors"
+                    className="hover:text-[#c8102e] transition-colors"
                   >
                     efocusinds.com
                   </a>
@@ -183,21 +183,21 @@ export default function Footer() {
               <a
                 href="#"
                 aria-label="LinkedIn"
-                className="hover:text-[#B20602] transition-colors"
+                className="hover:text-[#c8102e] transition-colors"
               >
                 <Linkedin size={20} />
               </a>
               <a
                 href="#"
                 aria-label="Twitter"
-                className="hover:text-[#B20602] transition-colors"
+                className="hover:text-[#c8102e] transition-colors"
               >
                 <Twitter size={20} />
               </a>
               <a
                 href="#"
                 aria-label="YouTube"
-                className="hover:text-[#B20602] transition-colors"
+                className="hover:text-[#c8102e] transition-colors"
               >
                 <Youtube size={20} />
               </a>
@@ -213,7 +213,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/categories/smt-rework-assembly"
-                  className="hover:text-[#B20602] transition-colors"
+                  className="hover:text-[#c8102e] transition-colors"
                 >
                   SMT, Rework & Assembly
                 </Link>
@@ -221,7 +221,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/categories/cables-connectivity"
-                  className="hover:text-[#B20602] transition-colors"
+                  className="hover:text-[#c8102e] transition-colors"
                 >
                   Cables & Connectivity
                 </Link>
@@ -229,7 +229,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/categories/tools-mro"
-                  className="hover:text-[#B20602] transition-colors"
+                  className="hover:text-[#c8102e] transition-colors"
                 >
                   Tools & MRO
                 </Link>
@@ -237,7 +237,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/categories/power-electrical"
-                  className="hover:text-[#B20602] transition-colors"
+                  className="hover:text-[#c8102e] transition-colors"
                 >
                   Power & Electrical
                 </Link>
@@ -245,7 +245,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/categories/esd-rf"
-                  className="hover:text-[#B20602] transition-colors"
+                  className="hover:text-[#c8102e] transition-colors"
                 >
                   ESD & RF Control
                 </Link>
@@ -253,7 +253,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/categories/testing-measurement"
-                  className="hover:text-[#B20602] transition-colors"
+                  className="hover:text-[#c8102e] transition-colors"
                 >
                   Testing & Measurement
                 </Link>
@@ -261,7 +261,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/custom-assembly"
-                  className="hover:text-[#B20602] transition-colors"
+                  className="hover:text-[#c8102e] transition-colors"
                 >
                   Custom Harness Builds
                 </Link>
@@ -276,35 +276,35 @@ export default function Footer() {
             </h4>
             <ul className="flex flex-col gap-3 text-[14px] text-[#777777]">
               <li>
-                <a href="#brochure" className="hover:text-[#B20602] transition-colors">
+                <a href="#brochure" className="hover:text-[#c8102e] transition-colors">
                   2026 Product Brochure
                 </a>
               </li>
               <li>
-                <Link to="/products" className="hover:text-[#B20602] transition-colors">
+                <Link to="/products" className="hover:text-[#c8102e] transition-colors">
                   Single-Vendor Procurement
                 </Link>
               </li>
               <li>
                 <Link
                   to="/custom-assembly"
-                  className="hover:text-[#B20602] transition-colors"
+                  className="hover:text-[#c8102e] transition-colors"
                 >
                   Custom Build Request
                 </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-[#B20602] transition-colors">
+                <a href="#" className="hover:text-[#c8102e] transition-colors">
                   Datasheets & Compliance
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-[#B20602] transition-colors">
+                <a href="#" className="hover:text-[#c8102e] transition-colors">
                   Terms & Conditions
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-[#B20602] transition-colors">
+                <a href="#" className="hover:text-[#c8102e] transition-colors">
                   Privacy Policy
                 </a>
               </li>
@@ -326,12 +326,12 @@ export default function Footer() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your business email..."
                 required
-                className="w-full bg-[#1a1a1e] border border-[#222226] rounded-[6px] px-4 py-3 text-[14px] outline-none text-white focus:border-[#B20602] transition-colors"
+                className="w-full bg-[#1a1a1e] border border-[#222226] rounded-[6px] px-4 py-3 text-[14px] outline-none text-white focus:border-[#c8102e] transition-colors"
                 aria-label="Enter email for quote consolidation"
               />
               <button
                 type="submit"
-                className="bg-[#B20602] hover:bg-[#900502] text-white py-3 rounded-[6px] text-[14px] font-bold transition-colors cursor-pointer"
+                className="bg-[#c8102e] hover:bg-[#a80c25] text-white py-3 rounded-[6px] text-[14px] font-bold transition-colors cursor-pointer"
               >
                 Submit Line List
               </button>
@@ -340,8 +340,8 @@ export default function Footer() {
         </div>
 
         {/* ─── Our Valuable Clients Ticker ─── */}
-        <div className="mt-16 pt-8 border-t border-[#1a1a1e]">
-          <div className="text-center mb-6">
+        <div className="mt-1 pt-6 border-t border-[#1a1a1e]">
+          <div className="text-center mb-4">
             <h4 className="text-[12px] font-bold tracking-[0.2em] text-[#777777] uppercase font-hero-heading">
               Our Valuable Clients
             </h4>
@@ -366,7 +366,7 @@ export default function Footer() {
         </div>
 
         {/* Footer Bottom */}
-        <div className="mt-12 pt-8 border-t border-[#1a1a1e] flex flex-col sm:flex-row justify-between items-center gap-4 text-[13px] text-[#777777]">
+        <div className="mt-10 pt-4 border-t border-[#1a1a1e] flex flex-col sm:flex-row justify-between items-center gap-4 text-[13px] text-[#777777]">
           <div>
             &copy; 2026 eFOCUS Industrial Solutions. All Rights Reserved. CAT. No. EF-2026/CI
           </div>
@@ -375,14 +375,14 @@ export default function Footer() {
             <strong>
               <a
                 href="mailto:chandruravichandran1536@gmail.com"
-                className="text-white hover:text-[#B20602]"
+                className="text-white hover:text-[#c8102e]"
               >
                 chandruravichandran1536@gmail.com
               </a>
             </strong>{" "}
             |{" "}
             <strong>
-              <a href="tel:+917397242650" className="text-white hover:text-[#B20602]">
+              <a href="tel:+917397242650" className="text-white hover:text-[#c8102e]">
                 +91 7397 242 650
               </a>
             </strong>

@@ -88,8 +88,8 @@ export default function QuoteDrawer() {
         <SheetHeader className="px-5 pt-5 pb-4 border-b border-[#eaeaea] shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-full bg-[#FFF0F0] flex items-center justify-center">
-                <ShoppingBag size={18} className="text-[#B20602]" />
+              <div className="w-9 h-9 rounded-full bg-[#FFF1F2] flex items-center justify-center">
+                <ShoppingBag size={18} className="text-[#c8102e]" />
               </div>
               <div>
                 <SheetTitle className="text-[18px] font-bold text-[#222222] leading-tight">
@@ -127,7 +127,7 @@ export default function QuoteDrawer() {
               </p>
               <button
                 onClick={closeDrawer}
-                className="bg-[#B20602] hover:bg-[#900502] text-white px-5 py-2.5 rounded-lg text-[13px] font-bold transition-colors cursor-pointer"
+                className="bg-[#c8102e] hover:bg-[#a80c25] text-white px-5 py-2.5 rounded-lg text-[13px] font-bold transition-colors cursor-pointer"
               >
                 Explore Stocked Lines
               </button>
@@ -143,13 +143,13 @@ export default function QuoteDrawer() {
                   <div className="flex items-center justify-between mb-1.5">
                     <Badge
                       variant="outline"
-                      className="text-[10.5px] font-bold text-[#B20602] border-[#B20602]/30 bg-[#FFF0F0] px-2 py-0 h-5 rounded-full uppercase tracking-wider"
+                      className="text-[10.5px] font-bold text-[#c8102e] border-[#c8102e]/30 bg-[#FFF1F2] px-2 py-0 h-5 rounded-full uppercase tracking-wider"
                     >
                       {item.code}
                     </Badge>
                     <button
                       onClick={() => removeItem(item.id)}
-                      className="text-[#bbbbbb] hover:text-[#B20602] transition-colors p-0.5 cursor-pointer"
+                      className="text-[#bbbbbb] hover:text-[#c8102e] transition-colors p-0.5 cursor-pointer"
                       title="Remove item"
                     >
                       <Trash2 size={14} />
@@ -208,7 +208,7 @@ export default function QuoteDrawer() {
               {items.length > 1 && (
                 <button
                   onClick={clearQuote}
-                  className="text-[12px] text-[#999999] hover:text-[#B20602] transition-colors self-end mt-1 cursor-pointer font-medium"
+                  className="text-[12px] text-[#999999] hover:text-[#c8102e] transition-colors self-end mt-1 cursor-pointer font-medium"
                 >
                   Clear all items
                 </button>
@@ -227,7 +227,7 @@ export default function QuoteDrawer() {
               </p>
               <div className="flex flex-col gap-1">
                 <label className="text-[12px] font-semibold text-[#333333]">
-                  Full Name <span className="text-[#B20602]">*</span>
+                  Full Name <span className="text-[#c8102e]">*</span>
                 </label>
                 <input
                   type="text"
@@ -236,12 +236,12 @@ export default function QuoteDrawer() {
                   onChange={handleChange}
                   placeholder="John Doe"
                   required
-                  className="bg-white border border-[#d1d5db] rounded-lg px-3 py-2 text-[13px] outline-none focus:border-[#B20602] focus:ring-1 focus:ring-[#B20602]/20 transition-all"
+                  className="bg-white border border-[#d1d5db] rounded-lg px-3 py-2 text-[13px] outline-none focus:border-[#c8102e] focus:ring-1 focus:ring-[#c8102e]/20 transition-all"
                 />
               </div>
               <div className="flex flex-col gap-1">
                 <label className="text-[12px] font-semibold text-[#333333]">
-                  Work Email <span className="text-[#B20602]">*</span>
+                  Work Email <span className="text-[#c8102e]">*</span>
                 </label>
                 <input
                   type="email"
@@ -250,12 +250,12 @@ export default function QuoteDrawer() {
                   onChange={handleChange}
                   placeholder="john@company.com"
                   required
-                  className="bg-white border border-[#d1d5db] rounded-lg px-3 py-2 text-[13px] outline-none focus:border-[#B20602] focus:ring-1 focus:ring-[#B20602]/20 transition-all"
+                  className="bg-white border border-[#d1d5db] rounded-lg px-3 py-2 text-[13px] outline-none focus:border-[#c8102e] focus:ring-1 focus:ring-[#c8102e]/20 transition-all"
                 />
               </div>
               <div className="flex flex-col gap-1">
                 <label className="text-[12px] font-semibold text-[#333333]">
-                  Company / EMS Name <span className="text-[#B20602]">*</span>
+                  Company / EMS Name <span className="text-[#c8102e]">*</span>
                 </label>
                 <input
                   type="text"
@@ -264,13 +264,13 @@ export default function QuoteDrawer() {
                   onChange={handleChange}
                   placeholder="Acme Electronics Ltd."
                   required
-                  className="bg-white border border-[#d1d5db] rounded-lg px-3 py-2 text-[13px] outline-none focus:border-[#B20602] focus:ring-1 focus:ring-[#B20602]/20 transition-all"
+                  className="bg-white border border-[#d1d5db] rounded-lg px-3 py-2 text-[13px] outline-none focus:border-[#c8102e] focus:ring-1 focus:ring-[#c8102e]/20 transition-all"
                 />
               </div>
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-[#B20602] hover:bg-[#900502] text-white py-3 rounded-lg text-[13.5px] font-bold transition-colors cursor-pointer flex items-center justify-center gap-2 mt-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-[#c8102e] hover:bg-[#a80c25] text-white py-3 rounded-lg text-[13.5px] font-bold transition-colors cursor-pointer flex items-center justify-center gap-2 mt-1 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? (
                   <span>Submitting...</span>

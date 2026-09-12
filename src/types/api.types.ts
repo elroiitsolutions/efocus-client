@@ -8,6 +8,7 @@ export interface NavSubcategory {
   id: number
   name: string
   description: string | null
+  families?: { id: number; name: string; product_count: number }[]
   featured_products: NavFeaturedProduct[]
 }
 

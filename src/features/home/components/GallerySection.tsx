@@ -24,7 +24,7 @@ export default function GallerySection() {
 
   return (
     <section className="py-16 bg-[#f9f9fb]">
-      <div className="max-w-[1380px] mx-auto px-6">
+      <div className="site-container">
         {/* Section Header */}
         <div className="text-center max-w-[750px] mx-auto mb-12">
           <h2 className="font-heading text-3xl font-extrabold text-[#222222] tracking-tight">

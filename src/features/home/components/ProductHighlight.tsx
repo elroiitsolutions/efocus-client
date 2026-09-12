@@ -27,7 +27,7 @@ export default function ProductHighlight() {
 
   const insulationOptions = [
     { name: "Standard Flat Ribbon", colorClass: "bg-gray-400" },
-    { name: "Rose Accent Line", colorClass: "bg-[#B20602]" },
+    { name: "Rose Accent Line", colorClass: "bg-[#c8102e]" },
     { name: "High-Temp Black Silicone", colorClass: "bg-gray-800" },
     { name: "Shielded Braided Sleeving", colorClass: "bg-slate-500" },
   ]
@@ -48,12 +48,12 @@ export default function ProductHighlight() {
   }
 
   return (
-    <section className="py-16 max-w-[1380px] mx-auto px-4 sm:px-6" id="custom-highlight">
+    <section className="site-container py-16" id="custom-highlight">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 bg-white rounded-[16px] border border-[#eaeaea] p-4 sm:p-6 lg:p-10 shadow-sm">
         {/* Left Side: Thumbnail Slider */}
         <div className="flex flex-col gap-4">
           <div className="relative aspect-square w-full rounded-[10px] border border-[#eaeaea] overflow-hidden bg-gray-50 flex items-center justify-center p-6">
-            <span className="absolute top-4 left-4 bg-[#B20602] text-white text-[10px] font-bold px-2.5 py-1 rounded-[4px] tracking-wider uppercase">
+            <span className="absolute top-4 left-4 bg-[#c8102e] text-white text-[10px] font-bold px-2.5 py-1 rounded-[4px] tracking-wider uppercase">
               SPEC BUILT
             </span>
             <img
@@ -73,7 +73,7 @@ export default function ProductHighlight() {
                 key={idx}
                 onClick={() => setActiveThumb(idx)}
                 className={`aspect-square rounded-[6px] border-2 cursor-pointer overflow-hidden p-2 flex items-center justify-center bg-gray-50 ${
-                  activeThumb === idx ? "border-[#B20602]" : "border-[#eaeaea] hover:border-gray-400"
+                  activeThumb === idx ? "border-[#c8102e]" : "border-[#eaeaea] hover:border-gray-400"
                 }`}
               >
                 <img
@@ -128,7 +128,7 @@ export default function ProductHighlight() {
                     onClick={() => setAssemblyType(opt)}
                     className={`px-4 py-2 rounded-[6px] text-[12.8px] font-bold border transition-colors cursor-pointer ${
                       assemblyType === opt
-                        ? "bg-[#B20602] border-[#B20602] text-white"
+                        ? "bg-[#c8102e] border-[#c8102e] text-white"
                         : "bg-[#f4f5f8] border-[#eaeaea] text-[#555555] hover:border-gray-400"
                     }`}
                   >
@@ -150,7 +150,7 @@ export default function ProductHighlight() {
                       key={opt.name}
                       onClick={() => setInsulation(opt.name)}
                       className={`w-7 h-7 rounded-full border-2 cursor-pointer ${opt.colorClass} ${
-                        insulation === opt.name ? "border-[#B20602] scale-110" : "border-transparent"
+                        insulation === opt.name ? "border-[#c8102e] scale-110" : "border-transparent"
                       }`}
                       title={opt.name}
                     />
@@ -190,7 +190,7 @@ export default function ProductHighlight() {
 
               <button
                 onClick={handleAddToQuote}
-                className="bg-[#B20602] hover:bg-[#900502] text-white px-6 py-3 rounded-[6px] text-[14px] font-bold transition-colors cursor-pointer flex-1"
+                className="bg-[#c8102e] hover:bg-[#a80c25] text-white px-6 py-3 rounded-[6px] text-[14px] font-bold transition-colors cursor-pointer flex-1"
               >
                 Request Custom Build Quote
               </button>
@@ -199,15 +199,15 @@ export default function ProductHighlight() {
             {/* Bullets lists */}
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2 text-[13px] text-[#555555]">
-                <Check size={16} className="text-[#B20602]" strokeWidth={3} />
+                <Check size={16} className="text-[#c8102e]" strokeWidth={3} />
                 <span>Single-Vendor Procurement — zero split orders</span>
               </div>
               <div className="flex items-center gap-2 text-[13px] text-[#555555]">
-                <Check size={16} className="text-[#B20602]" strokeWidth={3} />
+                <Check size={16} className="text-[#c8102e]" strokeWidth={3} />
                 <span>100% Continuity, Hipot & Pinout Verifications</span>
               </div>
               <div className="flex items-center gap-2 text-[13px] text-[#555555]">
-                <Check size={16} className="text-[#B20602]" strokeWidth={3} />
+                <Check size={16} className="text-[#c8102e]" strokeWidth={3} />
                 <span>Dispatched fast with batch traceability labels</span>
               </div>
             </div>

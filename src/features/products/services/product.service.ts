@@ -109,6 +109,21 @@ export const mockProducts: Product[] = [
     category_name: "ESD & RF",
     rfq_eligible: true,
   },
+  {
+    id: 99,
+    sku: "MAC-ADDR-MEDIUM",
+    catalog_number: "MAC-ADDR-MEDIUM",
+    product_name: "MAC Address Block Medium (MA-M)",
+    brand: "IEEE",
+    short_description: "IEEE-assigned MAC address block for product identification",
+    key_spec_1: "Block Size: 4096 addresses",
+    key_spec_2: "Application: Network device ID",
+    key_spec_3: "Issued By: IEEE",
+    category_name: "Labelling & Identification",
+    family_name: "MAC Address Blocks",
+    rfq_eligible: true,
+    stock_status: "in_stock",
+  },
 ]
 
 export interface GetProductsParams {
@@ -117,6 +132,8 @@ export interface GetProductsParams {
   subcategory?: string
   family?: string
   brand?: string
+  stock_status?: string
+  filter_options?: string
   page?: number
   limit?: number
 }
@@ -253,14 +270,24 @@ export class ProductService {
     }
   }
 
-  static async getBrands(): Promise<string[]> {
+  static async getBrands(params?: { category?: string; subcategory?: string; family?: string }): Promise<string[]> {
     try {
-      const response = await apiClient.get(`${API_ENDPOINTS.PRODUCTS}/brands`)
+      const response = await apiClient.get(`${API_ENDPOINTS.PRODUCTS}/brands`, { params })
       return response.data.data || response.data
     } catch (error) {
       console.warn("Failed to fetch brands from server, returning local mock brands", error)
       const brands = mockProducts.map(p => p.brand).filter(Boolean)
       return Array.from(new Set(brands)) as string[]
+    }
+  }
+
+  static async getContextualFilters(params: { category?: string; subcategory?: string; family?: string }) {
+    try {
+      const response = await apiClient.get(`${API_ENDPOINTS.FILTERS}/context`, { params })
+      return (response.data.data || response.data || []) as import("../types/product.types").ContextFilter[]
+    } catch (error) {
+      console.warn("Failed to fetch contextual filters from server", error)
+      return []
     }
   }
 

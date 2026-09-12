@@ -83,14 +83,14 @@ export default function ContactPage() {
               </h3>
 
               <div className="flex gap-4">
-                <div className="w-10 h-10 bg-[#FFF0F0] text-[#B20602] rounded-full flex items-center justify-center shrink-0">
+                <div className="w-10 h-10 bg-[#FFF1F2] text-[#c8102e] rounded-full flex items-center justify-center shrink-0">
                   <Mail size={18} />
                 </div>
                 <div>
                   <h4 className="text-[14px] font-bold text-[#222222]">Direct Email</h4>
                   <a
                     href="mailto:chandruravichandran1536@gmail.com"
-                    className="text-[13px] text-[#555555] font-semibold hover:text-[#B20602]"
+                    className="text-[13px] text-[#555555] font-semibold hover:text-[#c8102e]"
                   >
                     chandruravichandran1536@gmail.com
                   </a>
@@ -98,14 +98,14 @@ export default function ContactPage() {
               </div>
 
               <div className="flex gap-4">
-                <div className="w-10 h-10 bg-[#FFF0F0] text-[#B20602] rounded-full flex items-center justify-center shrink-0">
+                <div className="w-10 h-10 bg-[#FFF1F2] text-[#c8102e] rounded-full flex items-center justify-center shrink-0">
                   <Phone size={18} />
                 </div>
                 <div>
                   <h4 className="text-[14px] font-bold text-[#222222]">Phone / WhatsApp</h4>
                   <a
                     href="tel:+917397242650"
-                    className="text-[13px] text-[#555555] font-semibold hover:text-[#B20602]"
+                    className="text-[13px] text-[#555555] font-semibold hover:text-[#c8102e]"
                   >
                     +91 7397 242 650
                   </a>
@@ -113,7 +113,7 @@ export default function ContactPage() {
               </div>
 
               <div className="flex gap-4">
-                <div className="w-10 h-10 bg-[#FFF0F0] text-[#B20602] rounded-full flex items-center justify-center shrink-0">
+                <div className="w-10 h-10 bg-[#FFF1F2] text-[#c8102e] rounded-full flex items-center justify-center shrink-0">
                   <MapPin size={18} />
                 </div>
                 <div>
@@ -143,7 +143,7 @@ export default function ContactPage() {
           {/* Right Message Form */}
           <div className="lg:col-span-7 bg-white rounded-[10px] border border-[#eaeaea] p-4 sm:p-6 lg:p-10 shadow-sm">
             <h3 className="font-heading text-[18px] font-bold text-[#222222] border-b border-[#eaeaea] pb-4 flex items-center gap-2 mb-6">
-              <MessageSquare size={18} className="text-[#B20602]" />
+              <MessageSquare size={18} className="text-[#c8102e]" />
               <span>Send Message</span>
             </h3>
 
@@ -158,7 +158,7 @@ export default function ContactPage() {
                     onChange={handleChange}
                     placeholder="Your Name"
                     required
-                    className="w-full bg-[#f4f5f8] border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#B20602]"
+                    className="w-full bg-[#f4f5f8] border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#c8102e]"
                   />
                 </div>
                 <div className="flex flex-col gap-1">
@@ -170,7 +170,7 @@ export default function ContactPage() {
                     onChange={handleChange}
                     placeholder="you@company.com"
                     required
-                    className="w-full bg-[#f4f5f8] border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#B20602]"
+                    className="w-full bg-[#f4f5f8] border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#c8102e]"
                   />
                 </div>
               </div>
@@ -184,7 +184,7 @@ export default function ContactPage() {
                   onChange={handleChange}
                   placeholder="e.g. Custom RF cable assembly quote request"
                   required
-                  className="w-full bg-[#f4f5f8] border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#B20602]"
+                  className="w-full bg-[#f4f5f8] border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#c8102e]"
                 />
               </div>
 
@@ -197,14 +197,14 @@ export default function ContactPage() {
                   placeholder="Specify dimensions, connector requirements, or raw part references..."
                   rows={5}
                   required
-                  className="w-full bg-[#f4f5f8] border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#B20602]"
+                  className="w-full bg-[#f4f5f8] border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#c8102e]"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="bg-[#B20602] hover:bg-[#900502] text-white py-3 rounded-[6px] text-[14px] font-bold transition-colors cursor-pointer w-full mt-2 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-[#c8102e] hover:bg-[#a80c25] text-white py-3 rounded-[6px] text-[14px] font-bold transition-colors cursor-pointer w-full mt-2 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? (
                   <span>Sending...</span>

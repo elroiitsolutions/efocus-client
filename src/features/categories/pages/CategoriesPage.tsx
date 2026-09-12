@@ -28,7 +28,7 @@ export default function CategoriesPage() {
 
   return (
     <div className="bg-[#f9f9fb] min-h-screen py-16 text-left">
-      <div className="max-w-[1380px] mx-auto px-4 sm:px-6">
+      <div className="site-container">
         <div className="text-center max-w-[750px] mx-auto mb-12">
           <h1 className="font-heading text-4xl font-extrabold text-[#222222] tracking-tight">
             Product Categories
@@ -63,7 +63,7 @@ export default function CategoriesPage() {
                   </div>
                   <div className="p-5">
                     <div className="flex justify-between items-center">
-                      <span className="text-[11px] font-bold text-[#B20602] uppercase tracking-wider">
+                      <span className="text-[11px] font-bold text-[#c8102e] uppercase tracking-wider">
                         CAT {cat.category_no}
                       </span>
                       {cat.product_count !== undefined && (
@@ -72,7 +72,7 @@ export default function CategoriesPage() {
                         </span>
                       )}
                     </div>
-                    <h3 className="font-heading text-[16px] font-bold text-[#222222] mt-1 group-hover:text-[#B20602] transition-colors">
+                    <h3 className="font-heading text-[16px] font-bold text-[#222222] mt-1 group-hover:text-[#c8102e] transition-colors">
                       {cat.name}
                     </h3>
                   </div>

@@ -26,7 +26,21 @@ export interface Product {
   category_name?: string
   subcategory_name?: string
   family_name?: string
+  stock_status?: 'in_stock' | 'out_of_stock' | 'on_backorder'
   specs?: ProductSpec[]
+}
+
+export interface ContextFilterOption {
+  id: number
+  option_value: string
+  count: number
+}
+
+export interface ContextFilter {
+  filter_name: string
+  filter_type: string
+  family_names: string[]
+  options: ContextFilterOption[]
 }
 
 export interface Category {
@@ -50,4 +64,8 @@ export interface ProductFamily {
   subcategory_id: number
   name: string
   description?: string | null
+  subcategory_name?: string
+  category_name?: string
+  category_id?: number
+  product_count?: number
 }

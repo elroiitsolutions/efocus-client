@@ -21,7 +21,7 @@ export default function TrendingCollections() {
   const trendingCategories = categories?.slice(0, 6) || []
 
   return (
-    <section className="max-w-[1380px] mx-auto px-6 py-16">
+    <section className="site-container py-16">
       {/* Section Header */}
       <div className="text-center max-w-[750px] mx-auto mb-12">
         <h2 className="font-heading text-[32px] font-extrabold text-[#222222] tracking-tight">
@@ -35,7 +35,7 @@ export default function TrendingCollections() {
       {/* Loading indicator */}
       {isLoading && (
         <div className="flex justify-center py-12">
-          <Loader2 className="animate-spin text-[#B20602]" size={36} />
+          <Loader2 className="animate-spin text-[#c8102e]" size={36} />
         </div>
       )}
 
@@ -54,7 +54,7 @@ export default function TrendingCollections() {
             to={`/products?category=${slugify(col.name)}`}
             className="flex flex-col items-center text-center group cursor-pointer"
           >
-            <div className="w-[120px] h-[120px] rounded-full overflow-hidden border-2 border-transparent group-hover:border-[#B20602] transition-all bg-gray-50 flex items-center justify-center p-1.5 shadow-sm">
+            <div className="w-[120px] h-[120px] rounded-full overflow-hidden border-2 border-transparent group-hover:border-[#c8102e] transition-all bg-gray-50 flex items-center justify-center p-1.5 shadow-sm">
               <img
                 src={categoryImages[col.category_no] || "/images/cat_test_1785994197761.png"}
                 alt={col.name}
@@ -65,7 +65,7 @@ export default function TrendingCollections() {
                 }}
               />
             </div>
-            <h4 className="text-[14.4px] font-bold text-[#222222] mt-4 group-hover:text-[#B20602] transition-colors max-w-[150px] line-clamp-2">
+            <h4 className="text-[14.4px] font-bold text-[#222222] mt-4 group-hover:text-[#c8102e] transition-colors max-w-[150px] line-clamp-2">
               {col.name}
             </h4>
             <span className="text-[12px] text-[#777777] font-semibold mt-1">

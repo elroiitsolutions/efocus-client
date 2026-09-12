@@ -31,7 +31,7 @@ export default function AboutPage() {
         {/* Pillars grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           <div className="bg-white rounded-[10px] border border-[#eaeaea] p-6 shadow-sm">
-            <div className="w-12 h-12 bg-[#FFF0F0] text-[#B20602] rounded-full flex items-center justify-center mb-4">
+            <div className="w-12 h-12 bg-[#FFF1F2] text-[#c8102e] rounded-full flex items-center justify-center mb-4">
               <ShieldCheck size={24} />
             </div>
             <h3 className="font-heading text-[16.8px] font-bold text-[#222222]">
@@ -43,7 +43,7 @@ export default function AboutPage() {
           </div>
 
           <div className="bg-white rounded-[10px] border border-[#eaeaea] p-6 shadow-sm">
-            <div className="w-12 h-12 bg-[#FFF0F0] text-[#B20602] rounded-full flex items-center justify-center mb-4">
+            <div className="w-12 h-12 bg-[#FFF1F2] text-[#c8102e] rounded-full flex items-center justify-center mb-4">
               <Award size={24} />
             </div>
             <h3 className="font-heading text-[16.8px] font-bold text-[#222222]">
@@ -55,7 +55,7 @@ export default function AboutPage() {
           </div>
 
           <div className="bg-white rounded-[10px] border border-[#eaeaea] p-6 shadow-sm">
-            <div className="w-12 h-12 bg-[#FFF0F0] text-[#B20602] rounded-full flex items-center justify-center mb-4">
+            <div className="w-12 h-12 bg-[#FFF1F2] text-[#c8102e] rounded-full flex items-center justify-center mb-4">
               <Users size={24} />
             </div>
             <h3 className="font-heading text-[16.8px] font-bold text-[#222222]">
@@ -74,19 +74,19 @@ export default function AboutPage() {
           </h2>
           <ul className="flex flex-col gap-4">
             <li className="flex gap-3">
-              <Check className="text-[#B20602] mt-0.5 shrink-0" size={18} strokeWidth={3} />
+              <Check className="text-[#c8102e] mt-0.5 shrink-0" size={18} strokeWidth={3} />
               <span className="text-[14.4px] text-[#555555]">
                 <strong>Full Material Traceability:</strong> Certified raw wires and insulation sleeves with batch trace numbers.
               </span>
             </li>
             <li className="flex gap-3">
-              <Check className="text-[#B20602] mt-0.5 shrink-0" size={18} strokeWidth={3} />
+              <Check className="text-[#c8102e] mt-0.5 shrink-0" size={18} strokeWidth={3} />
               <span className="text-[14.4px] text-[#555555]">
                 <strong>Continuity Verification:</strong> Standard test beds verify point-to-point pinout mappings on every cable run.
               </span>
             </li>
             <li className="flex gap-3">
-              <Check className="text-[#B20602] mt-0.5 shrink-0" size={18} strokeWidth={3} />
+              <Check className="text-[#c8102e] mt-0.5 shrink-0" size={18} strokeWidth={3} />
               <span className="text-[14.4px] text-[#555555]">
                 <strong>ESD Safe Packaging:</strong> Conductive shielding bags protect assemblies from ESD during storage and transit.
               </span>

@@ -8,14 +8,14 @@
     --foreground: 0 0% 13.3%;
     --border: 0 0% 92%;
     --input: 218 11% 84%;
-    --ring: 1 98% 35.3%;
-    --primary: 1 98% 35.3%;
+    --ring: 350 85% 42%;
+    --primary: 350 85% 42%;
     --primary-foreground: 0 0% 100%;
 
-    --primary-rose: #B20602;
-    --primary-rose-hover: #900502;
-    --primary-rose-light: #FFF0F0;
-    --primary-rose-soft: #FEE8E8;
+    --primary-rose: #c8102e;
+    --primary-rose-hover: #a80c25;
+    --primary-rose-light: #FFF1F2;
+    --primary-rose-soft: #FFE4E6;
     
     --dark-bg: #121214;
     --dark-surface: #1a1a1e;
@@ -38,14 +38,31 @@
     --border-light: #eaeaea;
     --border-medium: #d1d5db;
     
-    --container-max: 1380px;
-    --font-heading: 'Manrope', sans-serif;
-    --font-body: 'Inter', sans-serif;
+    --container-max: 1600px;
+    --font-heading: 'Open Sauce One', 'Canva Sans', 'Plus Jakarta Sans', sans-serif;
+    --font-body: 'Open Sauce One', 'Canva Sans', 'Plus Jakarta Sans', sans-serif;
     
     --radius-sm: 6px;
     --radius-md: 10px;
     --radius-lg: 16px;
     --radius-full: 9999px;
+  }
+}
+
+@layer utilities {
+  .site-container {
+    @apply w-full max-w-[1780px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10;
+  }
+  
+  /* Completely hide scrollbars */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
   }
 }
 
