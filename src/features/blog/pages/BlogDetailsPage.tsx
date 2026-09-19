@@ -13,7 +13,7 @@ export default function BlogDetailsPage() {
         <p className="text-[#777777] mt-2">The article you requested could not be found.</p>
         <Link
           to="/blog"
-          className="mt-6 inline-flex items-center gap-2 bg-[#B20602] text-white px-5 py-2.5 rounded-[6px] text-[14px] font-bold"
+          className="mt-6 inline-flex items-center gap-2 bg-[#c8102e] text-white px-5 py-2.5 rounded-[6px] text-[14px] font-bold"
         >
           <ArrowLeft size={16} /> Back to Blog
         </Link>
@@ -27,7 +27,7 @@ export default function BlogDetailsPage() {
         {/* Navigation Breadcrumb */}
         <Link
           to="/blog"
-          className="inline-flex items-center gap-2 text-[#777777] hover:text-[#B20602] text-[13.6px] font-bold mb-8 transition-colors"
+          className="inline-flex items-center gap-2 text-[#777777] hover:text-[#c8102e] text-[13.6px] font-bold mb-8 transition-colors"
         >
           <ArrowLeft size={16} /> Back to Technical Guides
         </Link>
@@ -36,7 +36,7 @@ export default function BlogDetailsPage() {
           {/* Header */}
           <header className="mb-8">
             <div className="flex flex-wrap items-center gap-4 text-[12.8px] text-[#777777] mb-3">
-              <span className="flex items-center gap-1 bg-[#FFF0F0] text-[#B20602] font-bold px-3 py-1 rounded-full uppercase tracking-wider text-[10.4px]">
+              <span className="flex items-center gap-1 bg-[#FFF1F2] text-[#c8102e] font-bold px-3 py-1 rounded-full uppercase tracking-wider text-[10.4px]">
                 <Tag size={12} />
                 {post.tag}
               </span>

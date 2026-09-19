@@ -90,7 +90,7 @@ export default function QuotePage() {
             </p>
             <Link
               to="/products"
-              className="bg-[#B20602] hover:bg-[#900502] text-white px-6 py-2.5 rounded-[6px] text-[13.6px] font-bold inline-block"
+              className="bg-[#c8102e] hover:bg-[#a80c25] text-white px-6 py-2.5 rounded-[6px] text-[13.6px] font-bold inline-block"
             >
               Browse Stocked Lines
             </Link>
@@ -105,7 +105,7 @@ export default function QuotePage() {
                 </h3>
                 <button
                   onClick={clearQuote}
-                  className="text-[12px] text-[#B20602] hover:underline font-bold"
+                  className="text-[12px] text-[#c8102e] hover:underline font-bold"
                 >
                   Remove All
                 </button>
@@ -115,7 +115,7 @@ export default function QuotePage() {
                 {items.map((item) => (
                   <div key={item.id} className="flex justify-between items-start pt-4 first:pt-0">
                     <div>
-                      <span className="text-[10px] font-bold text-[#B20602] uppercase tracking-wide">
+                      <span className="text-[10px] font-bold text-[#c8102e] uppercase tracking-wide">
                         {item.code}
                       </span>
                       <h4 className="font-heading text-[14.4px] font-bold text-[#222222] mt-0.5">
@@ -145,7 +145,7 @@ export default function QuotePage() {
 
                       <button
                         onClick={() => removeItem(item.id)}
-                        className="text-gray-400 hover:text-[#B20602] p-1.5 transition-colors cursor-pointer"
+                        className="text-gray-400 hover:text-[#c8102e] p-1.5 transition-colors cursor-pointer"
                         title="Remove"
                       >
                         <Trash2 size={16} />
@@ -159,7 +159,7 @@ export default function QuotePage() {
             {/* Right Intake Form details */}
             <div className="lg:col-span-5 bg-[#fafbfd] border border-[#eaeaea] rounded-[10px] p-4 sm:p-6 shadow-sm flex flex-col gap-6">
               <h3 className="font-heading text-[18px] font-bold text-[#222222] border-b border-[#eaeaea] pb-4 flex items-center gap-2">
-                <FileText size={18} className="text-[#B20602]" />
+                <FileText size={18} className="text-[#c8102e]" />
                 <span>Submit Sourcing RFQ</span>
               </h3>
 
@@ -173,7 +173,7 @@ export default function QuotePage() {
                     onChange={handleChange}
                     placeholder="John Doe"
                     required
-                    className="w-full bg-white border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#B20602]"
+                    className="w-full bg-white border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#c8102e]"
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
@@ -185,7 +185,7 @@ export default function QuotePage() {
                     onChange={handleChange}
                     placeholder="john@company.com"
                     required
-                    className="w-full bg-white border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#B20602]"
+                    className="w-full bg-white border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#c8102e]"
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
@@ -197,7 +197,7 @@ export default function QuotePage() {
                     onChange={handleChange}
                     placeholder="Acme Electronics Ltd."
                     required
-                    className="w-full bg-white border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#B20602]"
+                    className="w-full bg-white border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#c8102e]"
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
@@ -210,14 +210,14 @@ export default function QuotePage() {
                     onChange={handleChange}
                     placeholder="e.g. Please source matching alternative lead-free fluxes, consolidate into one shipment by Aug 20th..."
                     rows={4}
-                    className="w-full bg-white border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#B20602]"
+                    className="w-full bg-white border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#c8102e]"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="bg-[#B20602] hover:bg-[#900502] text-white py-3 rounded-[6px] text-[14px] font-bold transition-colors cursor-pointer w-full mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="bg-[#c8102e] hover:bg-[#a80c25] text-white py-3 rounded-[6px] text-[14px] font-bold transition-colors cursor-pointer w-full mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? "Submitting..." : "Submit Quote Request"}
                 </button>

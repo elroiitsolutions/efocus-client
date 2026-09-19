@@ -56,9 +56,9 @@ export default function CustomAssemblyPage() {
     <div className="bg-[#f9f9fb] min-h-screen pb-16">
       {/* Hero Banner Section */}
       <section className="bg-gradient-to-r from-[#e2f9f8] to-[#d5f5f4] py-16 border-b border-[#eaeaea]">
-        <div className="max-w-[1380px] mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="site-container grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
-            <span className="text-[12px] font-bold text-[#B20602] uppercase tracking-widest bg-white px-3 py-1.5 rounded-full border border-[#d1d5db]">
+            <span className="text-[12px] font-bold text-[#c8102e] uppercase tracking-widest bg-white px-3 py-1.5 rounded-full border border-[#d1d5db]">
               IPC-WHMA-A-620 Spec Certified
             </span>
             <h1 className="font-heading text-4xl lg:text-5xl font-extrabold text-[#222222] tracking-tight mt-6 leading-tight">
@@ -70,7 +70,7 @@ export default function CustomAssemblyPage() {
             <div className="flex gap-4 mt-8 flex-wrap">
               <a
                 href="#configurator"
-                className="bg-[#B20602] hover:bg-[#900502] text-white px-6 py-3 rounded-[6px] text-[14px] font-bold transition-colors cursor-pointer"
+                className="bg-[#c8102e] hover:bg-[#a80c25] text-white px-6 py-3 rounded-[6px] text-[14px] font-bold transition-colors cursor-pointer"
               >
                 Configure Custom Build
               </a>
@@ -98,7 +98,7 @@ export default function CustomAssemblyPage() {
       </section>
 
       {/* Main Assembly Services Grid */}
-      <section className="max-w-[1380px] mx-auto px-4 sm:px-6 py-16">
+      <section className="site-container py-16">
         <div className="text-center max-w-[750px] mx-auto mb-12">
           <h2 className="font-heading text-3xl font-extrabold text-[#222222] tracking-tight">
             Our Assembly Capabilities
@@ -114,7 +114,7 @@ export default function CustomAssemblyPage() {
               key={type.name}
               className="bg-white p-6 rounded-[10px] border border-[#eaeaea] shadow-sm hover:shadow-md transition-shadow flex gap-4"
             >
-              <div className="w-12 h-12 bg-[#FFF0F0] text-[#B20602] rounded-full flex items-center justify-center shrink-0">
+              <div className="w-12 h-12 bg-[#FFF1F2] text-[#c8102e] rounded-full flex items-center justify-center shrink-0">
                 <Settings size={22} />
               </div>
               <div>
@@ -129,7 +129,7 @@ export default function CustomAssemblyPage() {
       </section>
 
       {/* Interactive Configurator Request Build */}
-      <section id="configurator" className="max-w-[1380px] mx-auto px-4 sm:px-6 py-8">
+      <section id="configurator" className="site-container py-8">
         <div className="bg-white rounded-[16px] border border-[#eaeaea] shadow-md overflow-hidden grid grid-cols-1 lg:grid-cols-12">
           {/* Configurator inputs form */}
           <div className="lg:col-span-7 p-4 sm:p-8 lg:p-12 border-r border-[#eaeaea]">
@@ -150,7 +150,7 @@ export default function CustomAssemblyPage() {
                   <select
                     value={assemblyType}
                     onChange={(e) => setAssemblyType(e.target.value)}
-                    className="w-full bg-[#f4f5f8] border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#B20602]"
+                    className="w-full bg-[#f4f5f8] border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#c8102e]"
                   >
                     <option>Ribbon Cables</option>
                     <option>Wire Harnesses</option>
@@ -167,7 +167,7 @@ export default function CustomAssemblyPage() {
                   <select
                     value={insulation}
                     onChange={(e) => setInsulation(e.target.value)}
-                    className="w-full bg-[#f4f5f8] border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#B20602]"
+                    className="w-full bg-[#f4f5f8] border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#c8102e]"
                   >
                     <option>Standard Flat Ribbon</option>
                     <option>High-Temp Silicone</option>
@@ -190,7 +190,7 @@ export default function CustomAssemblyPage() {
                     value={length}
                     onChange={(e) => setLength(e.target.value)}
                     required
-                    className="w-full bg-[#f4f5f8] border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#B20602]"
+                    className="w-full bg-[#f4f5f8] border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#c8102e]"
                   />
                 </div>
 
@@ -205,7 +205,7 @@ export default function CustomAssemblyPage() {
                     value={quantity}
                     onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
                     required
-                    className="w-full bg-[#f4f5f8] border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#B20602]"
+                    className="w-full bg-[#f4f5f8] border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#c8102e]"
                   />
                 </div>
 
@@ -217,7 +217,7 @@ export default function CustomAssemblyPage() {
                   <select
                     value={pinout}
                     onChange={(e) => setPinout(e.target.value)}
-                    className="w-full bg-[#f4f5f8] border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#B20602]"
+                    className="w-full bg-[#f4f5f8] border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#c8102e]"
                   >
                     <option>Straight-Through (1-to-1)</option>
                     <option>Reverse Pinout</option>
@@ -237,13 +237,13 @@ export default function CustomAssemblyPage() {
                   onChange={(e) => setNotes(e.target.value)}
                   placeholder="e.g. IDC socket pitch 2.54mm, heat-shrink red accent lines on both terminal ends, low-smoke zero-halogen jacket required..."
                   rows={4}
-                  className="w-full bg-[#f4f5f8] border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#B20602]"
+                  className="w-full bg-[#f4f5f8] border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#c8102e]"
                 />
               </div>
 
               <button
                 type="submit"
-                className="bg-[#B20602] hover:bg-[#900502] text-white py-3 rounded-[6px] text-[14px] font-bold transition-colors cursor-pointer mt-4 flex items-center justify-center gap-2"
+                className="bg-[#c8102e] hover:bg-[#a80c25] text-white py-3 rounded-[6px] text-[14px] font-bold transition-colors cursor-pointer mt-4 flex items-center justify-center gap-2"
               >
                 <Send size={16} />
                 <span>Add Configuration to Quote Basket</span>
@@ -259,7 +259,7 @@ export default function CustomAssemblyPage() {
               </h3>
               <ul className="flex flex-col gap-4">
                 <li className="flex gap-3 items-start">
-                  <div className="text-[#B20602] mt-1 shrink-0">
+                  <div className="text-[#c8102e] mt-1 shrink-0">
                     <Check size={18} strokeWidth={3} />
                   </div>
                   <div>
@@ -272,7 +272,7 @@ export default function CustomAssemblyPage() {
                   </div>
                 </li>
                 <li className="flex gap-3 items-start">
-                  <div className="text-[#B20602] mt-1 shrink-0">
+                  <div className="text-[#c8102e] mt-1 shrink-0">
                     <ShieldCheck size={18} strokeWidth={3} />
                   </div>
                   <div>
@@ -285,7 +285,7 @@ export default function CustomAssemblyPage() {
                   </div>
                 </li>
                 <li className="flex gap-3 items-start">
-                  <div className="text-[#B20602] mt-1 shrink-0">
+                  <div className="text-[#c8102e] mt-1 shrink-0">
                     <Layers size={18} strokeWidth={3} />
                   </div>
                   <div>
@@ -300,8 +300,8 @@ export default function CustomAssemblyPage() {
               </ul>
             </div>
 
-            <div className="mt-8 bg-[#FFF0F0] p-4 rounded-[6px] border border-[#FEE8E8] text-center">
-              <span className="text-[13px] text-[#B20602] font-semibold">
+            <div className="mt-8 bg-[#FFF1F2] p-4 rounded-[6px] border border-[#FFE4E6] text-center">
+              <span className="text-[13px] text-[#c8102e] font-semibold">
                 Have drawing blueprints already?
               </span>
               <p className="text-[12px] text-[#555555] mt-1">

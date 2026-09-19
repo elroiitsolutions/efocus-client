@@ -39,7 +39,7 @@ export default function WishlistPage() {
           {wishlistItems.length > 0 && (
             <button
               onClick={clearWishlist}
-              className="text-[13px] text-[#B20602] hover:underline font-bold cursor-pointer"
+              className="text-[13px] text-[#c8102e] hover:underline font-bold cursor-pointer"
             >
               Clear All Items
             </button>
@@ -51,7 +51,7 @@ export default function WishlistPage() {
             <p className="text-[15.2px] text-[#777777]">Your wishlist is currently empty.</p>
             <Link
               to="/products"
-              className="mt-6 inline-flex items-center gap-2 bg-[#B20602] text-white px-5 py-2.5 rounded-[6px] text-[13.6px] font-bold"
+              className="mt-6 inline-flex items-center gap-2 bg-[#c8102e] hover:bg-[#a80c25] text-white px-5 py-2.5 rounded-[6px] text-[13.6px] font-bold transition-colors"
             >
               <ArrowLeft size={16} /> Browse Component Lines
             </Link>
@@ -64,7 +64,7 @@ export default function WishlistPage() {
                 className="bg-white border border-[#eaeaea] rounded-[10px] p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-sm"
               >
                 <div>
-                  <span className="text-[11px] font-bold text-[#B20602] uppercase tracking-wide">
+                  <span className="text-[11px] font-bold text-[#c8102e] uppercase tracking-wide">
                     {item.code}
                   </span>
                   <h3 className="font-heading text-[16px] font-bold text-[#222222] mt-0.5">
@@ -76,7 +76,7 @@ export default function WishlistPage() {
                 <div className="flex items-center gap-3 w-full sm:w-auto">
                   <button
                     onClick={() => handleMoveToQuote(item)}
-                    className="flex-1 sm:flex-none bg-[#B20602] hover:bg-[#900502] text-white px-4 py-2 rounded-[6px] text-[13px] font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                    className="flex-1 sm:flex-none bg-[#c8102e] hover:bg-[#a80c25] text-white px-4 py-2 rounded-[6px] text-[13px] font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                   >
                     <ShoppingBag size={14} />
                     <span>Move to Quote</span>
@@ -84,7 +84,7 @@ export default function WishlistPage() {
 
                   <button
                     onClick={() => removeItem(item.id)}
-                    className="w-10 h-10 rounded-[6px] border border-[#eaeaea] text-gray-400 hover:text-[#B20602] hover:border-gray-300 flex items-center justify-center transition-colors cursor-pointer"
+                    className="w-10 h-10 rounded-[6px] border border-[#eaeaea] text-gray-400 hover:text-[#c8102e] hover:border-gray-300 flex items-center justify-center transition-colors cursor-pointer"
                     title="Remove item"
                   >
                     <Trash2 size={16} />

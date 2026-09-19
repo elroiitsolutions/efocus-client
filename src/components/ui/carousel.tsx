@@ -99,7 +99,7 @@ export function CarouselPrevious({
       type="button"
       onClick={context.prev}
       className={cn(
-        "absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-gray-800 flex items-center justify-center shadow border border-gray-200 z-10 transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B20602]",
+        "absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-gray-800 flex items-center justify-center shadow border border-gray-200 z-10 transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e]",
         className
       )}
       {...props}
@@ -121,7 +121,7 @@ export function CarouselNext({
       type="button"
       onClick={context.next}
       className={cn(
-        "absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-gray-800 flex items-center justify-center shadow border border-gray-200 z-10 transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B20602]",
+        "absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-gray-800 flex items-center justify-center shadow border border-gray-200 z-10 transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e]",
         className
       )}
       {...props}
@@ -148,7 +148,7 @@ export function CarouselIndicators({
           className={cn(
             "h-2.5 rounded-full cursor-pointer transition-all border-none p-0 duration-300",
             context.activeIndex === idx
-              ? "bg-[#B20602] w-6"
+              ? "bg-[#c8102e] w-6"
               : "bg-[#d1d5db] w-2.5"
           )}
           aria-label={`Go to slide ${idx + 1}`}

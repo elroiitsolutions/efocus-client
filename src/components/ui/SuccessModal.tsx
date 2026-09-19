@@ -70,8 +70,8 @@ export default function SuccessModal({
 
         <div className="p-6 sm:p-8 flex flex-col items-center text-center">
           {/* Animated Success Icon */}
-          <div className="w-16 h-16 bg-[#FFF0F0] rounded-full flex items-center justify-center mb-5 animate-bounce-slow">
-            <CheckCircle2 size={36} className="text-[#B20602]" />
+          <div className="w-16 h-16 bg-[#FFF1F2] rounded-full flex items-center justify-center mb-5 animate-bounce-slow">
+            <CheckCircle2 size={36} className="text-[#c8102e]" />
           </div>
 
           <h2 className="font-heading text-2xl font-extrabold text-[#222222] mb-2 leading-tight">
@@ -123,7 +123,7 @@ export default function SuccessModal({
                   onChange={(e) => setFeedbackText(e.target.value)}
                   placeholder="Tell us what you liked or how we can improve..."
                   rows={3}
-                  className="w-full bg-[#f9fafb] border border-[#d1d5db] rounded-lg px-3 py-2 text-[13px] outline-none focus:border-[#B20602] focus:bg-white transition-all resize-none"
+                  className="w-full bg-[#f9fafb] border border-[#d1d5db] rounded-lg px-3 py-2 text-[13px] outline-none focus:border-[#c8102e] focus:bg-white transition-all resize-none"
                 />
               </div>
 
@@ -139,7 +139,7 @@ export default function SuccessModal({
                 <button
                   type="submit"
                   disabled={rating === 0 || isSubmitting}
-                  className="flex-1 bg-[#B20602] hover:bg-[#900502] text-white py-2.5 rounded-lg text-[13.5px] font-semibold transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
+                  className="flex-1 bg-[#c8102e] hover:bg-[#a80c25] text-white py-2.5 rounded-lg text-[13.5px] font-semibold transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
                 >
                   {isSubmitting ? "Submitting..." : "Submit Feedback"}
                 </button>
@@ -147,7 +147,7 @@ export default function SuccessModal({
             </form>
           ) : (
             <div className="w-full flex flex-col items-center py-4 animate-fade-in">
-              <h4 className="text-[16px] font-bold text-[#B20602] mb-1.5">
+              <h4 className="text-[16px] font-bold text-[#c8102e] mb-1.5">
                 Thank you for your feedback!
               </h4>
               <p className="text-[13px] text-[#777777] mb-6">

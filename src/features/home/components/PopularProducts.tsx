@@ -37,7 +37,7 @@ export default function PopularProducts() {
 
   return (
     <section className="bg-[#f9f9fb] py-16" id="popular-now">
-      <div className="max-w-[1380px] mx-auto px-6">
+      <div className="site-container">
         {/* Section Header */}
         <div className="text-center max-w-[750px] mx-auto mb-12">
           <h2 className="font-heading text-3xl font-extrabold text-[#222222] tracking-tight">
@@ -55,8 +55,8 @@ export default function PopularProducts() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-5 py-2.5 rounded-full text-[13px] font-bold transition-colors cursor-pointer border ${
                   activeTab === tab.id
-                    ? "bg-[#B20602] border-[#B20602] text-white"
-                    : "bg-white border-[#eaeaea] text-[#555555] hover:text-[#B20602]"
+                    ? "bg-[#c8102e] border-[#c8102e] text-white"
+                    : "bg-white border-[#eaeaea] text-[#555555] hover:text-[#c8102e]"
                 }`}
               >
                 {tab.label}
@@ -67,18 +67,18 @@ export default function PopularProducts() {
 
         {/* Product Cards Grid */}
         {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
             {Array.from({ length: 4 }).map((_, idx) => (
               <div
                 key={idx}
-                className="bg-white border border-[#eaeaea] rounded-[10px] p-5 h-[380px] flex flex-col justify-between"
+                className="bg-white border border-[#eaeaea] rounded-[8px] sm:rounded-[10px] p-2.5 sm:p-3 h-[270px] flex flex-col justify-between"
               >
-                <Skeleton className="w-full aspect-square rounded-[6px]" />
-                <div className="flex flex-col gap-2 mt-4">
-                  <Skeleton className="h-4 w-1/3" />
-                  <Skeleton className="h-6 w-3/4" />
+                <Skeleton className="w-full aspect-[4/3] rounded-[6px]" />
+                <div className="flex flex-col gap-1.5 mt-2">
+                  <Skeleton className="h-3 w-1/3" />
+                  <Skeleton className="h-4 w-3/4" />
                 </div>
-                <Skeleton className="h-8 w-full mt-4" />
+                <Skeleton className="h-8 w-full mt-2" />
               </div>
             ))}
           </div>
@@ -87,7 +87,7 @@ export default function PopularProducts() {
             <p className="text-red-500 font-semibold">Failed to load popular products.</p>
             <button
               onClick={() => window.location.reload()}
-              className="mt-4 bg-[#B20602] text-white px-4 py-2 rounded-[6px] text-[13px] font-bold"
+              className="mt-4 bg-[#c8102e] text-white px-4 py-2 rounded-[6px] text-[13px] font-bold"
             >
               Retry
             </button>
@@ -97,7 +97,7 @@ export default function PopularProducts() {
             <p className="text-[#777777] text-[15px]">No products found in this category.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
             {data?.data.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
@@ -107,7 +107,7 @@ export default function PopularProducts() {
         <div className="flex justify-center mt-12">
           <a
             href="/products"
-            className="inline-block border-2 border-[#B20602] text-[#B20602] hover:bg-[#B20602] hover:text-white px-6 py-3 rounded-[6px] text-[13.6px] font-bold transition-all cursor-pointer"
+            className="inline-block border-2 border-[#c8102e] text-[#c8102e] hover:bg-[#c8102e] hover:text-white px-6 py-3 rounded-[6px] text-[13.6px] font-bold transition-all cursor-pointer"
           >
             Load More Products
           </a>

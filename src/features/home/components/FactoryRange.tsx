@@ -65,7 +65,7 @@ export default function FactoryRange() {
       </div>
 
       {/* 2. Bento Feature Grid */}
-      <section className="py-16 max-w-[1380px] mx-auto px-6">
+      <section className="site-container py-16">
         <div className="text-center max-w-[750px] mx-auto mb-12">
           <h2 className="font-heading text-3xl font-extrabold text-[#222222] tracking-tight">
             Factory & Production Range
@@ -88,7 +88,7 @@ export default function FactoryRange() {
               }}
             />
             <div className="absolute inset-0 bg-black/60 p-8 flex flex-col justify-end text-left">
-              <span className="text-[11px] font-bold text-[#B20602] bg-[#FFF0F0] px-2.5 py-1 rounded-[4px] self-start mb-3 uppercase tracking-wider">
+              <span className="text-[11px] font-bold text-[#c8102e] bg-[#FFF1F2] px-2.5 py-1 rounded-[4px] self-start mb-3 uppercase tracking-wider">
                 {bentoItems.large.cat}
               </span>
               <h3 className="font-heading text-[22px] font-bold text-white leading-tight">
@@ -99,7 +99,7 @@ export default function FactoryRange() {
               </p>
               <Link
                 to={bentoItems.large.link}
-                className="text-[#B20602] hover:text-white font-bold text-[13px] mt-4 flex items-center gap-1 transition-colors"
+                className="text-[#c8102e] hover:text-white font-bold text-[13px] mt-4 flex items-center gap-1 transition-colors"
               >
                 Browse SMT Lines &rarr;
               </Link>
@@ -117,7 +117,7 @@ export default function FactoryRange() {
               }}
             />
             <div className="absolute inset-0 bg-black/60 p-8 flex flex-col justify-end text-left">
-              <span className="text-[11px] font-bold text-[#B20602] bg-[#FFF0F0] px-2.5 py-1 rounded-[4px] self-start mb-3 uppercase tracking-wider">
+              <span className="text-[11px] font-bold text-[#c8102e] bg-[#FFF1F2] px-2.5 py-1 rounded-[4px] self-start mb-3 uppercase tracking-wider">
                 {bentoItems.medium.cat}
               </span>
               <h3 className="font-heading text-[22px] font-bold text-white leading-tight">
@@ -128,7 +128,7 @@ export default function FactoryRange() {
               </p>
               <Link
                 to={bentoItems.medium.link}
-                className="text-[#B20602] hover:text-white font-bold text-[13px] mt-4 flex items-center gap-1 transition-colors"
+                className="text-[#c8102e] hover:text-white font-bold text-[13px] mt-4 flex items-center gap-1 transition-colors"
               >
                 Browse Networking &rarr;
               </Link>
@@ -146,7 +146,7 @@ export default function FactoryRange() {
               }}
             />
             <div className="absolute inset-0 bg-black/60 p-6 flex flex-col justify-end text-left">
-              <span className="text-[10px] font-bold text-[#B20602] bg-[#FFF0F0] px-2 py-0.5 rounded-[4px] self-start mb-2">
+              <span className="text-[10px] font-bold text-[#c8102e] bg-[#FFF1F2] px-2 py-0.5 rounded-[4px] self-start mb-2">
                 {bentoItems.sm1.cat}
               </span>
               <h3 className="font-heading text-[16px] font-bold text-white leading-tight">
@@ -154,7 +154,7 @@ export default function FactoryRange() {
               </h3>
               <Link
                 to={bentoItems.sm1.link}
-                className="text-[#B20602] hover:text-white font-bold text-[12px] mt-2 flex items-center gap-1 transition-colors"
+                className="text-[#c8102e] hover:text-white font-bold text-[12px] mt-2 flex items-center gap-1 transition-colors"
               >
                 Explore &rarr;
               </Link>
@@ -172,7 +172,7 @@ export default function FactoryRange() {
               }}
             />
             <div className="absolute inset-0 bg-black/60 p-6 flex flex-col justify-end text-left">
-              <span className="text-[10px] font-bold text-[#B20602] bg-[#FFF0F0] px-2 py-0.5 rounded-[4px] self-start mb-2">
+              <span className="text-[10px] font-bold text-[#c8102e] bg-[#FFF1F2] px-2 py-0.5 rounded-[4px] self-start mb-2">
                 {bentoItems.sm2.cat}
               </span>
               <h3 className="font-heading text-[16px] font-bold text-white leading-tight">
@@ -180,7 +180,7 @@ export default function FactoryRange() {
               </h3>
               <Link
                 to={bentoItems.sm2.link}
-                className="text-[#B20602] hover:text-white font-bold text-[12px] mt-2 flex items-center gap-1 transition-colors"
+                className="text-[#c8102e] hover:text-white font-bold text-[12px] mt-2 flex items-center gap-1 transition-colors"
               >
                 Explore &rarr;
               </Link>
@@ -198,7 +198,7 @@ export default function FactoryRange() {
               }}
             />
             <div className="absolute inset-0 bg-black/60 p-6 flex flex-col justify-end text-left">
-              <span className="text-[10px] font-bold text-[#B20602] bg-[#FFF0F0] px-2 py-0.5 rounded-[4px] self-start mb-2">
+              <span className="text-[10px] font-bold text-[#c8102e] bg-[#FFF1F2] px-2 py-0.5 rounded-[4px] self-start mb-2">
                 {bentoItems.sm3.cat}
               </span>
               <h3 className="font-heading text-[16px] font-bold text-white leading-tight">
@@ -206,7 +206,7 @@ export default function FactoryRange() {
               </h3>
               <Link
                 to={bentoItems.sm3.link}
-                className="text-[#B20602] hover:text-white font-bold text-[12px] mt-2 flex items-center gap-1 transition-colors"
+                className="text-[#c8102e] hover:text-white font-bold text-[12px] mt-2 flex items-center gap-1 transition-colors"
               >
                 Explore &rarr;
               </Link>

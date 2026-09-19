@@ -28,10 +28,10 @@ function FeaturedProductsList({
           <li key={product.id}>
             <Link
               to={`/products/${product.sku}`}
-              className="flex items-center justify-between py-2.5 px-3 rounded-[6px] bg-white border border-[#eaeaea] hover:border-[#B20602] hover:shadow-sm transition-all group"
+              className="flex items-center justify-between py-2.5 px-3 rounded-[6px] bg-white border border-[#eaeaea] hover:border-[#c8102e] hover:shadow-sm transition-all group"
             >
               <div className="flex flex-col">
-                <span className="text-[13px] font-semibold text-[#222222] group-hover:text-[#B20602] transition-colors line-clamp-1">
+                <span className="text-[13px] font-semibold text-[#222222] group-hover:text-[#c8102e] transition-colors line-clamp-1">
                   {product.product_name}
                 </span>
                 <span className="text-[11px] font-bold text-[#999999] font-mono">
@@ -40,7 +40,7 @@ function FeaturedProductsList({
               </div>
               <ArrowRight
                 size={14}
-                className="text-[#d1d5db] group-hover:text-[#B20602] transition-colors shrink-0"
+                className="text-[#d1d5db] group-hover:text-[#c8102e] transition-colors shrink-0"
               />
             </Link>
           </li>
@@ -107,16 +107,16 @@ function CategoryDropdownContent({ category }: { category: NavCategory }) {
                     className={cn(
                       "flex items-center gap-2 py-2 px-3 rounded-[6px] text-[13.6px] font-medium transition-colors group",
                       isSubActive
-                        ? "bg-[#FFF0F0] text-[#B20602]"
-                        : "text-[#444444] hover:bg-[#FFF0F0] hover:text-[#B20602]"
+                        ? "bg-[#FFF1F2] text-[#c8102e]"
+                        : "text-[#444444] hover:bg-[#FFF1F2] hover:text-[#c8102e]"
                     )}
                   >
                     <span
                       className={cn(
                         "w-1.5 h-1.5 rounded-full transition-colors shrink-0",
                         isSubActive
-                          ? "bg-[#B20602]"
-                          : "bg-[#d1d5db] group-hover:bg-[#B20602]"
+                          ? "bg-[#c8102e]"
+                          : "bg-[#d1d5db] group-hover:bg-[#c8102e]"
                       )}
                     />
                     {sub.name}
@@ -131,7 +131,7 @@ function CategoryDropdownContent({ category }: { category: NavCategory }) {
 
         <Link
           to={viewAllLink}
-          className="flex items-center gap-1.5 text-[13px] font-bold text-[#B20602] hover:text-[#900502] transition-colors"
+          className="flex items-center gap-1.5 text-[13px] font-bold text-[#c8102e] hover:text-[#a80c25] transition-colors"
         >
           {viewAllLabel}
           <ArrowRight size={14} />
@@ -165,7 +165,7 @@ export default function Navigation() {
 
   return (
     <nav className="border-t border-[#eaeaea] bg-white hidden lg:block relative z-50">
-      <div className="max-w-[1380px] mx-auto px-6 flex items-center justify-between h-[52px] relative">
+      <div className="site-container flex items-center justify-between h-[52px] relative">
         {/* Mega Menu Navigation */}
         <div className="flex items-center gap-0">
           {/* Home Link (no dropdown) */}
@@ -173,15 +173,15 @@ export default function Navigation() {
             <Link
               to="/"
               className={cn(
-                "inline-flex h-[52px] items-center px-2 xl:px-3 text-[13px] xl:text-[14px] font-medium transition-colors hover:text-[#B20602] relative",
+                "inline-flex h-[52px] items-center px-2 xl:px-3 text-[13px] xl:text-[14px] font-medium transition-colors hover:text-[#c8102e] relative",
                 location.pathname === "/"
-                  ? "text-[#B20602]"
+                  ? "text-[#c8102e]"
                   : "text-[#222222]"
               )}
             >
               Home
               {location.pathname === "/" && (
-                <span className="absolute bottom-0 left-2 right-2 h-[2px] bg-[#B20602]" />
+                <span className="absolute bottom-0 left-2 right-2 h-[2px] bg-[#c8102e]" />
               )}
             </Link>
           </div>
@@ -205,14 +205,14 @@ export default function Navigation() {
               <div key={category.id} className="group relative">
                 <div
                   className={cn(
-                    "inline-flex h-[52px] items-center gap-1 px-2 xl:px-3 text-[13px] xl:text-[14px] font-medium hover:text-[#B20602] transition-colors relative cursor-pointer",
-                    isActive ? "text-[#B20602]" : "text-[#222222]"
+                    "inline-flex h-[52px] items-center gap-1 px-2 xl:px-3 text-[13px] xl:text-[14px] font-medium hover:text-[#c8102e] transition-colors relative cursor-pointer",
+                    isActive ? "text-[#c8102e]" : "text-[#222222]"
                   )}
                 >
                   <span>{category.name}</span>
                   <ChevronDown size={12} className="opacity-70 group-hover:rotate-180 transition-transform duration-200" />
                   {isActive && (
-                    <span className="absolute bottom-0 left-2 right-2 h-[2px] bg-[#B20602]" />
+                    <span className="absolute bottom-0 left-2 right-2 h-[2px] bg-[#c8102e]" />
                   )}
                 </div>
 
@@ -232,15 +232,15 @@ export default function Navigation() {
             <Link
               to="/custom-assembly"
               className={cn(
-                "inline-flex h-[52px] items-center px-2 xl:px-3 text-[13px] xl:text-[14px] font-medium transition-colors hover:text-[#B20602] relative",
+                "inline-flex h-[52px] items-center px-2 xl:px-3 text-[13px] xl:text-[14px] font-medium transition-colors hover:text-[#c8102e] relative",
                 location.pathname === "/custom-assembly"
-                  ? "text-[#B20602]"
+                  ? "text-[#c8102e]"
                   : "text-[#222222]"
               )}
             >
               Custom & Assembly
               {location.pathname === "/custom-assembly" && (
-                <span className="absolute bottom-0 left-2 right-2 h-[2px] bg-[#B20602]" />
+                <span className="absolute bottom-0 left-2 right-2 h-[2px] bg-[#c8102e]" />
               )}
             </Link>
           </div>
