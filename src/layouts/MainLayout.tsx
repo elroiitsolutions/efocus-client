@@ -1,32 +1,43 @@
-import { Outlet, ScrollRestoration } from "react-router-dom"
-import AnnouncementBar from "@/components/layout/AnnouncementBar"
-import Header from "@/components/layout/Header"
+import { Outlet, ScrollRestoration, useLocation } from "react-router-dom"
+import Navbar from "@/components/layout/Navbar"
 import Footer from "@/components/layout/Footer"
+import SmoothScroll from "@/components/common/SmoothScroll"
+import ScrollProgress from "@/components/common/ScrollProgress"
+import ScrollAnimations from "@/components/common/ScrollAnimations"
+import QuickProcurementStickyButton from "@/components/procurement/QuickProcurementStickyButton"
 import QuoteDrawer from "@/features/quote/components/QuoteDrawer"
-import ScrollToTop from "@/components/layout/ScrollToTop"
 
 export default function MainLayout() {
+  const location = useLocation();
+  const isHomePage = location.pathname === "/";
+
   return (
-    <div className="flex min-h-screen flex-col bg-white">
-      {/* Announcement Bar */}
-      <AnnouncementBar />
+    <div className="min-h-screen bg-[#fbfcfd] text-[#0d0f11] selection:bg-red-500 selection:text-white flex flex-col">
+      {/* Lenis Smooth Momentum Scroll Engine */}
+      <SmoothScroll />
 
-      {/* Main Header */}
-      <Header />
+      {/* GSAP Scroll Animations */}
+      <ScrollAnimations />
 
-      {/* Active Page View */}
-      <main className="flex-grow">
+      {/* Reading Top Progress Indicator */}
+      <ScrollProgress />
+
+      {/* Global Interactive Mega Navbar with Ctrl+K Quick Search */}
+      <Navbar />
+
+      {/* Floating Quick Procurement Desk & RFQ Modal */}
+      <QuickProcurementStickyButton />
+
+      {/* Active Page View (with top padding on subpages to clear the floating navbar) */}
+      <main className={`flex-grow w-full flex flex-col items-center ${!isHomePage ? "pt-24 sm:pt-28" : ""}`}>
         <Outlet />
       </main>
 
-      {/* Footer */}
+      {/* 5-Column Industrial Footer */}
       <Footer />
 
       {/* Slide-over Quote Basket Drawer */}
       <QuoteDrawer />
-
-      {/* Floating Scroll to Top Button */}
-      <ScrollToTop />
 
       {/* React Router Scroll Restoration */}
       <ScrollRestoration />
