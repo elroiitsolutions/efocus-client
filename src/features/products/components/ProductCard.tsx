@@ -135,7 +135,7 @@ export function ProductCard({ product }: ProductCardProps) {
       <div className="p-2.5 sm:p-3 flex flex-col justify-between flex-grow bg-white">
         <div>
           <div className="flex items-start justify-between gap-1.5 min-w-0">
-            <span className="text-[9px] sm:text-[10px] font-bold text-[#c8102e] uppercase tracking-wider min-w-0 flex-1 leading-tight">
+            <span className="text-[9px] sm:text-[7.5px] font-bold text-[#c8102e] uppercase tracking-wider min-w-0 flex-1 leading-tight">
               {product.category_name || "Industrial Solutions"}
             </span>
             {product.brand && (
@@ -144,7 +144,7 @@ export function ProductCard({ product }: ProductCardProps) {
               </span>
             )}
           </div>
-          <h4 className="font-heading text-[12px] sm:text-[13px] font-bold text-[#222222] mt-0.5 leading-snug hover:text-[#c8102e] transition-colors">
+          <h4 className="font-heading text-[12px] sm:text-[11px] font-bold text-[#222222] mt-0.5 leading-snug hover:text-[#c8102e] transition-colors">
             <Link to={`/products/${product.sku}`}>{product.product_name}</Link>
           </h4>
         </div>
@@ -152,7 +152,7 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* Action button bar */}
         <div className="mt-2 pt-2 border-t border-[#e5e7eb] flex items-center justify-between gap-1.5 min-w-0">
           <span
-            className="text-[10px] sm:text-[11px] font-bold text-[#111111] min-w-0 flex-1 leading-tight break-all"
+            className="text-[10px] sm:text-[10px] font-bold text-[#111111] min-w-0 flex-1 leading-tight break-all"
             title={product.sku}
           >
             {product.sku}
@@ -164,7 +164,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 isOutOfStock
                   ? "bg-[#808489] hover:bg-[#6c7075] text-white"
                   : "bg-[#c8102e] hover:bg-[#b00d26] text-white"
-              } px-3 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-[11px] font-bold transition-colors cursor-pointer shrink-0 whitespace-nowrap shadow-2xs`}
+              } px-3 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-[10px] font-bold transition-colors cursor-pointer shrink-0 whitespace-nowrap shadow-2xs`}
             >
               Request Quote
             </button>
