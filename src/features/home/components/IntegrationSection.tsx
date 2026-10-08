@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { NexBadge } from "@/components/ui/NexIcons";
 
 export default function IntegrationSection() {
   const slugify = (text: string) =>
@@ -125,16 +124,12 @@ export default function IntegrationSection() {
   const trackBrands = [...brands, ...brands, ...brands, ...brands];
 
   return (
-    <section className="w-full py-12 sm:py-16 bg-white border-t border-gray-100 overflow-hidden relative">
+    <section className="w-full py-8 sm:py-10 bg-white border-t border-gray-100 overflow-hidden relative">
       {/* Section Header */}
-      <div className="w-full max-w-[100rem] mx-auto px-4 text-center mb-6 sm:mb-8">
-        <NexBadge label="Direct Brand Supply" />
-        <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#0d0f11] tracking-tight mt-3">
+      <div className="w-full max-w-[100rem] mx-auto px-4 text-center mb-4 sm:mb-5">
+        <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-[#0d0f11] tracking-tight">
           Authorized & Multi-Brand Industrial Partner
         </h2>
-        <p className="text-xs sm:text-sm text-gray-500 max-w-xl mx-auto mt-1.5">
-          Guaranteed 100% genuine OEM factory parts with full manufacturer test certificates
-        </p>
       </div>
 
       {/* Style keyframe for continuous sliding marquee */}

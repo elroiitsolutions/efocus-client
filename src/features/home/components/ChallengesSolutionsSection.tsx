@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import { NexBadge } from "@/components/ui/NexIcons";
 
 type CategoryTab = "technical" | "commercial" | "fulfillment";
 
@@ -342,25 +341,38 @@ export default function ChallengesSolutionsSection() {
   const [animCycle, setAnimCycle] = useState(0);
 
   useEffect(() => {
+    const checkVisibility = () => {
+      if (sectionRef.current) {
+        const rect = sectionRef.current.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.95 && rect.bottom > 0) {
+          setHasEntered(true);
+        }
+      }
+    };
+
+    // Immediate check on mount/hydration
+    checkVisibility();
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setHasEntered(true);
           setAnimCycle((c) => c + 1);
-        } else if (entry.boundingClientRect.top > 0) {
-          // Reset when user scrolls back above the section so it animates again when scrolling down
-          setHasEntered(false);
         }
       },
-      { threshold: 0.15, rootMargin: "0px 0px -50px 0px" }
+      { threshold: 0.05, rootMargin: "100px 0px -20px 0px" }
     );
 
-    const target = diagramRef.current || sectionRef.current;
-    if (target) {
-      observer.observe(target);
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
     }
 
-    return () => observer.disconnect();
+    window.addEventListener("scroll", checkVisibility, { passive: true });
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", checkVisibility);
+    };
   }, []);
 
   // Only the 3 requested tabs
@@ -387,7 +399,7 @@ export default function ChallengesSolutionsSection() {
   return (
     <section
       ref={sectionRef}
-      className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white relative overflow-hidden"
+      className="w-full pt-8 sm:pt-12 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 bg-white relative overflow-hidden"
       id="challenges-solutions"
     >
       {/* Dynamic Keyframes for Rich Smooth Left/Right Slide Animations (Cinematic Slow Glide) */}
@@ -481,28 +493,28 @@ export default function ChallengesSolutionsSection() {
         
         {/* Section Header with Scroll Entry Animation */}
         <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
-          <div className={`flex justify-center mb-3 transition-all duration-700 ease-out ${
+          {/* <div className={`flex justify-center mb-3 transition-all duration-700 delay-100 ease-out ${
             hasEntered ? "opacity-100 translate-y-0 scale-100" : "opacity-0 -translate-y-4 scale-90"
           }`}>
             <NexBadge label="Operational Ownership" />
-          </div>
+          </div> */}
 
-          <h2 className={`text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[#0d0f11] mb-3 leading-[1.15] transition-all duration-700 delay-100 ease-out ${
+          <h2 className={`text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-[#0d0f11] mb-3 leading-[1.2] transition-all duration-700 delay-200 ease-out ${
             hasEntered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           }`}>
             Your Requirement Challenges,<br className="hidden sm:inline" /> Our Responsibility
           </h2>
 
-          <p className={`text-sm sm:text-base md:text-lg text-gray-600 leading-relaxed font-normal transition-all duration-700 delay-200 ease-out ${
+          {/* <p className={`text-sm sm:text-base md:text-lg text-gray-600 leading-relaxed font-normal transition-all duration-700 delay-300 ease-out ${
             hasEntered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           }`}>
             From initial specification to after-sales maintenance, eFocus takes complete technical
             ownership of your factory procurement pipeline.
-          </p>
+          </p> */}
         </div>
 
         {/* 3 Core Category Tabs with Scroll Entry Animation */}
-        <div className={`flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 mb-8 sm:mb-10 transition-all duration-700 delay-300 ease-out ${
+        <div className={`flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 mb-8 sm:mb-10 transition-all duration-700 delay-[380ms] ease-out ${
           hasEntered ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 translate-y-3"
         }`}>
           {categoryTabs.map((tab) => {
@@ -538,7 +550,7 @@ export default function ChallengesSolutionsSection() {
           {/* Top Column Headers */}
           <div className="grid grid-cols-2 gap-8 mb-5 px-6 sm:px-12 overflow-hidden">
             {/* Left Header */}
-            <div className={`flex items-center justify-start gap-2.5 text-[#b91c1c] transition-all duration-1000 ease-out ${
+            <div className={`flex items-center justify-start gap-2.5 text-[#b91c1c] transition-all duration-700 delay-[460ms] ease-out ${
               hasEntered ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-12"
             }`}>
               <span className="w-6 h-6 rounded-full border-2 border-[#b91c1c] flex items-center justify-center text-xs font-bold shrink-0">
@@ -550,7 +562,7 @@ export default function ChallengesSolutionsSection() {
             </div>
 
             {/* Right Header */}
-            <div className={`flex items-center justify-end gap-2.5 text-[#15803d] transition-all duration-1000 ease-out ${
+            <div className={`flex items-center justify-end gap-2.5 text-[#15803d] transition-all duration-700 delay-[460ms] ease-out ${
               hasEntered ? "opacity-100 translate-x-0" : "opacity-0 translate-x-12"
             }`}>
               <span className="w-6 h-6 rounded-full border-2 border-[#15803d] flex items-center justify-center text-xs font-bold shrink-0">
@@ -688,7 +700,9 @@ export default function ChallengesSolutionsSection() {
                       style={
                         hasEntered
                           ? {
-                              animation: `efRowSlideInLeft 1.25s cubic-bezier(0.22, 1, 0.36, 1) ${idx * 160}ms both`,
+                              animation: `efRowSlideInLeft 1.1s cubic-bezier(0.22, 1, 0.36, 1) ${
+                                520 + idx * 160
+                              }ms both`,
                             }
                           : { opacity: 0 }
                       }
@@ -738,7 +752,9 @@ export default function ChallengesSolutionsSection() {
                       style={
                         hasEntered
                           ? {
-                              animation: `efRowSlideInRight 1.25s cubic-bezier(0.22, 1, 0.36, 1) ${idx * 160}ms both`,
+                              animation: `efRowSlideInRight 1.1s cubic-bezier(0.22, 1, 0.36, 1) ${
+                                520 + idx * 160
+                              }ms both`,
                             }
                           : { opacity: 0 }
                       }
@@ -814,10 +830,9 @@ export default function ChallengesSolutionsSection() {
                       <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </div>
-                  {/* <div>
-                    <h4 className="text-xs font-bold text-gray-900">{item.challengeTitle}</h4>
-                    <span className="text-[10px] font-medium text-gray-500">Phase: {item.phaseTag}</span>
-                  </div> */}
+                  <div className="flex flex-col text-left min-w-0">
+                    <h4 className="text-xs font-bold text-gray-900 leading-snug">{item.challengeTitle}</h4>
+                  </div>
                 </div>
 
                 {/* Transition Arrow */}

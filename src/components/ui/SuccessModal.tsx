@@ -33,7 +33,7 @@ export default function SuccessModal({
 
     setIsSubmitting(true)
     try {
-      await fetch("https://formsubmit.co/ajax/chandruravichandran1536@gmail.com", {
+      await fetch("https://formsubmit.co/ajax/sales@efocus.in", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

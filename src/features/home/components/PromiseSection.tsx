@@ -68,12 +68,12 @@ export default function PromiseSection({ embedded = false }: { embedded?: boolea
     <div
       ref={containerRef}
       className={`w-full max-w-4xl mx-auto relative z-10 flex flex-col items-center text-center ${
-        embedded ? "mt-6 sm:mt-8" : ""
+        embedded ? "mt-4 sm:mt-6" : ""
       }`}
       id={embedded ? "our-promise" : undefined}
     >
       {/* Live Typing Headline */}
-      <div className="min-h-[80px] sm:min-h-[100px] md:min-h-[110px] flex items-center justify-center px-4">
+      <div className="min-h-[50px] sm:min-h-[64px] flex items-center justify-center px-2 sm:px-4">
         <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-2xl font-bold text-[#111315] tracking-tight leading-snug max-w-4xl">
           {displayedCount <= 12 ? (
             <span className="text-red-600">{displayedText}</span>

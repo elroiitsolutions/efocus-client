@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from "react"
-import { useParams, Link } from "react-router-dom"
+import { useParams, Link, useNavigate } from "react-router-dom"
 import { useProduct } from "../hooks/useProduct"
 import { useProducts } from "../hooks/useProducts"
 import { useQuoteStore } from "@/features/quote/store/quote.store"
 import { useWishlistStore } from "@/features/wishlist/store/wishlist.store"
+import { useCompareStore } from "@/features/compare/store/compare.store"
 import { Skeleton } from "@/components/ui/skeleton"
 import {
   Heart,
@@ -12,6 +13,9 @@ import {
   ChevronLeft,
   ChevronRight,
   Star,
+  ArrowLeftRight,
+  Search,
+  Headset,
 } from "lucide-react"
 import { slugify } from "@/lib/utils"
 import type { Product } from "../types/product.types"
@@ -21,63 +25,31 @@ import {
   getProductThumbnails,
   getCarouselProductImage,
 } from "../utils/productImages"
+import RequestProductModal from "../components/RequestProductModal"
 
-// Styled brand badges to replicate real vendor logos
+// Brand badge theme registry (declarative lookup table, avoiding repetitive if/else statements)
+const BRAND_BADGE_THEMES: Record<string, { label?: string; className: string }> = {
+  "3m": { label: "3M", className: "font-black text-[#D32F2F] tracking-tighter bg-red-50 border-red-200" },
+  "ieee": { label: "IEEE", className: "font-black italic text-[#00629B] bg-white border-[#38bdf8]" },
+  "iee": { label: "IEEE", className: "font-black italic text-[#00629B] bg-white border-[#38bdf8]" },
+  "impinj": { label: "IMPINJ", className: "font-bold text-[#E84E1B] bg-orange-50 border-orange-200" },
+  "honeywell": { label: "Honeywell", className: "font-black text-[#DE1F27] tracking-tight bg-red-50 border-red-200" },
+  "weller": { label: "Weller", className: "font-bold text-[#00897B] bg-teal-50 border-teal-200" },
+  "quick": { label: "QUICK", className: "font-bold text-[#1565C0] bg-gray-50 border-gray-200" },
+  "fluke": { label: "FLUKE", className: "font-black text-black bg-[#FFD100] border-[#FFD100]" },
+}
+
 function BrandBadge({ name }: { name: string }) {
-  const brandClean = (name || "").toLowerCase()
+  const brandKey = Object.keys(BRAND_BADGE_THEMES).find((key) =>
+    (name || "").toLowerCase().includes(key)
+  )
+  const theme = brandKey ? BRAND_BADGE_THEMES[brandKey] : null
+  const displayLabel = theme?.label || name || "Generic"
+  const badgeStyle = theme?.className || "font-bold text-gray-700 bg-gray-100 border-gray-200"
 
-  if (brandClean.includes("3m")) {
-    return (
-      <span className="text-[11px] font-black text-[#D32F2F] tracking-tighter bg-red-50 border border-red-200 px-1.5 py-0.5 rounded">
-        3M
-      </span>
-    )
-  }
-  if (brandClean.includes("ieee") || brandClean.includes("iee")) {
-    return (
-      <span className="text-[10px] font-black italic text-[#00629B] bg-white border border-[#38bdf8] px-1.5 py-0.5 rounded-[4px] tracking-tight leading-none inline-block">
-        IEE
-      </span>
-    )
-  }
-  if (brandClean.includes("impinj")) {
-    return (
-      <span className="text-[11px] font-bold text-[#E84E1B] bg-orange-50 border border-orange-200 px-1.5 py-0.5 rounded">
-        IMPINJ
-      </span>
-    )
-  }
-  if (brandClean.includes("honeywell")) {
-    return (
-      <span className="text-[11px] font-black text-[#DE1F27] tracking-tight bg-red-50 border border-red-200 px-1.5 py-0.5 rounded">
-        Honeywell
-      </span>
-    )
-  }
-  if (brandClean.includes("weller")) {
-    return (
-      <span className="text-[11px] font-bold text-[#00897B] bg-teal-50 border border-teal-200 px-1.5 py-0.5 rounded">
-        Weller
-      </span>
-    )
-  }
-  if (brandClean.includes("quick")) {
-    return (
-      <span className="text-[11px] font-bold text-[#1565C0] bg-gray-50 border border-gray-200 px-1.5 py-0.5 rounded">
-        QUICK
-      </span>
-    )
-  }
-  if (brandClean.includes("fluke")) {
-    return (
-      <span className="text-[11px] font-black text-black bg-[#FFD100] px-1.5 py-0.5 rounded">
-        FLUKE
-      </span>
-    )
-  }
   return (
-    <span className="text-[11px] font-bold text-gray-700 bg-gray-100 border border-gray-200 px-1.5 py-0.5 rounded">
-      {name}
+    <span className={`text-[11px] px-2 py-0.5 rounded border inline-block ${badgeStyle}`}>
+      {displayLabel}
     </span>
   )
 }
@@ -109,18 +81,17 @@ function CarouselProductCard({
           <img
             src={image}
             alt={title}
-            className={`max-h-[110px] sm:max-h-[125px] w-auto object-contain ${
-              isOutOfStock ? "grayscale contrast-95 opacity-80" : ""
-            }`}
+            className={`max-h-[110px] sm:max-h-[125px] w-auto object-contain ${isOutOfStock ? "grayscale contrast-95 opacity-80" : ""
+              }`}
             onError={(e) => {
-              ;(e.target as HTMLImageElement).src =
+              ; (e.target as HTMLImageElement).src =
                 "/images/cat_cables_1785994179162.png"
             }}
           />
         </div>
 
         {/* Product Title */}
-        <h4 className="font-heading font-bold text-[12.5px] sm:text-[13px] text-[#111111] leading-snug group-hover:text-[#b91c1c] transition-colors">
+        <h4 className="font-heading font-bold text-[12.5px] sm:text-[13px] text-[#111111] leading-snug group-hover:text-[#b91c1c] transition-colors line-clamp-2 min-h-[32px] sm:min-h-[36px]">
           {title}
         </h4>
 
@@ -181,6 +152,11 @@ function getProductSpecPills(product: Product) {
     }
 
     if (!value) return
+
+    // Never display "Issued By" or duplicate brand values since Brand is already prominently shown
+    if (label.toLowerCase().includes("issued by") || label.toLowerCase() === "brand") return
+    if (product.brand && value.toLowerCase() === product.brand.toLowerCase()) return
+
     // Prevent duplicate values or duplicate labels
     const alreadyExists = pills.some(
       (p) =>
@@ -192,28 +168,18 @@ function getProductSpecPills(product: Product) {
     }
   }
 
-  // 1st Pill: Key Spec 1 (e.g. Block Size: 4096 addresses)
-  parseAndAdd(product.key_spec_1, "Block Size")
+  // 1st Pill: Key Spec 1 (e.g. Block Size: 4096 addresses, or Frequency: UHF 865-867MHz)
+  parseAndAdd(product.key_spec_1, "Specification")
 
-  // 2nd Pill: Issued By / Brand
-  if (product.brand) {
-    const brandVal = product.brand.trim()
-    const alreadyHasBrand = pills.some(
-      (p) => p.value.toLowerCase() === brandVal.toLowerCase()
-    )
-    if (!alreadyHasBrand) {
-      pills.push({ label: "Issued By", value: brandVal })
-    }
-  }
-
-  // 3rd Pill: Key Spec 2 or 3 (e.g. Temp Range or Application)
+  // 2nd Pill: Key Spec 2 (e.g. Application: Network device ID, or Interface: PoE Ethernet)
   parseAndAdd(product.key_spec_2, "Application")
 
-  if (pills.length < 3 && product.key_spec_3) {
+  // 3rd Pill: Key Spec 3
+  if (product.key_spec_3) {
     parseAndAdd(product.key_spec_3, "Standard")
   }
 
-  return pills.slice(0, 3)
+  return pills
 }
 
 // 5 Customer reviews exactly matching user request and PDF
@@ -252,20 +218,44 @@ const customerReviews = [
 
 export default function ProductDetailsPage() {
   const { slug } = useParams<{ slug: string }>()
+  const navigate = useNavigate()
   const { data: product, isLoading, error } = useProduct(slug || "")
   const { data: productsData } = useProducts({ limit: 100 })
+
+  // Synchronize Lenis dimensions immediately whenever product data finishes loading
+  useEffect(() => {
+    if (window.__lenis?.dimensions) {
+      window.__lenis.dimensions.resize();
+    }
+  }, [isLoading, product]);
 
   const addItem = useQuoteStore((state) => state.addItem)
   const openDrawer = useQuoteStore((state) => state.openDrawer)
   const toggleWishlist = useWishlistStore((state) => state.toggleItem)
   const isWishlisted = useWishlistStore((state) => state.hasItem(product?.sku || ""))
+  const toggleCompare = useCompareStore((state) => state.toggleItem)
+  const isCompared = useCompareStore((state) => state.hasItem(product?.sku || ""))
+  const compareCount = useCompareStore((state) => state.items.length)
+  const [showCompareToast, setShowCompareToast] = useState(false)
+  const [isRequestProductOpen, setIsRequestProductOpen] = useState(false)
 
   const [qty, setQty] = useState(1)
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
   const [relatedPage, setRelatedPage] = useState(1)
   const [viewedPage, setViewedPage] = useState(1)
   const [reviewPage, setReviewPage] = useState(1)
-  
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth < 640 : false
+  )
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640)
+    }
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
   // Robu.in high-performance zoom lens refs (no re-render lag)
   const zoomContainerRef = useRef<HTMLDivElement>(null)
   const zoomImageRef = useRef<HTMLImageElement>(null)
@@ -300,7 +290,10 @@ export default function ProductDetailsPage() {
     setSelectedImageIndex(0)
     setQty(1)
     resetZoom()
-    window.scrollTo({ top: 0, behavior: "smooth" })
+    if (window.__lenis) {
+      window.__lenis.scrollTo(0, { immediate: true })
+    }
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior })
   }, [slug])
 
   const handleAddToQuote = () => {
@@ -323,6 +316,29 @@ export default function ProductDetailsPage() {
       category: product.category_name || "Industrial Solutions",
       code: product.catalog_number || product.sku,
     })
+  }
+
+  const handleToggleCompare = () => {
+    if (!product) return
+    const willBeAdded = !isCompared
+    toggleCompare({
+      id: product.sku,
+      sku: product.sku,
+      name: product.product_name,
+      category: product.category_name || "Industrial Solutions",
+      code: product.catalog_number || product.sku,
+      brand: product.brand || "Generic",
+      image: getProductPrimaryImage(product),
+      key_spec_1: product.key_spec_1,
+      key_spec_2: product.key_spec_2,
+      key_spec_3: product.key_spec_3,
+      stock_status: product.stock_status,
+      short_description: product.short_description,
+    })
+    if (willBeAdded) {
+      setShowCompareToast(true)
+      setTimeout(() => setShowCompareToast(false), 4000)
+    }
   }
 
   if (isLoading) {
@@ -410,9 +426,12 @@ export default function ProductDetailsPage() {
 
   const catalog = diverseCatalog.length > 0 ? diverseCatalog : distinctCatalog
 
+  // Responsive carousel: 2 items on mobile (< 640px), 5 on desktop
+  const carouselPageSize = isMobile ? 2 : 5
+
   // Carousel Row 1 items (Related products) with pagination support
   const relatedPool = catalog
-  const relatedPageSize = 5
+  const relatedPageSize = carouselPageSize
   const totalRelatedPages = Math.max(1, Math.ceil(relatedPool.length / relatedPageSize))
   const safeRelatedPage = ((relatedPage - 1) % totalRelatedPages) + 1
   const relatedStartIndex = (safeRelatedPage - 1) * relatedPageSize
@@ -420,7 +439,7 @@ export default function ProductDetailsPage() {
 
   // Carousel Row 2 items (Customers also viewed) offset by 5 to guarantee different products
   const viewedPool = [...catalog.slice(5), ...catalog.slice(0, 5)]
-  const viewedPageSize = 5
+  const viewedPageSize = carouselPageSize
   const totalViewedPages = Math.max(1, Math.ceil(viewedPool.length / viewedPageSize))
   const safeViewedPage = ((viewedPage - 1) % totalViewedPages) + 1
   const viewedStartIndex = (safeViewedPage - 1) * viewedPageSize
@@ -430,7 +449,7 @@ export default function ProductDetailsPage() {
     <div className="bg-white min-h-screen py-2.5 sm:py-3.5 text-left overflow-x-clip">
       {/* Container constrained to exact width matching PDF without empty gaps */}
       <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Breadcrumbs: Home > Products > Category > Product */}
         <nav className="flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-[12.5px] text-gray-700 mb-2.5 sm:mb-3.5 font-medium flex-wrap">
           <Link to="/" className="hover:text-[#b91c1c] transition-colors shrink-0">Home</Link>
@@ -449,17 +468,17 @@ export default function ProductDetailsPage() {
           </span>
         </nav>
 
-        {/* Main Product Showcase Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 lg:gap-8 pb-6 sm:pb-8">
-          
-          {/* Left Column: Showcase Card with Main Image + 4 Thumbnails Inside */}
-          <div className="col-span-1 lg:col-span-6 w-full bg-[#f8f9fa] border border-[#e5e7eb] rounded-lg p-3.5 sm:p-4 lg:p-5 xl:p-6 flex flex-col justify-between items-center shadow-2xs">
-            {/* Main Product Image with Interactive Opposite-Direction Zoom Lens (Robu.in style) */}
+        {/* Main Product Showcase Section matching Robu.in Model */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-10 pb-8 sm:pb-10">
+
+          {/* Left Column: Clean White Showcase Card with Main Image + Centered Thumbnails */}
+          <div className="col-span-1 lg:col-span-6 w-full bg-white border border-gray-200 rounded-2xl p-5 sm:p-7 lg:p-8 flex flex-col justify-between items-center shadow-xs">
+            {/* Main Product Image with Interactive Opposite-Direction Zoom Lens */}
             <div
               ref={zoomContainerRef}
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
-              className="w-full flex-1 flex items-center justify-center py-1 sm:py-2 min-h-[190px] sm:min-h-[220px] md:min-h-[250px] lg:min-h-[260px] xl:min-h-[340px] 2xl:min-h-[380px] overflow-hidden cursor-crosshair relative select-none rounded-md"
+              className="w-full flex-1 flex items-center justify-center py-4 min-h-[240px] sm:min-h-[290px] md:min-h-[320px] lg:min-h-[350px] xl:min-h-[390px] overflow-hidden cursor-crosshair relative select-none rounded-md"
             >
               <img
                 ref={zoomImageRef}
@@ -470,18 +489,17 @@ export default function ProductDetailsPage() {
                   transform: "scale(1)",
                   transition: "transform 0.25s cubic-bezier(0.25, 1, 0.5, 1)",
                 }}
-                className={`max-h-[180px] sm:max-h-[210px] md:max-h-[240px] lg:max-h-[250px] xl:max-h-[330px] 2xl:max-h-[370px] max-w-[300px] w-auto object-contain pointer-events-none will-change-transform ${
-                  product.stock_status === "out_of_stock" ? "grayscale contrast-95 opacity-85" : ""
-                }`}
+                className={`max-h-[220px] sm:max-h-[270px] md:max-h-[300px] lg:max-h-[330px] xl:max-h-[370px] max-w-[340px] w-auto object-contain pointer-events-none will-change-transform ${product.stock_status === "out_of_stock" ? "grayscale contrast-95 opacity-85" : ""
+                  }`}
                 onError={(e) => {
-                  ;(e.target as HTMLImageElement).src =
+                  ; (e.target as HTMLImageElement).src =
                     gallery.primary || "/images/cat_cables_1785994179162.png"
                 }}
               />
             </div>
 
-            {/* 4 Thumbnails positioned at bottom inside the same gray card */}
-            <div className="flex items-center justify-center gap-2 sm:gap-2.5 md:gap-3 mt-2 sm:mt-3 w-full">
+            {/* Thumbnails centered below the main image matching Image 2 */}
+            <div className="flex items-center justify-center gap-3 mt-4 w-full">
               {galleryThumbnails.map((thumb, idx) => (
                 <button
                   key={idx}
@@ -489,11 +507,10 @@ export default function ProductDetailsPage() {
                     setSelectedImageIndex(idx)
                     resetZoom()
                   }}
-                  className={`w-12 h-12 sm:w-14 sm:h-14 lg:w-15 lg:h-15 xl:w-[72px] xl:h-[72px] rounded-lg bg-white border p-1 sm:p-1.5 flex items-center justify-center cursor-pointer transition-all shrink-0 ${
-                    selectedImageIndex === idx
-                      ? "border-2 border-[#b91c1c] ring-2 ring-[#b91c1c]/25 shadow-xs"
-                      : "border-[#d1d5db] hover:border-gray-400 opacity-85 hover:opacity-100 shadow-2xs"
-                  }`}
+                  className={`w-14 h-14 sm:w-16 sm:h-16 rounded-lg bg-white border p-1.5 flex items-center justify-center cursor-pointer transition-all shrink-0 ${selectedImageIndex === idx
+                      ? "border-2 border-gray-900 shadow-sm"
+                      : "border-gray-200 hover:border-gray-400 opacity-90 hover:opacity-100 shadow-2xs"
+                    }`}
                   aria-label={`Select product image ${idx + 1}`}
                 >
                   <img
@@ -506,80 +523,134 @@ export default function ProductDetailsPage() {
             </div>
           </div>
 
-          {/* Right Column: Product Info & Actions matching PDF UI */}
-          <div className="col-span-1 lg:col-span-6 w-full flex flex-col justify-start pt-0.5">
-            
-            {/* Top Tag Row: Category Red Pill on Left, Availability on Right */}
-            <div className="flex items-center justify-between flex-wrap gap-2 mb-1.5 sm:mb-2">
-              <span className="bg-[#b91c1c] text-white text-[11px] sm:text-[11.5px] font-bold px-3 py-0.5 rounded-full uppercase tracking-wider inline-block">
-                {product.category_name || "Industrial Solutions"}
-              </span>
-              <div className="text-[12px] sm:text-[12.5px] font-medium text-gray-700">
-                Availability:{" "}
-                {product.stock_status === "out_of_stock" ? (
-                  <span className="font-bold text-[#b91c1c]">Out of Stock</span>
-                ) : (
-                  <span className="font-bold text-[#16a34a]">In Stock</span>
-                )}
-              </div>
-            </div>
+          {/* Right Column: Product Info & Actions matching Image 2 (Robu.in Model) */}
+          <div className="col-span-1 lg:col-span-6 w-full flex flex-col justify-start text-left">
 
-            {/* Product Title */}
-            <h1 className="font-heading text-[19px] sm:text-[22px] lg:text-[25px] xl:text-[30px] 2xl:text-[32px] font-black text-[#111111] leading-tight mb-2 sm:mb-2.5">
+            {/* 1. Category Link at top */}
+            <Link
+              to={`/products?category=${slugify(product.category_name || "Industrial Solutions")}`}
+              className="text-xs sm:text-[13px] text-gray-500 hover:text-gray-900 transition-colors mb-1 inline-block font-normal"
+            >
+              {product.category_name || "Industrial Solutions"}
+            </Link>
+
+            {/* 2. Product Title */}
+            <h1 className="font-heading text-xl sm:text-2xl lg:text-[27px] font-bold text-[#111315] leading-snug mb-2 tracking-tight">
               {product.product_name}
             </h1>
 
-            {/* Dynamic Specification Pills matching PDF badge styling */}
-            <div className="flex items-center flex-wrap gap-1.5 mb-2 sm:mb-2.5">
-              {specPills.map((pill, idx) => (
-                <span
-                  key={idx}
-                  className="bg-[#f2f4f7] text-[#111111] text-[10.5px] sm:text-[11.5px] font-bold px-2.5 py-1 rounded-lg"
-                >
-                  {pill.label ? `${pill.label}: ` : ""}
-                  <span className="font-medium text-gray-700">{pill.value}</span>
-                </span>
-              ))}
-            </div>
-
-            {/* Rating Stars */}
-            <div className="flex items-center gap-2 mb-2 sm:mb-2.5">
+            {/* 3. Rating Stars + Review count */}
+            <div className="flex items-center gap-1.5 mb-2.5">
               <div className="flex text-[#f59e0b]">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={15} fill="#f59e0b" stroke="none" />
+                  <Star key={i} size={14} fill="#f59e0b" stroke="none" />
                 ))}
               </div>
-              <span className="text-[12px] sm:text-[12.5px] text-gray-500 font-medium">
-                ( 1 customer review)
+              <span className="text-xs text-gray-500 font-normal">
+                (5 customer review)
               </span>
             </div>
 
-            <hr className="border-t border-[#e5e7eb] my-2 sm:my-2.5" />
-
-            {/* Brand, SKU, and Product Family specs */}
-            <div className="flex flex-col gap-1.5 sm:gap-2 text-[13px] sm:text-[13.5px]">
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-gray-900">Brand:</span>
-                <BrandBadge name={product.brand || "Generic"} />
-              </div>
-              <div>
-                <span className="font-bold text-gray-900">SKU / Part Number:</span>{" "}
-                <span className="font-semibold text-gray-800 font-mono">{product.catalog_number || product.sku}</span>
-              </div>
-              <div>
-                <span className="font-bold text-gray-900">Product Family:</span>{" "}
-                <span className="font-semibold text-gray-800">{product.family_name || product.category_name || "Industrial Components"}</span>
-              </div>
-              <p className="text-gray-600 text-[12px] sm:text-[12.5px] leading-relaxed mt-0.5 line-clamp-2">
-                {product.short_description || "High-precision industrial product engineered for dependable reliability, standard compliance, and continuous manufacturing."}
-              </p>
+            {/* 4. SKU Line in Blue Accent */}
+            <div className="text-xs sm:text-[13px] font-bold text-gray-900 mb-2">
+              SKU: <span className="text-[#0284c7] font-bold font-mono">{product.catalog_number || product.sku}</span>
             </div>
 
-            <hr className="border-t border-[#e5e7eb] my-2.5 sm:my-3" />
+            {/* 5. Pricing / Commercial Quote Line matching Image 2 */}
+            <div className="flex items-baseline gap-2 mb-1">
+              <span className="text-2xl sm:text-[26px] font-extrabold text-[#111315]">
+                Custom B2B Quotation
+              </span>
+              <span className="text-xs font-semibold text-gray-500">
+                (Incl. GST)
+              </span>
+            </div>
 
-            {/* Action Row: Quantity + Add to Quote Basket + Wishlist + Accessibility */}
-            <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap mb-3 sm:mb-4">
-              {/* Quantity Box matching PDF: - 1 + */}
+            {/* 6. Rewards / Procurement Loyalty Line */}
+            <p className="text-xs text-gray-600 mb-2 font-normal">
+              Purchase this product now and earn <span className="font-bold text-gray-800">64 eFocus Points</span>!
+            </p>
+
+            {/* 7. Availability */}
+            <div className="text-xs sm:text-[13px] font-medium text-gray-900 mb-2.5">
+              Availability:{" "}
+              {product.stock_status === "out_of_stock" ? (
+                <span className="font-bold text-[#b91c1c]">Out of Stock</span>
+              ) : (
+                <span className="font-bold text-[#16a34a]">In Stock</span>
+              )}
+            </div>
+
+            {/* 8. B2B / Bulk Inquiries Note matching Image 2 */}
+            <div className="text-xs text-gray-700 space-y-1 mb-3 leading-relaxed">
+              <p>
+                For bulk orders or B2B inquiries, email us:{" "}
+                <a href="mailto:sales@efocus.in" className="text-[#0284c7] font-semibold hover:underline">
+                  sales@efocus.in
+                </a>
+              </p>
+              {product.family_name && (
+                <p className="text-amber-800 text-[11.5px] font-medium">
+                  <span className="font-bold text-amber-900">Note: </span>
+                  Looking for the latest model? Check out the all new{" "}
+                  <span className="font-semibold text-amber-900 underline">{product.family_name}</span>.
+                </p>
+              )}
+            </div>
+
+            {/* 9. Key Specs Table with Clean Aligned Colons (Robu.in hallmark) */}
+            <div className="border-t border-b border-gray-200/90 py-3 my-2 space-y-1.5 text-xs sm:text-[12.5px]">
+              <div className="grid grid-cols-[85px_14px_1fr] sm:grid-cols-[100px_14px_1fr] items-center">
+                <span className="font-bold text-gray-800">MPN</span>
+                <span className="text-gray-500 font-bold">:</span>
+                <span className="text-gray-900 font-mono font-medium">{product.catalog_number || "N/A"}</span>
+              </div>
+              <div className="grid grid-cols-[85px_14px_1fr] sm:grid-cols-[100px_14px_1fr] items-center">
+                <span className="font-bold text-gray-800">Brand</span>
+                <span className="text-gray-500 font-bold">:</span>
+                <div>
+                  <BrandBadge name={product.brand || "Generic"} />
+                </div>
+              </div>
+              <div className="grid grid-cols-[85px_14px_1fr] sm:grid-cols-[100px_14px_1fr] items-center">
+                <span className="font-bold text-gray-800">Category</span>
+                <span className="text-gray-500 font-bold">:</span>
+                <span className="text-gray-900 font-medium">{product.category_name || "Industrial Solutions"}</span>
+              </div>
+              {specPills.map((sp, idx) => (
+                <div key={idx} className="grid grid-cols-[85px_14px_1fr] sm:grid-cols-[100px_14px_1fr] items-center">
+                  <span className="font-bold text-gray-800">{sp.label || `Spec ${idx + 1}`}</span>
+                  <span className="text-gray-500 font-bold">:</span>
+                  <span className="text-gray-900 font-medium">{sp.value}</span>
+                </div>
+              ))}
+              {/* <div className="grid grid-cols-[85px_14px_1fr] sm:grid-cols-[100px_14px_1fr] items-center">
+                <span className="font-bold text-gray-800">Data Sheet</span>
+                <span className="text-gray-500 font-bold">:</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    window.dispatchEvent(
+                      new CustomEvent("open-procurement-modal", {
+                        detail: { mode: "quote", title: `Request Datasheet: ${product.product_name}` },
+                      })
+                    )
+                  }}
+                  className="text-[#0284c7] hover:underline font-semibold flex items-center gap-1.5 cursor-pointer w-fit text-left"
+                >
+                  <span>Click to Download</span>
+                  <svg className="w-3.5 h-3.5 text-[#0284c7]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                  </svg>
+                </button>
+              </div> */}
+            </div>
+
+            {/* 10. Action Row: Quantity + Add to Quote + Wishlist + Compare */}
+            <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap my-3">
+              {/* Quantity Box: - 1 + */}
               <div className="flex items-center border border-[#d1d5db] rounded-lg overflow-hidden bg-white shrink-0 h-10">
                 <button
                   onClick={() => setQty(Math.max(1, qty - 1))}
@@ -617,53 +688,145 @@ export default function ProductDetailsPage() {
                 </button>
               )}
 
-              {/* Wishlist Button: Rounded square */}
+              {/* Wishlist Button: Rounded square matching Image 2 */}
               <button
                 onClick={handleToggleWishlist}
-                className={`w-10 h-10 rounded-lg border flex items-center justify-center cursor-pointer transition-colors shrink-0 ${
-                  isWishlisted
+                className={`w-10 h-10 rounded-lg border flex items-center justify-center cursor-pointer transition-colors shrink-0 ${isWishlisted
                     ? "bg-[#FFF1F2] border-[#b91c1c] text-[#b91c1c]"
-                    : "bg-white border-[#d1d5db] text-gray-700 hover:border-[#b91c1c] hover:text-[#b91c1c]"
-                }`}
+                    : "bg-white border-[#d1d5db] text-gray-700 hover:border-gray-900 hover:text-black"
+                  }`}
                 title={isWishlisted ? "Wishlisted" : "Add to Wishlist"}
                 aria-label="Wishlist"
               >
                 <Heart size={16} fill={isWishlisted ? "#b91c1c" : "none"} />
               </button>
 
-              {/* Share / Accessibility Icon Button matching PDF */}
+              {/* Compare Button with Opposing Arrows Icon matching Image 2 */}
               <button
-                className="w-10 h-10 rounded-lg border border-[#d1d5db] flex items-center justify-center bg-white text-gray-700 hover:bg-gray-50 cursor-pointer transition-colors shrink-0"
-                title="Accessibility & Share"
-                aria-label="Share product"
+                type="button"
+                onClick={handleToggleCompare}
+                className={`w-10 h-10 rounded-lg border flex items-center justify-center cursor-pointer transition-colors shrink-0 ${
+                  isCompared
+                    ? "bg-[#FFF1F2] border-[#b91c1c] text-[#b91c1c]"
+                    : "bg-white border-[#d1d5db] text-gray-700 hover:border-gray-900 hover:text-black"
+                }`}
+                title={isCompared ? "Remove from Comparison" : "Add to Comparison"}
+                aria-label="Compare product"
               >
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="4" r="2" />
-                  <path d="m4 8 8 2 8-2" />
-                  <path d="M12 10v6" />
-                  <path d="m8 20 4-4 4 4" />
-                </svg>
+                <ArrowLeftRight size={16} strokeWidth={2} />
               </button>
             </div>
 
-            {/* Value Propositions with Green Icons */}
-            <div className="flex flex-col gap-2 text-[12px] sm:text-[12.5px] text-gray-700">
-              <div className="flex items-center gap-2">
-                <svg className="w-4 h-4 text-[#16a34a] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10" />
-                  <path d="m9 12 2 2 4-4" />
-                </svg>
-                <span>Single-Vendor Consolidated Quotes (zero split shipments)</span>
+            {/* Compare Notification Banner */}
+            {showCompareToast && (
+              <div className="flex items-center justify-between bg-[#111315] text-white text-xs px-3.5 py-2.5 rounded-lg shadow-md animate-in fade-in slide-in-from-top-1 duration-200 mt-2 mb-1">
+                <span className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+                  Added to comparison ({compareCount} {compareCount === 1 ? "product" : "products"})
+                </span>
+                <Link
+                  to="/compare"
+                  className="font-bold text-red-400 hover:text-red-300 underline ml-3 cursor-pointer shrink-0"
+                >
+                  View Compare Page →
+                </Link>
               </div>
-              <div className="flex items-center gap-2">
-                <svg className="w-4 h-4 text-[#16a34a] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                  <polyline points="14 2 14 8 20 8" />
-                  <line x1="16" y1="13" x2="8" y2="13" />
-                  <line x1="16" y1="17" x2="8" y2="17" />
-                  <polyline points="10 9 9 9 8 9" />
-                </svg>
-                <span>Traceability batch labels supplied on delivery</span>
+            )}
+
+            {/* 11. 5-Column Horizontal Trust & Support Strip matching Image 2 */}
+            <div className="pt-4 mt-2 border-t border-gray-200/80">
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 sm:gap-2 text-center text-xs">
+                {/* 1. Have a Bulk Order? */}
+                <Link
+                  to="/contact"
+                  onClick={() => {
+                    window.scrollTo({ top: 0, left: 0, behavior: "instant" })
+                    if (window.__lenis) {
+                      window.__lenis.scrollTo(0, { immediate: true })
+                    }
+                    navigate("/contact")
+                  }}
+                  className="flex flex-col items-center justify-center p-2 rounded-lg bg-gray-50/60 hover:bg-red-50/50 hover:border-red-200 border border-transparent transition-all group cursor-pointer text-center select-none"
+                  title="Have a Bulk Order? Contact our sales team"
+                >
+                  <svg className="w-5 h-5 text-gray-700 group-hover:text-[#b91c1c] transition-colors mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                    <rect x="2" y="7" width="20" height="14" rx="2" />
+                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                  </svg>
+                  <span className="font-bold text-gray-900 group-hover:text-[#b91c1c] text-[11px] leading-tight transition-colors">
+                    Have a Bulk Order?
+                  </span>
+                  <span className="text-[#0284c7] group-hover:text-[#b91c1c] font-semibold text-[11px] group-hover:underline mt-0.5 transition-colors">
+                    Click Here
+                  </span>
+                </Link>
+
+                {/* 2. Need Support? */}
+                <Link
+                  to="/contact"
+                  onClick={() => {
+                    window.scrollTo({ top: 0, left: 0, behavior: "instant" })
+                    if (window.__lenis) {
+                      window.__lenis.scrollTo(0, { immediate: true })
+                    }
+                    navigate("/contact")
+                  }}
+                  className="flex flex-col items-center justify-center p-2 rounded-lg bg-gray-50/60 hover:bg-red-50/50 hover:border-red-200 border border-transparent transition-all group cursor-pointer text-center select-none"
+                  title="Need Support? Contact our technical support team"
+                >
+                  <Headset className="w-5 h-5 text-gray-700 group-hover:text-[#b91c1c] transition-colors mb-1" strokeWidth={1.9} />
+                  <span className="font-bold text-gray-900 group-hover:text-[#b91c1c] text-[11px] leading-tight transition-colors">
+                    Need Support ?
+                  </span>
+                  <span className="text-[#0284c7] group-hover:text-[#b91c1c] font-semibold text-[11px] group-hover:underline mt-0.5 transition-colors">
+                    Click Here
+                  </span>
+                </Link>
+
+                {/* 3. 1 Year Warranty */}
+                <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-gray-50/60 hover:bg-gray-100/80 transition-colors">
+                  <svg className="w-5 h-5 text-gray-700 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    <path d="m9 12 2 2 4-4" />
+                  </svg>
+                  <span className="font-bold text-gray-900 text-[11px] leading-tight">1 Year Warranty</span>
+                  <span className="text-[10px] text-gray-500 mt-0.5">OEM Direct</span>
+                </div>
+
+                {/* 4. Free Delivery Above ₹999 */}
+                <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-gray-50/60 hover:bg-gray-100/80 transition-colors">
+                  <svg className="w-5 h-5 text-gray-700 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                    <rect x="1" y="3" width="15" height="13" />
+                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
+                    <circle cx="5.5" cy="18.5" r="2.5" />
+                    <circle cx="18.5" cy="18.5" r="2.5" />
+                  </svg>
+                  <span className="font-bold text-gray-900 text-[11px] leading-tight">Free Delivery</span>
+                  <span className="text-[10px] text-gray-500 mt-0.5">Above ₹999</span>
+                </div>
+
+                {/* 5. Cash on Delivery* */}
+                <div className="col-span-2 sm:col-span-1 flex flex-col items-center justify-center p-2 rounded-lg bg-gray-50/60 hover:bg-gray-100/80 transition-colors">
+                  <svg className="w-5 h-5 text-gray-700 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                    <rect x="2" y="6" width="20" height="12" rx="2" />
+                    <circle cx="12" cy="12" r="2" />
+                    <path d="M6 12h.01M18 12h.01" />
+                  </svg>
+                  <span className="font-bold text-gray-900 text-[11px] leading-tight">Cash on Delivery*</span>
+                  <span className="text-[10px] text-gray-500 mt-0.5">Or GST Credit</span>
+                </div>
+              </div>
+
+              {/* 12. Bottom Link: Didn't find what you are looking for? */}
+              <div className="mt-3.5 pt-2 text-center sm:text-left">
+                <button
+                  type="button"
+                  onClick={() => setIsRequestProductOpen(true)}
+                  className="inline-flex items-center gap-1.5 text-xs sm:text-[13px] font-bold text-[#0284c7] hover:underline underline cursor-pointer"
+                >
+                  <Search size={14} className="text-[#0284c7] shrink-0" />
+                  <span>Didn't find what you are looking for?</span>
+                </button>
               </div>
             </div>
 
@@ -685,7 +848,7 @@ export default function ProductDetailsPage() {
             {/* Left Floating Red Button */}
             <button
               onClick={() => setRelatedPage((p) => (p > 1 ? p - 1 : totalRelatedPages))}
-              className="absolute left-1 sm:-left-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full bg-[#b91c1c] hover:bg-[#991b1b] text-white flex items-center justify-center cursor-pointer shadow-md transition-all active:scale-95"
+              className="absolute -left-2 sm:-left-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full bg-[#b91c1c] hover:bg-[#991b1b] text-white flex items-center justify-center cursor-pointer shadow-md transition-all active:scale-95"
               aria-label="Previous page"
             >
               <ChevronLeft size={18} strokeWidth={2.5} />
@@ -694,20 +857,20 @@ export default function ProductDetailsPage() {
             {/* Right Floating Red Button */}
             <button
               onClick={() => setRelatedPage((p) => (p < totalRelatedPages ? p + 1 : 1))}
-              className="absolute right-1 sm:-right-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full bg-[#b91c1c] hover:bg-[#991b1b] text-white flex items-center justify-center cursor-pointer shadow-md transition-all active:scale-95"
+              className="absolute -right-2 sm:-right-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full bg-[#b91c1c] hover:bg-[#991b1b] text-white flex items-center justify-center cursor-pointer shadow-md transition-all active:scale-95"
               aria-label="Next page"
             >
               <ChevronRight size={18} strokeWidth={2.5} />
             </button>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 sm:gap-4">
               {relatedItems.map((item, idx) => (
                 <CarouselProductCard
                   key={item.sku}
                   sku={item.sku}
                   title={item.product_name}
                   brand={item.brand || "Generic"}
-                  image={getCarouselProductImage(item, (safeRelatedPage - 1) * 5 + idx)}
+                  image={getCarouselProductImage(item, (safeRelatedPage - 1) * relatedPageSize + idx)}
                   stockStatus={item.stock_status || "in_stock"}
                 />
               ))}
@@ -730,7 +893,7 @@ export default function ProductDetailsPage() {
             {/* Left Floating Red Button */}
             <button
               onClick={() => setViewedPage((p) => (p > 1 ? p - 1 : totalViewedPages))}
-              className="absolute left-1 sm:-left-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full bg-[#b91c1c] hover:bg-[#991b1b] text-white flex items-center justify-center cursor-pointer shadow-md transition-all active:scale-95"
+              className="absolute -left-2 sm:-left-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full bg-[#b91c1c] hover:bg-[#991b1b] text-white flex items-center justify-center cursor-pointer shadow-md transition-all active:scale-95"
               aria-label="Previous page"
             >
               <ChevronLeft size={18} strokeWidth={2.5} />
@@ -739,20 +902,20 @@ export default function ProductDetailsPage() {
             {/* Right Floating Red Button */}
             <button
               onClick={() => setViewedPage((p) => (p < totalViewedPages ? p + 1 : 1))}
-              className="absolute right-1 sm:-right-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full bg-[#b91c1c] hover:bg-[#991b1b] text-white flex items-center justify-center cursor-pointer shadow-md transition-all active:scale-95"
+              className="absolute -right-2 sm:-right-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full bg-[#b91c1c] hover:bg-[#991b1b] text-white flex items-center justify-center cursor-pointer shadow-md transition-all active:scale-95"
               aria-label="Next page"
             >
               <ChevronRight size={18} strokeWidth={2.5} />
             </button>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 sm:gap-4">
               {viewedItems.map((item, idx) => (
                 <CarouselProductCard
                   key={item.sku}
                   sku={item.sku}
                   title={item.product_name}
                   brand={item.brand || "Generic"}
-                  image={getCarouselProductImage(item, 5 + (safeViewedPage - 1) * 5 + idx)}
+                  image={getCarouselProductImage(item, 5 + (safeViewedPage - 1) * viewedPageSize + idx)}
                   stockStatus={item.stock_status || "in_stock"}
                 />
               ))}
@@ -763,105 +926,140 @@ export default function ProductDetailsPage() {
         {/* Section 3: Support / Help Section matching PDF clean icons */}
         <section className="py-14">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto">
-            <div className="flex flex-col items-center justify-center gap-3 text-center cursor-pointer hover:opacity-80 transition-opacity">
+            {/* 1. Need Support ? -> Navigates to Contact Us page */}
+            <Link
+              to="/contact"
+              onClick={() => {
+                window.scrollTo({ top: 0, left: 0, behavior: "instant" })
+                if (window.__lenis) {
+                  window.__lenis.scrollTo(0, { immediate: true })
+                }
+                navigate("/contact")
+              }}
+              className="flex flex-col items-center justify-center gap-3 text-center cursor-pointer group hover:scale-[1.03] transition-all duration-200 p-5 rounded-2xl hover:bg-gray-50/80 active:scale-95"
+              title="Need Support? Contact our technical team"
+            >
               <img
                 src="/images/support_headset.png"
                 alt="Need Support"
-                className="w-12 h-12 object-contain"
+                className="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-200"
               />
-              <h4 className="font-heading font-extrabold text-[17px] sm:text-[18px] text-[#111111]">
+              <h4 className="font-heading font-extrabold text-[17px] sm:text-[18px] text-[#111111] group-hover:text-[#b91c1c] transition-colors">
                 Need Support ?
               </h4>
-            </div>
+            </Link>
 
-            <div className="flex flex-col items-center justify-center gap-3 text-center cursor-pointer hover:opacity-80 transition-opacity">
+            {/* 2. Didn't find what you are looking for? -> Opens popup form modal */}
+            <button
+              type="button"
+              onClick={() => setIsRequestProductOpen(true)}
+              className="flex flex-col items-center justify-center gap-3 text-center cursor-pointer group hover:scale-[1.03] transition-all duration-200 p-5 rounded-2xl hover:bg-gray-50/80 active:scale-95"
+              title="Didn't find what you are looking for? Submit a request"
+            >
               <img
                 src="/images/support_search.png"
                 alt="Didn't find what you are looking for"
-                className="w-12 h-12 object-contain"
+                className="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-200"
               />
-              <h4 className="font-heading font-extrabold text-[17px] sm:text-[18px] text-[#111111]">
+              <h4 className="font-heading font-extrabold text-[17px] sm:text-[18px] text-[#111111] group-hover:text-[#b91c1c] transition-colors">
                 Didn’t find what you are looking for?
               </h4>
-            </div>
+            </button>
           </div>
         </section>
 
-        {/* Section 4: Exactly 5 Customer Product reviews matching user request & PDF */}
-        <section className="py-10">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="font-heading text-[19px] sm:text-[21px] font-bold text-[#111111]">
-              Customer Product reviews
-            </h3>
-            <span className="text-[12.5px] font-medium text-gray-500">Page {reviewPage} of 1</span>
-          </div>
+        {/* Section 4: Exactly 5 Customer Product reviews with 1-review mobile carousel */}
+        {(() => {
+          const totalReviewPages = isMobile ? customerReviews.length : 1
+          const safeReviewPage = ((reviewPage - 1) % totalReviewPages) + 1
+          const displayedReviews = isMobile
+            ? [customerReviews[safeReviewPage - 1]]
+            : customerReviews
 
-          <div className="relative">
-            {/* Left Floating Red Button */}
-            <button
-              onClick={() => setReviewPage((p) => (p > 1 ? p - 1 : 1))}
-              className="absolute left-1 sm:-left-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full bg-[#b91c1c] hover:bg-[#991b1b] text-white flex items-center justify-center cursor-pointer shadow-md transition-all active:scale-95"
-              aria-label="Previous review"
-            >
-              <ChevronLeft size={18} strokeWidth={2.5} />
-            </button>
+          return (
+            <section className="py-10">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="font-heading text-[19px] sm:text-[21px] font-bold text-[#111111]">
+                  Customer Product reviews
+                </h3>
+                <span className="text-[12.5px] font-medium text-gray-500">
+                  Page {safeReviewPage} of {totalReviewPages}
+                </span>
+              </div>
 
-            {/* Right Floating Red Button */}
-            <button
-              onClick={() => setReviewPage((p) => (p < 1 ? p + 1 : 1))}
-              className="absolute right-1 sm:-right-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full bg-[#b91c1c] hover:bg-[#991b1b] text-white flex items-center justify-center cursor-pointer shadow-md transition-all active:scale-95"
-              aria-label="Next review"
-            >
-              <ChevronRight size={18} strokeWidth={2.5} />
-            </button>
-
-            {/* 5 Review Cards Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-              {customerReviews.map((rev, i) => (
-                <div
-                  key={i}
-                  className="bg-white border border-[#e5e7eb] rounded-lg p-5 sm:p-6 flex flex-col items-center text-center shadow-2xs hover:shadow-xs transition-shadow justify-center gap-1"
+              <div className="relative px-6 sm:px-0">
+                {/* Left Floating Red Button */}
+                <button
+                  onClick={() => setReviewPage((p) => (p > 1 ? p - 1 : totalReviewPages))}
+                  className="absolute left-0 sm:-left-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full bg-[#b91c1c] hover:bg-[#991b1b] text-white flex items-center justify-center cursor-pointer shadow-md transition-all active:scale-95"
+                  aria-label="Previous review"
                 >
-                  {/* Circular Avatar */}
-                  <div className="w-14 h-14 rounded-full overflow-hidden mb-2 border border-gray-100 shadow-2xs bg-[#f2f4f7] flex items-center justify-center shrink-0">
-                    <img
-                      src={rev.avatar}
-                      alt={rev.name}
-                      className="w-full h-full object-cover object-center"
-                      onError={(e) => {
-                        ;(e.target as HTMLImageElement).src =
-                          "/images/avatar_jackson.png"
-                      }}
-                    />
-                  </div>
+                  <ChevronLeft size={18} strokeWidth={2.5} />
+                </button>
 
-                  {/* Reviewer Name */}
-                  <h4 className="font-heading font-bold text-[14px] text-gray-900 mb-0.5">
-                    {rev.name}
-                  </h4>
+                {/* Right Floating Red Button */}
+                <button
+                  onClick={() => setReviewPage((p) => (p < totalReviewPages ? p + 1 : 1))}
+                  className="absolute right-0 sm:-right-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full bg-[#b91c1c] hover:bg-[#991b1b] text-white flex items-center justify-center cursor-pointer shadow-md transition-all active:scale-95"
+                  aria-label="Next review"
+                >
+                  <ChevronRight size={18} strokeWidth={2.5} />
+                </button>
 
-                  {/* Star Rating with 15px gold stars */}
-                  <div className="flex text-[#f59e0b] mb-2 gap-0.5">
-                    {[...Array(5)].map((_, starIdx) => (
-                      <Star
-                        key={starIdx}
-                        size={15}
-                        fill={starIdx < rev.rating ? "#f59e0b" : "#e5e7eb"}
-                        stroke="none"
-                      />
-                    ))}
-                  </div>
+                {/* Review Cards Grid: 1 on mobile, 5 on desktop */}
+                <div className="grid grid-cols-1 sm:grid-cols-5 gap-4">
+                  {displayedReviews.map((rev, i) => (
+                    <div
+                      key={i}
+                      className="bg-white border border-[#e5e7eb] rounded-xl p-5 sm:p-6 flex flex-col items-center text-center shadow-2xs hover:shadow-xs transition-shadow justify-center gap-1"
+                    >
+                      {/* Circular Avatar */}
+                      <div className="w-14 h-14 rounded-full overflow-hidden mb-2 border border-gray-100 shadow-2xs bg-[#f2f4f7] flex items-center justify-center shrink-0">
+                        <img
+                          src={rev.avatar}
+                          alt={rev.name}
+                          className="w-full h-full object-cover object-center"
+                          onError={(e) => {
+                            ;(e.target as HTMLImageElement).src =
+                              "/images/avatar_jackson.png"
+                          }}
+                        />
+                      </div>
 
-                  {/* Comment */}
-                  <p className="text-gray-600 text-[12px] sm:text-[12.5px] leading-relaxed line-clamp-3">
-                    {rev.comment}
-                  </p>
+                      {/* Reviewer Name */}
+                      <h4 className="font-heading font-bold text-[14px] text-gray-900 mb-0.5">
+                        {rev.name}
+                      </h4>
+
+                      {/* Star Rating with 15px gold stars */}
+                      <div className="flex text-[#f59e0b] mb-2 gap-0.5">
+                        {[...Array(5)].map((_, starIdx) => (
+                          <Star
+                            key={starIdx}
+                            size={15}
+                            fill={starIdx < rev.rating ? "#f59e0b" : "#e5e7eb"}
+                            stroke="none"
+                          />
+                        ))}
+                      </div>
+
+                      {/* Comment */}
+                      <p className="text-gray-600 text-[12px] sm:text-[12.5px] leading-relaxed line-clamp-3">
+                        {rev.comment}
+                      </p>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
-        </section>
+              </div>
+            </section>
+          )
+        })()}
 
+        {/* "Didn't find what you are looking for?" Request Modal */}
+        <RequestProductModal
+          isOpen={isRequestProductOpen}
+          onClose={() => setIsRequestProductOpen(false)}
+        />
       </div>
     </div>
   )

@@ -23,7 +23,7 @@ export default function ContactPage() {
     e.preventDefault()
     setIsSubmitting(true)
     try {
-      const response = await fetch(`https://formsubmit.co/ajax/chandruravichandran1536@gmail.com`, {
+      const response = await fetch(`https://formsubmit.co/ajax/sales@efocus.in`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -89,10 +89,10 @@ export default function ContactPage() {
                 <div>
                   <h4 className="text-[14px] font-bold text-[#222222]">Direct Email</h4>
                   <a
-                    href="mailto:chandruravichandran1536@gmail.com"
+                    href="mailto:sales@efocus.in"
                     className="text-[13px] text-[#555555] font-semibold hover:text-[#c8102e]"
                   >
-                    chandruravichandran1536@gmail.com
+                    sales@efocus.in
                   </a>
                 </div>
               </div>
@@ -225,7 +225,7 @@ export default function ContactPage() {
       isOpen={isSuccessOpen}
       onClose={handleSuccessClose}
       title="Message Sent!"
-      message="Thank you! Your sourcing request has been successfully sent to chandruravichandran1536@gmail.com. We will get back to you as soon as possible."
+      message="Thank you! Your sourcing request has been successfully sent to sales@efocus.in. We will get back to you as soon as possible."
       submitterEmail={formData.email}
     />
     </>

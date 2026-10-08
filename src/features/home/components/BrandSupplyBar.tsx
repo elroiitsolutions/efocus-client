@@ -102,39 +102,6 @@ export default function BrandSupplyBar() {
       ),
     },
     {
-      name: "CVRDE (DRDO)",
-      customRender: (
-        <div className="flex items-center gap-1.5 opacity-80 hover:opacity-100 transition-all duration-200">
-          <div className="w-6 h-6 rounded-full border border-gray-900 flex items-center justify-center font-bold text-[7px] text-gray-900 shrink-0">
-            DRDO
-          </div>
-          <span className="font-bold text-[11px] sm:text-[12px] tracking-tight text-[#111315]">
-            CVRDE
-          </span>
-        </div>
-      ),
-    },
-    {
-      name: "ISRO",
-      customRender: (
-        <div className="flex items-center gap-1.5 opacity-85 hover:opacity-100 transition-all duration-200">
-          <span className="font-extrabold text-[14px] sm:text-[15px] tracking-widest text-[#F37021]">
-            ISRO
-          </span>
-        </div>
-      ),
-    },
-    {
-      name: "TANGEDCO",
-      customRender: (
-        <div className="flex items-center opacity-80 hover:opacity-100 transition-all duration-200">
-          <span className="font-bold text-[12px] sm:text-[13px] tracking-wider text-[#111315]">
-            TANGEDCO
-          </span>
-        </div>
-      ),
-    },
-    {
       name: "HCL",
       customRender: (
         <div className="flex items-center opacity-85 hover:opacity-100 transition-all duration-200">
@@ -152,7 +119,7 @@ export default function BrandSupplyBar() {
   return (
     <section 
       aria-label="Our Valuable Clients"
-      className="w-full bg-[#fbfcfd] pt-3 pb-4 sm:pt-3.5 sm:pb-5 border-b border-gray-200/70 relative overflow-hidden select-none group"
+      className="w-full bg-[#fbfcfd] pt-3 pb-4 sm:pt-3.5 sm:pb-5 border-b border-gray-200/70 relative overflow-hidden select-none"
     >
       {/* Reverse 60fps Butter-Smooth Infinite Ribbon Marquee Keyframes */}
       <style>{`
@@ -172,9 +139,6 @@ export default function BrandSupplyBar() {
           animation: brandRibbonTickerReverse 65s linear infinite;
           will-change: transform;
         }
-        .group:hover .brand-ribbon-track {
-          animation-play-state: paused;
-        }
       `}</style>
 
       {/* Left Gradient Edge Fade */}
@@ -189,10 +153,12 @@ export default function BrandSupplyBar() {
         aria-hidden="true" 
       />
 
-      {/* Compact Section Heading */}
-      <div className="w-full max-w-[100rem] mx-auto px-4 text-center mb-3 sm:mb-4">
-        <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-white border border-gray-200/80 shadow-2xs text-[11px] sm:text-xs font-semibold text-gray-600">
-          <span>Our Valuable Clients</span>
+      {/* Section Heading */}
+      <div className="w-full max-w-[100rem] mx-auto px-4 text-center mb-4 sm:mb-5">
+        <div className="inline-flex items-center gap-2.5">
+          <h2 className="text-base sm:text-lg md:text-3xl font-black text-[#0d0f11] tracking-tight">
+            Our Valuable Clients
+          </h2>
         </div>
       </div>
 
@@ -203,7 +169,7 @@ export default function BrandSupplyBar() {
           {trackClients.map((client, idx) => (
             <div
               key={`client-1-${client.name}-${idx}`}
-              className="shrink-0 px-6 sm:px-8 md:px-10 py-2 flex items-center justify-center grayscale hover:grayscale-0 opacity-75 hover:opacity-100 transition-all duration-300 hover:scale-105 cursor-pointer select-none"
+              className="shrink-0 px-6 sm:px-8 md:px-10 py-2 flex items-center justify-center grayscale opacity-80 transition-all duration-300 select-none cursor-default"
               title={client.name}
             >
               {client.customRender}
@@ -216,7 +182,7 @@ export default function BrandSupplyBar() {
           {trackClients.map((client, idx) => (
             <div
               key={`client-2-${client.name}-${idx}`}
-              className="shrink-0 px-6 sm:px-8 md:px-10 py-2 flex items-center justify-center grayscale hover:grayscale-0 opacity-75 hover:opacity-100 transition-all duration-300 hover:scale-105 cursor-pointer select-none"
+              className="shrink-0 px-6 sm:px-8 md:px-10 py-2 flex items-center justify-center grayscale opacity-80 transition-all duration-300 select-none cursor-default"
               title={client.name}
             >
               {client.customRender}

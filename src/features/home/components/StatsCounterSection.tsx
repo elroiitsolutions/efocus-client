@@ -69,7 +69,7 @@ export default function StatsCounterSection() {
                   : `opacity-0 ${stat.fromSide} blur-[4px]`
               }`}
             >
-              <span className="text-2xl sm:text-3xl font-extrabold text-[#111315] tracking-tight leading-none font-sans group-hover:text-black transition-colors">
+              <span className="text-2xl sm:text-3xl font-extrabold text-[#AF0202] tracking-tight leading-none font-sans transition-colors">
                 {hasEntered ? (
                   <CountUp value={stat.value} suffix={stat.suffix} duration={1800} />
                 ) : (

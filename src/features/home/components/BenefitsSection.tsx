@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { NexBadge, NexChipIcon } from "@/components/ui/NexIcons";
+import { NexChipIcon } from "@/components/ui/NexIcons";
 
 interface CategoryCard {
   id: string;
@@ -88,22 +88,18 @@ const CATEGORIES: CategoryCard[] = [
 
 export default function BenefitsSection() {
   return (
-    <section className="w-full py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-[#fbfcfd]" id="benefits">
+    <section className="w-full pt-16 sm:pt-20 pb-12 sm:pb-14 px-4 sm:px-6 lg:px-8 bg-[#fbfcfd]" id="benefits">
       <div className="w-full max-w-[100rem] mx-auto">
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-18">
-          <div className="flex justify-center mb-4">
+          {/* <div className="flex justify-center mb-4">
             <NexBadge label="Product Categories" />
-          </div>
+          </div> */}
 
-          <h2 className="text-3xl sm:text-5xl font-bold text-[#0d0f11] tracking-tight mb-4 leading-[1.15]">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#0d0f11] tracking-tight mb-4 leading-[1.2]">
             Everything Your Engineering &amp; Industrial Teams Need
           </h2>
-
-          <p className="text-base sm:text-lg text-gray-600 leading-relaxed max-w-2xl mx-auto">
-            Find the right products for your Engineering, Production, Testing and shopfloor Needs.
-          </p>
         </div>
 
         {/* 8-Grid Product Categories */}
@@ -146,7 +142,7 @@ export default function BenefitsSection() {
         </div>
 
         {/* Bottom CTA Button */}
-        <div className="mt-14 sm:mt-18 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <div className="mt-10 sm:mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             to="/products"
             className="nex-button-swap inline-flex items-center gap-3 bg-[#111315] hover:bg-black text-white pl-2 pr-7 py-3 rounded-full font-semibold text-sm transition-all shadow-md hover:shadow-lg cursor-pointer"

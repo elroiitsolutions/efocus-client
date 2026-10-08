@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import { NexBadge } from "@/components/ui/NexIcons";
 import PromiseSection from "./PromiseSection";
 
 interface ProcurementSolution {
@@ -18,18 +17,39 @@ interface ProcurementSolution {
   }[];
 }
 
+const planKeys: ("setup" | "consolidation" | "bom")[] = ["setup", "consolidation", "bom"];
+
 export default function PricingSection() {
   const [selectedPlan, setSelectedPlan] = useState<"setup" | "consolidation" | "bom">("setup");
   const [isHeaderVisible, setIsHeaderVisible] = useState(false);
   const [isContentVisible, setIsContentVisible] = useState(false);
+  const [isSectionInView, setIsSectionInView] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  const planKeys: ("setup" | "consolidation" | "bom")[] = ["setup", "consolidation", "bom"];
-
   useEffect(() => {
+    let headerObserver: IntersectionObserver | null = null;
+    let contentObserver: IntersectionObserver | null = null;
+    let sectionObserver: IntersectionObserver | null = null;
+
+    const sectionEl = sectionRef.current;
+    if (sectionEl) {
+      sectionObserver = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setIsSectionInView(true);
+            setSelectedPlan("setup"); // Guarantee first tab is shown when reaching this section
+          } else {
+            setIsSectionInView(false);
+          }
+        },
+        { threshold: 0.05, rootMargin: "0px 0px -40px 0px" }
+      );
+      sectionObserver.observe(sectionEl);
+    }
+
     const headerEl = headerRef.current;
     if (headerEl) {
       const rect = headerEl.getBoundingClientRect();
@@ -37,7 +57,7 @@ export default function PricingSection() {
         setIsHeaderVisible(true);
       }
 
-      const headerObserver = new IntersectionObserver(
+      headerObserver = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {
             setIsHeaderVisible(true);
@@ -58,10 +78,11 @@ export default function PricingSection() {
         setIsContentVisible(true);
       }
 
-      const contentObserver = new IntersectionObserver(
+      contentObserver = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {
             setIsContentVisible(true);
+            setSelectedPlan("setup"); // Guarantee first tab is active when content enters view
           } else if (entry.boundingClientRect.top > 0) {
             setIsContentVisible(false);
           }
@@ -71,11 +92,18 @@ export default function PricingSection() {
 
       contentObserver.observe(contentEl);
     }
+
+    return () => {
+      headerObserver?.disconnect();
+      contentObserver?.disconnect();
+      sectionObserver?.disconnect();
+    };
   }, []);
 
-  // Auto-advance tabs like HeroSection carousel (pauses on hover)
+  // Auto-advance tabs ONLY when section is visible on screen (pauses on hover)
   useEffect(() => {
-    if (isPaused) return;
+    if (!isSectionInView || isPaused) return;
+
     const timer = setInterval(() => {
       setSelectedPlan((prev) => {
         const nextIdx = (planKeys.indexOf(prev) + 1) % planKeys.length;
@@ -84,12 +112,12 @@ export default function PricingSection() {
     }, 5500);
 
     return () => clearInterval(timer);
-  }, [selectedPlan, isPaused]);
+  }, [isSectionInView, isPaused]);
 
   const solutions: Record<string, ProcurementSolution> = {
     setup: {
       id: "setup",
-      name: "New Plant & Facility Setup",
+      name: "",
       // tagline: "Turnkey lines, workstations & commissioning",
       shortDesc:
         "",
@@ -123,7 +151,7 @@ export default function PricingSection() {
     },
     consolidation: {
       id: "consolidation",
-      name: "Consolidate Supplier Base",
+      name: "",
       // tagline: "Shift 500+ suppliers under 1 GST partner",
       shortDesc:
         "",
@@ -157,7 +185,7 @@ export default function PricingSection() {
     },
     bom: {
       id: "bom",
-      name: "BOM Requirement Sourcing",
+      name: "",
       shortDesc:
         "",
       badge: "BOM Sourcing Engine",
@@ -217,7 +245,7 @@ export default function PricingSection() {
   return (
     <section 
       ref={sectionRef} 
-      className="w-full py-18  sm:py-28 px-4 sm:px-6 lg:px-8 bg-[#f4f6fa] relative overflow-hidden" 
+      className="w-full pt-12 sm:pt-16 pb-12 sm:pb-16 px-2 sm:px-6 lg:px-8 bg-[#f4f6fa] relative overflow-hidden" 
       id="services"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
@@ -316,26 +344,26 @@ export default function PricingSection() {
         
         {/* Header with Smooth Cascading Down-to-Top Text Slide Animations */}
         <div ref={headerRef} className="text-center max-w-3xl mx-auto mb-14">
-          <div
+          {/* <div
             style={{
               animation: isHeaderVisible ? "psFadeDown 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0ms both" : "none",
               opacity: isHeaderVisible ? undefined : 0,
             }}
           >
             <NexBadge label="Procurement Solutions" />
-          </div>
+          </div> */}
 
           <h2 
             style={{
               animation: isHeaderVisible ? "psFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 120ms both" : "none",
               opacity: isHeaderVisible ? undefined : 0,
             }}
-            className="text-3xl sm:text-5xl font-semibold text-[#0d0f11] tracking-tight mt-5 mb-4"
+            className="text-2xl sm:text-3xl md:text-4xl font-semibold text-[#0d0f11] tracking-tight mt-4 mb-3"
           >
             Tailored Procurement Solutions for Every Operational Need 
           </h2>
 
-          <p 
+          {/* <p 
             style={{
               animation: isHeaderVisible ? "psFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 240ms both" : "none",
               opacity: isHeaderVisible ? undefined : 0,
@@ -343,7 +371,7 @@ export default function PricingSection() {
             className="text-base text-gray-600 leading-relaxed max-w-2xl mx-auto"
           >
             Whether setting up a new plant, streamlining vendor supply, or fulfilling complex BOMs—we engineer the exact sourcing pipeline for your facility. 
-          </p>
+          </p> */}
         </div>
 
         {/* Layout: Top 3 Solution Tabs in Same Line, Below Dynamic Details Card */}
@@ -355,7 +383,7 @@ export default function PricingSection() {
         >
           
           {/* Top Row: 3 Solution Selector Tabs in Same Line - Staggered 1 by 1 */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5 mb-6 sm:mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 sm:gap-4 lg:gap-5 mb-4 sm:mb-8">
             {tabItems.map((tab, idx) => {
               const isActive = selectedPlan === tab.id;
               return (
@@ -369,7 +397,7 @@ export default function PricingSection() {
                     animation: isContentVisible ? `psTabStagger 0.75s cubic-bezier(0.16, 1, 0.3, 1) ${idx * 140}ms both` : "none",
                     opacity: isContentVisible ? undefined : 0,
                   }}
-                  className={`relative py-4 px-4 sm:px-6 rounded-[20px] sm:rounded-[24px] cursor-pointer transition-all duration-300 flex items-center justify-center text-center border overflow-hidden group select-none hover:-translate-y-0.5 ${
+                  className={`relative py-2.5 sm:py-4 px-3 sm:px-6 rounded-xl sm:rounded-[24px] cursor-pointer transition-all duration-300 flex items-center justify-center text-center border overflow-hidden group select-none hover:-translate-y-0.5 ${
                     isActive
                       ? "bg-white border-gray-200 shadow-md ring-1 ring-black/5"
                       : "bg-white/60 border-transparent hover:bg-white hover:border-gray-200/60 shadow-2xs hover:shadow-xs"
@@ -415,14 +443,14 @@ export default function PricingSection() {
               style={{
                 animation: "psSlideContentIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both",
               }}
-              className="bg-white border border-gray-200/90 rounded-[32px] p-7 sm:p-10 shadow-[0_12px_40px_rgba(0,0,0,0.06)] hover:shadow-[0_16px_48px_rgba(0,0,0,0.08)] flex flex-col justify-between transition-all duration-300 relative overflow-hidden"
+              className="bg-white border border-gray-200/90 rounded-2xl sm:rounded-[32px] p-3.5 sm:px-8 sm:pt-6 sm:pb-6 shadow-[0_10px_35px_rgba(0,0,0,0.05)] hover:shadow-[0_14px_44px_rgba(0,0,0,0.07)] transition-all duration-300 relative overflow-hidden"
             >
               {/* Subtle top accent edge */}
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#AF0202]/30 to-transparent" />
 
               <div>
                 {/* Header Row: Badge & Model Tag + Quick Slide Indicators (Centered) */}
-                <div className="flex flex-wrap items-center justify-center gap-3 mb-4">
+                <div className="flex flex-wrap items-center justify-center gap-3 mb-3">
                   <div className="flex items-center gap-2">
                     <span className="px-3.5 py-1 rounded-full border border-gray-200 bg-gray-50 text-xs font-semibold text-gray-800">
                       {current.badge}
@@ -443,29 +471,32 @@ export default function PricingSection() {
                   )}
                 </div>
 
-                {/* Solution Title - Aligned Center */}
-                <h3 className="text-2xl sm:text-3xl font-bold text-[#0d0f11] tracking-tight pb-3 border-b border-gray-100 text-center">
-                  {current.name}
-                </h3>
+                {/* Subtle Divider below header */}
+                <div className="w-full border-b border-gray-100 mb-4" />
 
-                {/* Subtitle Description */}
-                {current.shortDesc ? (
-                  <p className="text-sm sm:text-base text-gray-500 leading-relaxed mt-4 mb-6 text-center max-w-2xl mx-auto">
+                {/* Solution Title - Aligned Center (if present) */}
+                {current.name && (
+                  <h3 className="text-xl sm:text-2xl font-bold text-[#0d0f11] tracking-tight pb-3 border-b border-gray-100 text-center mb-3">
+                    {current.name}
+                  </h3>
+                )}
+
+                {/* Subtitle Description (if present) */}
+                {current.shortDesc && (
+                  <p className="text-sm sm:text-base text-gray-500 leading-relaxed mt-2 mb-4 text-center max-w-2xl mx-auto">
                     {current.shortDesc}
                   </p>
-                ) : (
-                  <div className="mb-6" />
                 )}
 
                 {/* 4 Feature Points Staggered in 2-Column Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-4 mb-0">
                   {current.points.map((pt, idx) => (
                     <div 
                       key={`${current.id}-pt-${idx}`} 
                       style={{
                         animation: `psFeaturePoint 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${80 + idx * 70}ms both`,
                       }}
-                      className="flex items-start gap-3 group/pt p-3 rounded-xl hover:bg-gray-50/70 transition-colors"
+                      className="flex items-start gap-2.5 sm:gap-3 group/pt p-1.5 sm:p-3 rounded-xl hover:bg-gray-50/70 transition-colors"
                     >
                       <div className="w-5 h-5 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5 border border-emerald-200/60 shadow-2xs group-hover/pt:scale-110 transition-transform duration-250">
                         <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -480,8 +511,6 @@ export default function PricingSection() {
                   ))}
                 </div>
               </div>
-
-              
             </div>
           </div>
 

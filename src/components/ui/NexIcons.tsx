@@ -19,9 +19,9 @@ export function NexsasLogoIcon({ className = "w-9 h-9" }: { className?: string }
 }
 
 // Nexsas Button Chip: Red circle with 3 angled dots
-export function NexChipIcon({ bg = "bg-[#AF0202]", text = "text-white" }: { bg?: string; text?: string }) {
+export function NexChipIcon({ bg = "bg-[#AF0202]", text = "text-white", className = "w-8 h-8" }: { bg?: string; text?: string; className?: string }) {
   return (
-    <span className={`w-8 h-8 rounded-full ${bg} flex items-center justify-center ${text} shrink-0 shadow-sm`}>
+    <span className={`${className} rounded-full ${bg} flex items-center justify-center ${text} shrink-0 shadow-sm`}>
       <svg className="w-4 h-4 fill-current" viewBox="0 0 16 16">
         <circle cx="5" cy="5" r="1.4" />
         <circle cx="9" cy="8" r="1.4" />

@@ -1,11 +1,15 @@
 import { useState, useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { NexChipIcon } from "@/components/ui/NexIcons";
 import { useQuoteStore } from "@/features/quote/store/quote.store";
+import { useWishlistStore } from "@/features/wishlist/store/wishlist.store";
+import { useCompareStore } from "@/features/compare/store/compare.store";
 import {
   Search,
   ChevronDown,
   UploadCloud,
+  Heart,
+  ArrowLeftRight,
   Cpu,
   Cable,
   Zap,
@@ -39,14 +43,23 @@ import {
   Phone,
   X,
   Sparkles,
-  FileText
+  FileText,
+  Menu
 } from "lucide-react";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const isHomePage = location.pathname === "/";
+  const isProductPage = location.pathname.startsWith("/products") || location.pathname.startsWith("/compare");
   const quoteItems = useQuoteStore((state) => state.items);
   const openQuoteDrawer = useQuoteStore((state) => state.openDrawer);
   const totalQuoteCount = quoteItems.reduce((sum, item) => sum + item.qty, 0);
+  const wishlistItems = useWishlistStore((state) => state.items);
+  const wishlistCount = wishlistItems.length;
+  const compareItems = useCompareStore((state) => state.items);
+  const compareCount = compareItems.length;
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
@@ -81,9 +94,9 @@ export default function Navbar() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // Lock background scroll and coordinate with Lenis when search is open
+  // Lock background scroll and coordinate with Lenis when search or mobile sidebar is open
   useEffect(() => {
-    if (isSearchOpen) {
+    if (isSearchOpen || mobileMenuOpen) {
       document.body.style.overflow = "hidden";
       if (typeof window !== "undefined" && window.__lenis) {
         window.__lenis.stop();
@@ -100,7 +113,7 @@ export default function Navbar() {
         window.__lenis.start();
       }
     };
-  }, [isSearchOpen]);
+  }, [isSearchOpen, mobileMenuOpen]);
 
   const handleMouseEnter = (name: string) => {
     if (dropdownTimeoutRef.current) {
@@ -160,8 +173,8 @@ export default function Navbar() {
       { name: "Case Studies", icon: Award, desc: "Real-world procurement & workstation optimization stories", href: "/blog" },
     ],
     company: [
-      { name: "About eFocus", icon: Info, desc: "Learn about eFocus's mission, vendor network and engineering roots", href: "/about" },
-      { name: "Contact Technical Sales", icon: Phone, desc: "Get in touch with our technical sales and local application hubs", href: "/contact" },
+      { name: "About us", icon: Info, href: "/about" },
+      { name: "Contact us", icon: Phone, href: "/contact" },
     ],
   };
 
@@ -169,7 +182,7 @@ export default function Navbar() {
   const allSearchableItems: Array<{
     name: string;
     icon: typeof Cpu;
-    desc: string;
+    // desc: string;
     category: string;
     href?: string;
     action?: () => void;
@@ -186,7 +199,7 @@ export default function Navbar() {
     ? allSearchableItems.slice(0, 6)
     : allSearchableItems.filter(item => 
         item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        // item.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.category.toLowerCase().includes(searchQuery.toLowerCase())
       );
 
@@ -202,7 +215,7 @@ export default function Navbar() {
     <>
       <header className="fixed top-3 sm:top-5 left-0 right-0 z-50 px-3 sm:px-6 transition-all duration-300 pointer-events-none">
         <div className="w-full max-w-[102rem] mx-auto pointer-events-auto">
-          <nav className="w-full bg-white/95 backdrop-blur-md rounded-full px-3.5 sm:px-5 lg:px-6 py-2.5 sm:py-3 border-[5px] border-white/90 shadow-[0_8px_30px_rgba(0,0,0,0.08)] flex items-center justify-between gap-2 lg:gap-4">
+          <nav className="w-full bg-white/95 backdrop-blur-md rounded-full px-3.5 sm:px-4 lg:px-5 py-2 sm:py-2.5 border-[5px] border-white/90 shadow-[0_8px_30px_rgba(0,0,0,0.08)] flex items-center justify-between gap-1.5 lg:gap-2">
             
             {/* 1. Official Logo (eFocus) */}
             <Link to="/" className="flex items-center gap-2 group shrink-0 pl-1">
@@ -214,7 +227,7 @@ export default function Navbar() {
             </Link>
 
             {/* 2. Desktop Main Navigation Links */}
-            <div className="hidden lg:flex items-center gap-4 xl:gap-6 2xl:gap-8 text-[13px] xl:text-[14px] font-medium text-gray-700">
+            <div className="hidden lg:flex items-center gap-3 xl:gap-4.5 2xl:gap-6 text-[13px] xl:text-[13.5px] font-medium text-gray-700">
               
               {/* Products Dropdown */}
               <div
@@ -288,7 +301,7 @@ export default function Navbar() {
                 <button 
                   className={`flex items-center gap-1.5 hover:text-black transition-colors cursor-pointer py-1 ${activeDropdown === "solutions" ? "text-red-600 font-semibold" : ""}`}
                 >
-                  <span>Solutions</span>
+                  <span>Procurement Solutions</span>
                   <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${activeDropdown === "solutions" ? "rotate-180 text-red-600" : "text-gray-400 group-hover:text-gray-700"}`} />
                 </button>
 
@@ -555,9 +568,9 @@ export default function Navbar() {
                             <h4 className="text-sm font-semibold text-gray-900 group-hover/item:text-red-600 transition-colors leading-tight">
                               {item.name}
                             </h4>
-                            <p className="text-[11px] text-gray-500 line-clamp-1 mt-0.5">
+                            {/* <p className="text-[11px] text-gray-500 line-clamp-1 mt-0.5">
                               {item.desc}
-                            </p>
+                            </p> */}
                           </div>
                         </Link>
                       );
@@ -569,17 +582,18 @@ export default function Navbar() {
             </div>
 
             {/* 3. Right Action Area: Search Trigger + Upload BOM + Quote Basket + Get a Quote */}
-            <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
               
               {/* Search Modal Trigger (⌘K) */}
               <button
                 type="button"
                 onClick={() => setIsSearchOpen(true)}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100/80 hover:bg-gray-200/80 text-gray-500 hover:text-gray-900 text-xs transition-colors cursor-pointer"
+                className="flex items-center justify-center sm:justify-start gap-1.5 h-9 w-9 sm:w-auto px-2 sm:px-3 rounded-full bg-gray-100/80 hover:bg-gray-200/80 text-gray-500 hover:text-gray-900 text-xs transition-colors cursor-pointer shrink-0"
                 title="Search (Ctrl + K)"
               >
                 <Search className="w-3.5 h-3.5 text-gray-600" />
-                <span className="hidden xl:inline text-[12px] font-medium text-gray-500">Search products, MPNs...</span>
+                <span className="hidden 2xl:inline text-[12px] font-medium text-gray-500">Search products, MPNs...</span>
+                <span className="hidden xl:inline 2xl:hidden text-[12px] font-medium text-gray-500">Search...</span>
                 <kbd className="hidden sm:inline-flex px-1.5 py-0.5 rounded bg-white text-[10px] font-mono text-gray-500 border border-gray-200 shadow-2xs">
                   ⌘K
                 </kbd>
@@ -589,17 +603,49 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={() => handleOpenProcurement("bom")}
-                className="hidden md:inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-red-50 hover:bg-red-100/80 text-red-600 hover:text-red-700 text-xs xl:text-[13px] font-semibold transition-all border border-red-200/80 shadow-2xs cursor-pointer"
+                className="hidden xl:inline-flex items-center gap-1.5 h-9 px-3.5 rounded-full bg-red-50 hover:bg-red-100/80 text-red-600 hover:text-red-700 text-xs xl:text-[13px] font-semibold transition-all border border-red-200/80 shadow-2xs cursor-pointer shrink-0"
               >
                 <UploadCloud className="w-3.5 h-3.5" />
                 <span>Upload BOM</span>
               </button>
 
+              {/* Wishlist Icon Button */}
+              <Link
+                to="/wishlist"
+                className="relative flex items-center justify-center w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-800 transition-colors cursor-pointer shrink-0"
+                title="View Wishlist"
+                aria-label="View Wishlist"
+              >
+                <Heart className="w-4 h-4 text-gray-700 hover:text-red-600 transition-colors" />
+                {wishlistCount > 0 && (
+                  <span className="absolute -top-1 -right-1 flex items-center justify-center min-w-5 h-5 px-1 rounded-full bg-[#AF0202] text-white text-[10px] font-bold shadow-xs animate-in zoom-in-50 duration-200">
+                    {wishlistCount}
+                  </span>
+                )}
+              </Link>
+
+              {/* Compare Icon Button (Only shown on product & compare pages) */}
+              {isProductPage && (
+                <Link
+                  to="/compare"
+                  className="relative flex items-center justify-center w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-800 transition-colors cursor-pointer shrink-0 animate-in fade-in zoom-in-90 duration-150"
+                  title="Compare Products"
+                  aria-label="Compare Products"
+                >
+                  <ArrowLeftRight className="w-4 h-4 text-gray-700 hover:text-red-600 transition-colors" />
+                  {compareCount > 0 && (
+                    <span className="absolute -top-1 -right-1 flex items-center justify-center min-w-5 h-5 px-1 rounded-full bg-[#AF0202] text-white text-[10px] font-bold shadow-xs animate-in zoom-in-50 duration-200">
+                      {compareCount}
+                    </span>
+                  )}
+                </Link>
+              )}
+
               {/* Quote Basket Drawer Trigger */}
               <button
                 type="button"
                 onClick={openQuoteDrawer}
-                className="relative flex items-center justify-center w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-800 transition-colors cursor-pointer"
+                className="relative flex items-center justify-center w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-800 transition-colors cursor-pointer shrink-0"
                 title="View Quote Basket"
                 aria-label="View Quote Basket"
               >
@@ -611,234 +657,280 @@ export default function Navbar() {
                 )}
               </button>
 
-              {/* Get a Quote Action Button */}
-              <button
-                type="button"
-                onClick={() => handleOpenProcurement("quote")}
-                className="group nex-button-swap inline-flex items-center justify-center rounded-full bg-[#111315] hover:bg-black text-white text-xs xl:text-sm font-medium py-1.5 pr-4 transition-all shadow-sm cursor-pointer"
-              >
-                <NexChipIcon />
-                <span className="leading-none">Get a Quote</span>
-              </button>
+              {/* Get a Quote Action Button (Only on Home Page, with signature icon swap animation & safe fit inside header) */}
+              {isHomePage && (
+                <button
+                  type="button"
+                  onClick={() => handleOpenProcurement("quote")}
+                  className="hidden sm:inline-flex group nex-button-swap-nav items-center justify-center rounded-full bg-[#111315] hover:bg-black text-white text-xs xl:text-[13px] font-semibold transition-all shadow-sm cursor-pointer shrink-0 mr-1"
+                >
+                  <NexChipIcon className="w-[30px] h-[30px]" />
+                  <span className="whitespace-nowrap leading-none">Get a Quote</span>
+                </button>
+              )}
 
-              {/* Mobile Menu Hamburger Button */}
+              {/* Mobile Menu Hamburger Button (Always visible on mobile & tablet) */}
               <button
                 type="button"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="lg:hidden p-2 rounded-full hover:bg-gray-100 text-gray-700 cursor-pointer"
-                aria-label="Toggle mobile menu"
+                onClick={() => setMobileMenuOpen(true)}
+                className="lg:hidden flex items-center justify-center w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-800 transition-colors cursor-pointer shrink-0"
+                aria-label="Toggle navigation menu"
               >
-                {mobileMenuOpen ? <X className="w-5 h-5" /> : (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
-                  </svg>
-                )}
+                <Menu className="w-5 h-5 text-gray-700" />
               </button>
 
             </div>
 
           </nav>
+        </div>
+      </header>
 
-          {/* Mobile Accordion Navigation Panel */}
-          {mobileMenuOpen && (
-            <div className="lg:hidden mt-2 bg-white rounded-3xl p-5 border border-gray-100 shadow-xl max-h-[80vh] overflow-y-auto space-y-4 animate-in slide-in-from-top-2 duration-200">
+      {/* Mobile Navigation Sidebar Drawer (Radix Sheet) */}
+      <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+        <SheetContent
+          side="right"
+          data-lenis-prevent="true"
+          className="w-[320px] sm:w-[380px] max-w-[88vw] p-0 flex flex-col bg-white z-[100] border-l border-gray-100 shadow-2xl"
+        >
+          <SheetHeader className="p-5 border-b border-gray-100 flex flex-row items-center justify-between">
+            <Link to="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2">
+              <img src="/logo.png" alt="eFocus Logo" className="h-7 w-auto object-contain" />
+            </Link>
+            <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+          </SheetHeader>
+
+          <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4" data-lenis-prevent="true">
+            {/* Quick Action Procurement CTAs */}
+            <div className="space-y-2 pt-1">
+              <button
+                type="button"
+                onClick={() => handleOpenProcurement("quote")}
+                className="w-full py-2.5 px-4 rounded-full bg-[#111315] hover:bg-black text-white text-xs font-semibold flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer"
+              >
+                <NexChipIcon />
+                <span>Get Instant Quote</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleOpenProcurement("bom")}
+                className="w-full py-2.5 px-4 rounded-full bg-red-50 hover:bg-red-100 text-red-600 font-semibold text-xs flex items-center justify-center gap-2 border border-red-200 transition-colors cursor-pointer"
+              >
+                <UploadCloud className="w-4 h-4" />
+                <span>Upload BOM Spreadsheet</span>
+              </button>
+            </div>
+
+
+
+            {/* Search Trigger inside drawer */}
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                setIsSearchOpen(true);
+              }}
+              className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-500 text-xs font-medium transition-colors cursor-pointer"
+            >
+              <span className="flex items-center gap-2">
+                <Search className="w-4 h-4 text-gray-500" />
+                Search parts, MPNs, solutions...
+              </span>
+              <kbd className="px-1.5 py-0.5 rounded bg-white text-[10px] font-mono text-gray-400 border border-gray-200">
+                ⌘K
+              </kbd>
+            </button>
+
+            {/* Accordion Navigation Groups */}
+            <div className="space-y-1 divide-y divide-gray-100 text-sm font-medium text-gray-800 border-t border-gray-100 pt-2">
               
-              <div className="flex gap-2 pb-3 border-b border-gray-100">
+              {/* Products Mobile */}
+              <div className="pt-2">
                 <button
-                  type="button"
-                  onClick={() => handleOpenProcurement("bom")}
-                  className="flex-1 py-2.5 rounded-2xl bg-red-50 text-red-600 font-semibold text-xs flex items-center justify-center gap-1.5 border border-red-200"
+                  onClick={() => setActiveMobileAccordion(activeMobileAccordion === "products" ? null : "products")}
+                  className="w-full flex items-center justify-between py-2 cursor-pointer text-left"
                 >
-                  <UploadCloud className="w-3.5 h-3.5" />
-                  Upload BOM
+                  <span className="font-semibold text-gray-900">Products</span>
+                  <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${activeMobileAccordion === "products" ? "rotate-180 text-red-600" : ""}`} />
                 </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    setIsSearchOpen(true);
-                  }}
-                  className="px-3 py-2.5 rounded-2xl bg-gray-100 text-gray-700 text-xs flex items-center justify-center gap-1"
-                >
-                  <Search className="w-3.5 h-3.5" />
-                </button>
+                {activeMobileAccordion === "products" && (
+                  <div className="pl-2 pt-1 pb-2 space-y-2 text-xs">
+                    {navData.products.map((item, i) => (
+                      <Link
+                        key={i}
+                        to={item.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="block py-1.5 text-gray-600 hover:text-red-600 transition-colors"
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                    <Link
+                      to="/products"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block py-1.5 text-red-600 font-bold hover:underline"
+                    >
+                      View All Products →
+                    </Link>
+                  </div>
+                )}
               </div>
 
-              <div className="space-y-3 divide-y divide-gray-100 text-sm font-medium text-gray-800">
-                
-                {/* Products Mobile */}
-                <div className="pt-2">
-                  <button
-                    onClick={() => setActiveMobileAccordion(activeMobileAccordion === "products" ? null : "products")}
-                    className="w-full flex items-center justify-between py-1.5 cursor-pointer"
-                  >
-                    <span>Products</span>
-                    <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${activeMobileAccordion === "products" ? "rotate-180 text-red-600" : ""}`} />
-                  </button>
-                  {activeMobileAccordion === "products" && (
-                    <div className="pl-2 pt-2 space-y-2 text-xs">
-                      {navData.products.map((item, i) => (
-                        <Link
-                          key={i}
-                          to={item.href}
-                          onClick={() => setMobileMenuOpen(false)}
-                          className="block py-1.5 text-gray-600 hover:text-red-600"
-                        >
-                          {item.name}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* Solutions Mobile */}
-                <div className="pt-2">
-                  <button
-                    onClick={() => setActiveMobileAccordion(activeMobileAccordion === "solutions" ? null : "solutions")}
-                    className="w-full flex items-center justify-between py-1.5 cursor-pointer"
-                  >
-                    <span>Solutions</span>
-                    <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${activeMobileAccordion === "solutions" ? "rotate-180 text-red-600" : ""}`} />
-                  </button>
-                  {activeMobileAccordion === "solutions" && (
-                    <div className="pl-2 pt-2 space-y-2 text-xs">
-                      {navData.solutions.map((item, i) => {
-                        if (item.action) {
-                          return (
-                            <button
-                              key={i}
-                              type="button"
-                              onClick={() => {
-                                setMobileMenuOpen(false);
-                                item.action?.();
-                              }}
-                              className="block w-full text-left py-1.5 text-gray-600 hover:text-red-600 cursor-pointer"
-                            >
-                              {item.name}
-                            </button>
-                          );
-                        }
+              {/* Solutions Mobile */}
+              <div className="pt-2">
+                <button
+                  onClick={() => setActiveMobileAccordion(activeMobileAccordion === "solutions" ? null : "solutions")}
+                  className="w-full flex items-center justify-between py-2 cursor-pointer text-left"
+                >
+                  <span className="font-semibold text-gray-900">Procurement Solutions</span>
+                  <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${activeMobileAccordion === "solutions" ? "rotate-180 text-red-600" : ""}`} />
+                </button>
+                {activeMobileAccordion === "solutions" && (
+                  <div className="pl-2 pt-1 pb-2 space-y-2 text-xs">
+                    {navData.solutions.map((item, i) => {
+                      if (item.action) {
                         return (
-                          <Link
+                          <button
                             key={i}
-                            to={item.href || "/quote"}
-                            onClick={() => setMobileMenuOpen(false)}
-                            className="block py-1.5 text-gray-600 hover:text-red-600"
+                            type="button"
+                            onClick={() => {
+                              setMobileMenuOpen(false);
+                              item.action?.();
+                            }}
+                            className="block w-full text-left py-1.5 text-gray-600 hover:text-red-600 transition-colors cursor-pointer"
                           >
                             {item.name}
-                          </Link>
+                          </button>
                         );
-                      })}
-                    </div>
-                  )}
-                </div>
-
-                {/* Services Mobile */}
-                <div className="pt-2">
-                  <button
-                    onClick={() => setActiveMobileAccordion(activeMobileAccordion === "services" ? null : "services")}
-                    className="w-full flex items-center justify-between py-1.5 cursor-pointer"
-                  >
-                    <span>Services</span>
-                    <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${activeMobileAccordion === "services" ? "rotate-180 text-red-600" : ""}`} />
-                  </button>
-                  {activeMobileAccordion === "services" && (
-                    <div className="pl-2 pt-2 space-y-2 text-xs">
-                      {navData.services.map((item, i) => (
+                      }
+                      return (
                         <Link
                           key={i}
-                          to={item.href}
+                          to={item.href || "/quote"}
                           onClick={() => setMobileMenuOpen(false)}
-                          className="block py-1.5 text-gray-600 hover:text-red-600"
+                          className="block py-1.5 text-gray-600 hover:text-red-600 transition-colors"
                         >
                           {item.name}
                         </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
 
-                {/* Industries Mobile */}
-                <div className="pt-2">
-                  <button
-                    onClick={() => setActiveMobileAccordion(activeMobileAccordion === "industries" ? null : "industries")}
-                    className="w-full flex items-center justify-between py-1.5 cursor-pointer"
-                  >
-                    <span>Industries</span>
-                    <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${activeMobileAccordion === "industries" ? "rotate-180 text-red-600" : ""}`} />
-                  </button>
-                  {activeMobileAccordion === "industries" && (
-                    <div className="pl-2 pt-2 space-y-2 text-xs">
-                      {navData.industries.map((item, i) => (
-                        <Link
-                          key={i}
-                          to={item.href}
-                          onClick={() => setMobileMenuOpen(false)}
-                          className="block py-1.5 text-gray-600 hover:text-red-600"
-                        >
-                          {item.name}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
+              {/* Services Mobile */}
+              <div className="pt-2">
+                <button
+                  onClick={() => setActiveMobileAccordion(activeMobileAccordion === "services" ? null : "services")}
+                  className="w-full flex items-center justify-between py-2 cursor-pointer text-left"
+                >
+                  <span className="font-semibold text-gray-900">Services</span>
+                  <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${activeMobileAccordion === "services" ? "rotate-180 text-red-600" : ""}`} />
+                </button>
+                {activeMobileAccordion === "services" && (
+                  <div className="pl-2 pt-1 pb-2 space-y-2 text-xs">
+                    {navData.services.map((item, i) => (
+                      <Link
+                        key={i}
+                        to={item.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="block py-1.5 text-gray-600 hover:text-red-600 transition-colors"
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
 
-                {/* Resources Mobile */}
-                <div className="pt-2">
-                  <button
-                    onClick={() => setActiveMobileAccordion(activeMobileAccordion === "resources" ? null : "resources")}
-                    className="w-full flex items-center justify-between py-1.5 cursor-pointer"
-                  >
-                    <span>Resources</span>
-                    <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${activeMobileAccordion === "resources" ? "rotate-180 text-red-600" : ""}`} />
-                  </button>
-                  {activeMobileAccordion === "resources" && (
-                    <div className="pl-2 pt-2 space-y-2 text-xs">
-                      {navData.resources.map((item, i) => (
-                        <Link
-                          key={i}
-                          to={item.href}
-                          onClick={() => setMobileMenuOpen(false)}
-                          className="block py-1.5 text-gray-600 hover:text-red-600"
-                        >
-                          {item.name}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
+              {/* Industries Mobile */}
+              <div className="pt-2">
+                <button
+                  onClick={() => setActiveMobileAccordion(activeMobileAccordion === "industries" ? null : "industries")}
+                  className="w-full flex items-center justify-between py-2 cursor-pointer text-left"
+                >
+                  <span className="font-semibold text-gray-900">Industries</span>
+                  <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${activeMobileAccordion === "industries" ? "rotate-180 text-red-600" : ""}`} />
+                </button>
+                {activeMobileAccordion === "industries" && (
+                  <div className="pl-2 pt-1 pb-2 space-y-2 text-xs">
+                    {navData.industries.map((item, i) => (
+                      <Link
+                        key={i}
+                        to={item.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="block py-1.5 text-gray-600 hover:text-red-600 transition-colors"
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
 
-                {/* Company Mobile */}
-                <div className="pt-2">
-                  <button
-                    onClick={() => setActiveMobileAccordion(activeMobileAccordion === "company" ? null : "company")}
-                    className="w-full flex items-center justify-between py-1.5 cursor-pointer"
-                  >
-                    <span>Company</span>
-                    <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${activeMobileAccordion === "company" ? "rotate-180 text-red-600" : ""}`} />
-                  </button>
-                  {activeMobileAccordion === "company" && (
-                    <div className="pl-2 pt-1 space-y-2 text-xs">
-                      {navData.company.map((item, i) => (
-                        <Link
-                          key={i}
-                          to={item.href}
-                          onClick={() => setMobileMenuOpen(false)}
-                          className="block py-1.5 text-gray-600 hover:text-red-600"
-                        >
-                          {item.name}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
+              {/* Resources Mobile */}
+              <div className="pt-2">
+                <button
+                  onClick={() => setActiveMobileAccordion(activeMobileAccordion === "resources" ? null : "resources")}
+                  className="w-full flex items-center justify-between py-2 cursor-pointer text-left"
+                >
+                  <span className="font-semibold text-gray-900">Resources</span>
+                  <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${activeMobileAccordion === "resources" ? "rotate-180 text-red-600" : ""}`} />
+                </button>
+                {activeMobileAccordion === "resources" && (
+                  <div className="pl-2 pt-1 pb-2 space-y-2 text-xs">
+                    {navData.resources.map((item, i) => (
+                      <Link
+                        key={i}
+                        to={item.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="block py-1.5 text-gray-600 hover:text-red-600 transition-colors"
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
 
+              {/* Company Mobile */}
+              <div className="pt-2">
+                <button
+                  onClick={() => setActiveMobileAccordion(activeMobileAccordion === "company" ? null : "company")}
+                  className="w-full flex items-center justify-between py-2 cursor-pointer text-left"
+                >
+                  <span className="font-semibold text-gray-900">Company</span>
+                  <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${activeMobileAccordion === "company" ? "rotate-180 text-red-600" : ""}`} />
+                </button>
+                {activeMobileAccordion === "company" && (
+                  <div className="pl-2 pt-1 pb-2 space-y-2 text-xs">
+                    {navData.company.map((item, i) => (
+                      <Link
+                        key={i}
+                        to={item.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="block py-1.5 text-gray-600 hover:text-red-600 transition-colors"
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
               </div>
 
             </div>
-          )}
-        </div>
-      </header>
+
+            {/* Direct Contact Footer */}
+            <div className="pt-4 pb-2 border-t border-gray-100 flex flex-col gap-1.5 text-xs text-gray-500">
+              <div className="font-semibold text-gray-900">Direct Support & Sourcing</div>
+              <a href="mailto:sales@efocus.in" className="text-red-600 font-semibold hover:underline">
+                sales@efocus.in
+              </a>
+              <span>Direct Sales: +91 7397 242 650</span>
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
 
       {/* Global Interactive Search Modal / Palette */}
       {isSearchOpen && (
@@ -958,7 +1050,7 @@ export default function Navbar() {
                               {item.category}
                             </span>
                           </div>
-                          <p className="text-xs text-gray-500 line-clamp-1 mt-0.5">{item.desc}</p>
+                          {/* <p className="text-xs text-gray-500 line-clamp-1 mt-0.5">{item.desc}</p> */}
                         </div>
                       </div>
                       <ChevronDown className="w-4 h-4 text-gray-300 -rotate-90 group-hover:text-red-600 group-hover:translate-x-1 transition-all" />

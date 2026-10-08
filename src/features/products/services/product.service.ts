@@ -118,7 +118,7 @@ export const mockProducts: Product[] = [
     short_description: "IEEE-assigned MAC address block for product identification",
     key_spec_1: "Block Size: 4096 addresses",
     key_spec_2: "Application: Network device ID",
-    key_spec_3: "Issued By: IEEE",
+    key_spec_3: "Standard: IEEE 802 Registry",
     category_name: "Labelling & Identification",
     family_name: "MAC Address Blocks",
     rfq_eligible: true,

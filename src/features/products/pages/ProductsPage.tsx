@@ -227,6 +227,13 @@ export default function ProductsPage() {
     limit,
   })
 
+  // Synchronize Lenis dimensions immediately whenever products data finishes loading
+  useEffect(() => {
+    if (window.__lenis?.dimensions) {
+      window.__lenis.dimensions.resize();
+    }
+  }, [isLoading, data]);
+
   // URL State Mutator
   const updateParams = (updates: Record<string, string | null>) => {
     const params = new URLSearchParams(searchParams)
@@ -242,7 +249,11 @@ export default function ProductsPage() {
       params.delete("page")
     }
     setSearchParams(params)
-    window.scrollTo({ top: 0, behavior: "smooth" })
+    if (window.__lenis) {
+      window.__lenis.scrollTo(0, { duration: 0.8 })
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" })
+    }
   }
 
   // Apply all pending filters to URL with clean slugs
@@ -278,7 +289,11 @@ export default function ProductsPage() {
     setPendingOptIds([])
     setOpenCategoryId(null)
     setSearchParams(new URLSearchParams())
-    window.scrollTo({ top: 0, behavior: "smooth" })
+    if (window.__lenis) {
+      window.__lenis.scrollTo(0, { duration: 0.8 })
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" })
+    }
   }
 
   // Clear upside Filter Catalog (Categories & Subcategories)
@@ -332,7 +347,11 @@ export default function ProductsPage() {
       params.delete("page")
     }
     setSearchParams(params)
-    window.scrollTo({ top: 0, behavior: "smooth" })
+    if (window.__lenis) {
+      window.__lenis.scrollTo(0, { duration: 0.8 })
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" })
+    }
   }
 
   // Stock status options definition
@@ -1024,9 +1043,9 @@ export default function ProductsPage() {
             </div>
           </div>
 
-          {/* Cards listing - 5 columns on big screen as requested */}
+          {/* Cards listing - 2 columns on mobile, 5 columns on big screen as requested */}
           {isLoading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3.5 sm:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2.5 sm:gap-4">
               {Array.from({ length: limit }).map((_, idx) => (
                 <div
                   key={idx}
@@ -1062,7 +1081,7 @@ export default function ProductsPage() {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3.5 sm:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2.5 sm:gap-4">
               {data?.data.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}

@@ -92,7 +92,7 @@ export default function StatsRibbon() {
               <div className="h-11 sm:h-12 px-4.5 sm:px-6 rounded-2xl bg-white border border-gray-200/80 shadow-2xs hover:shadow-xs hover:border-gray-300 transition-all duration-300 flex items-center gap-3 cursor-default hover:-translate-y-0.5">
                 {item.icon}
                 <div className="flex items-baseline gap-2">
-                  <span className="text-xl sm:text-2xl font-bold text-[#111315] tracking-tight font-sans">
+                  <span className="text-xl sm:text-2xl font-bold text-[#AF0202] tracking-tight font-sans">
                     {item.value}
                   </span>
                   {item.hasStar && (
@@ -122,7 +122,7 @@ export default function StatsRibbon() {
               <div className="h-11 sm:h-12 px-4.5 sm:px-6 rounded-2xl bg-white border border-gray-200/80 shadow-2xs hover:shadow-xs hover:border-gray-300 transition-all duration-300 flex items-center gap-3 cursor-default hover:-translate-y-0.5">
                 {item.icon}
                 <div className="flex items-baseline gap-2">
-                  <span className="text-xl sm:text-2xl font-bold text-[#111315] tracking-tight font-sans">
+                  <span className="text-xl sm:text-2xl font-bold text-[#AF0202] tracking-tight font-sans">
                     {item.value}
                   </span>
                   {item.hasStar && (
