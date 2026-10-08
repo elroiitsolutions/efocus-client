@@ -73,6 +73,25 @@ function BrandBadge({ name }: { name: string }) {
   )
 }
 
+const isMatchCategory = (catName: string, activeList: string[]) => {
+  if (!catName || !activeList || activeList.length === 0) return false
+  const catSlug = slugify(catName)
+  const catSimple = catName.toLowerCase().replace(/\band\b/g, "").replace(/[^a-z0-9]/g, "")
+  return activeList.some((item) => {
+    if (!item) return false
+    const itemSlug = slugify(item)
+    const itemSimple = item.toLowerCase().replace(/\band\b/g, "").replace(/[^a-z0-9]/g, "")
+    if (item === catName || itemSlug === catSlug || itemSimple === catSimple) return true
+    if (catSimple.length >= 4 && itemSimple.length >= 4) {
+      if (catSimple.startsWith(itemSimple) || itemSimple.startsWith(catSimple)) return true
+      const catRoot = catSimple.replace(/s$/, '')
+      const itemRoot = itemSimple.replace(/s$/, '')
+      if (catRoot === itemRoot || catRoot.startsWith(itemRoot) || itemRoot.startsWith(catRoot)) return true
+    }
+    return false
+  })
+}
+
 export default function ProductsPage() {
   const [searchParams, setSearchParams] = useSearchParams()
   const [showMobileFilters, setShowMobileFilters] = useState(false)
@@ -167,11 +186,8 @@ export default function ProductsPage() {
   useEffect(() => {
     if (navigationTree && navigationTree.length > 0 && !openCategoryId) {
       const activeCat = navigationTree.find((cat) => {
-        const catSlug = slugify(cat.name)
-        const isCatActive = activeCats.includes(catSlug) || activeCats.includes(cat.name)
-        const isSubActive = cat.subcategories.some((sub) =>
-          activeSubs.includes(slugify(sub.name)) || activeSubs.includes(sub.name)
-        )
+        const isCatActive = isMatchCategory(cat.name, activeCats)
+        const isSubActive = cat.subcategories.some((sub) => isMatchCategory(sub.name, activeSubs))
         return isCatActive || isSubActive
       })
 
@@ -211,6 +227,13 @@ export default function ProductsPage() {
     limit,
   })
 
+  // Synchronize Lenis dimensions immediately whenever products data finishes loading
+  useEffect(() => {
+    if (window.__lenis?.dimensions) {
+      window.__lenis.dimensions.resize();
+    }
+  }, [isLoading, data]);
+
   // URL State Mutator
   const updateParams = (updates: Record<string, string | null>) => {
     const params = new URLSearchParams(searchParams)
@@ -226,7 +249,11 @@ export default function ProductsPage() {
       params.delete("page")
     }
     setSearchParams(params)
-    window.scrollTo({ top: 0, behavior: "smooth" })
+    if (window.__lenis) {
+      window.__lenis.scrollTo(0, { duration: 0.8 })
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" })
+    }
   }
 
   // Apply all pending filters to URL with clean slugs
@@ -262,7 +289,11 @@ export default function ProductsPage() {
     setPendingOptIds([])
     setOpenCategoryId(null)
     setSearchParams(new URLSearchParams())
-    window.scrollTo({ top: 0, behavior: "smooth" })
+    if (window.__lenis) {
+      window.__lenis.scrollTo(0, { duration: 0.8 })
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" })
+    }
   }
 
   // Clear upside Filter Catalog (Categories & Subcategories)
@@ -316,7 +347,11 @@ export default function ProductsPage() {
       params.delete("page")
     }
     setSearchParams(params)
-    window.scrollTo({ top: 0, behavior: "smooth" })
+    if (window.__lenis) {
+      window.__lenis.scrollTo(0, { duration: 0.8 })
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" })
+    }
   }
 
   // Stock status options definition
@@ -334,19 +369,11 @@ export default function ProductsPage() {
   // Context-aware scoping for Product Families
   const availableFamilies = allFamilies.filter((fam) => {
     if (pendingCats.length > 0) {
-      const catMatches = pendingCats.some(
-        (c) =>
-          (fam.category_name && slugify(fam.category_name) === c) ||
-          (fam.category_name && fam.category_name.toLowerCase() === c.toLowerCase())
-      )
+      const catMatches = fam.category_name && isMatchCategory(fam.category_name, pendingCats)
       if (!catMatches) return false
     }
     if (pendingSubs.length > 0) {
-      const subMatches = pendingSubs.some(
-        (s) =>
-          (fam.subcategory_name && slugify(fam.subcategory_name) === s) ||
-          (fam.subcategory_name && fam.subcategory_name.toLowerCase() === s.toLowerCase())
-      )
+      const subMatches = fam.subcategory_name && isMatchCategory(fam.subcategory_name, pendingSubs)
       if (!subMatches) return false
     }
     return true
@@ -407,7 +434,7 @@ export default function ProductsPage() {
               <div className="space-y-1">
                 {navigationTree?.map((cat) => {
                   const catSlug = slugify(cat.name)
-                  const isCatChecked = pendingCats.includes(catSlug) || pendingCats.includes(cat.name)
+                  const isCatChecked = isMatchCategory(cat.name, pendingCats)
                   const isCatOpen = openCategoryId === `cat-${cat.id}`
 
                   return (
@@ -434,12 +461,12 @@ export default function ProductsPage() {
                                 newCats.push(catSlug)
                                 setOpenCategoryId(`cat-${cat.id}`)
                               } else {
-                                newCats = newCats.filter((c) => c !== catSlug && c !== cat.name)
+                                newCats = newCats.filter((c) => c !== catSlug && c !== cat.name && !isMatchCategory(cat.name, [c]))
                               }
                               const subSlugs = cat.subcategories.map((s) => slugify(s.name))
                               const newSubs = checked
                                 ? pendingSubs
-                                : pendingSubs.filter((s) => !subSlugs.includes(s))
+                                : pendingSubs.filter((s) => !subSlugs.includes(s) && !cat.subcategories.some(sub => isMatchCategory(sub.name, [s])))
                               setPendingCats(newCats)
                               setPendingSubs(newSubs)
                             }}
@@ -476,8 +503,7 @@ export default function ProductsPage() {
                         <div className="pt-1 pb-2 pl-6 ml-3 border-l-2 border-red-200 flex flex-col gap-1.5 animate-in fade-in-50 duration-200">
                           {cat.subcategories.map((sub) => {
                             const subSlug = slugify(sub.name)
-                            const isSubChecked =
-                              pendingSubs.includes(subSlug) || pendingSubs.includes(sub.name)
+                            const isSubChecked = isMatchCategory(sub.name, pendingSubs)
 
                             return (
                               <div
@@ -487,11 +513,11 @@ export default function ProductsPage() {
                                   let newSubs = [...pendingSubs]
                                   if (isSubChecked) {
                                     newSubs = newSubs.filter(
-                                      (s) => s !== subSlug && s !== sub.name
+                                      (s) => s !== subSlug && s !== sub.name && !isMatchCategory(sub.name, [s])
                                     )
                                   } else {
                                     newSubs.push(subSlug)
-                                    if (!pendingCats.includes(catSlug)) {
+                                    if (!isMatchCategory(cat.name, pendingCats)) {
                                       setPendingCats([...pendingCats, catSlug])
                                     }
                                   }
@@ -508,12 +534,12 @@ export default function ProductsPage() {
                                       let newSubs = [...pendingSubs]
                                       if (checked) {
                                         newSubs.push(subSlug)
-                                        if (!pendingCats.includes(catSlug)) {
+                                        if (!isMatchCategory(cat.name, pendingCats)) {
                                           setPendingCats([...pendingCats, catSlug])
                                         }
                                       } else {
                                         newSubs = newSubs.filter(
-                                          (s) => s !== subSlug && s !== sub.name
+                                          (s) => s !== subSlug && s !== sub.name && !isMatchCategory(sub.name, [s])
                                         )
                                       }
                                       setPendingSubs(newSubs)
@@ -1017,9 +1043,9 @@ export default function ProductsPage() {
             </div>
           </div>
 
-          {/* Cards listing - 5 columns on big screen as requested */}
+          {/* Cards listing - 2 columns on mobile, 5 columns on big screen as requested */}
           {isLoading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3.5 sm:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2.5 sm:gap-4">
               {Array.from({ length: limit }).map((_, idx) => (
                 <div
                   key={idx}
@@ -1055,7 +1081,7 @@ export default function ProductsPage() {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3.5 sm:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2.5 sm:gap-4">
               {data?.data.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}

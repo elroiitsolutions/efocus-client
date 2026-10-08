@@ -38,7 +38,7 @@ export default function QuoteDrawer() {
         `${idx + 1}. [${item.name}] - Part/SKU: ${item.code || item.id} | Category: ${item.category} | Qty: ${item.qty}`
       ).join('\n\n');
 
-      const response = await fetch(`https://formsubmit.co/ajax/chandruravichandran1536@gmail.com`, {
+      const response = await fetch(`https://formsubmit.co/ajax/sales@efocus.in`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -107,7 +107,7 @@ export default function QuoteDrawer() {
         <div className="px-5 pt-4 shrink-0">
           <div className="text-[12.5px] text-[#555555] leading-relaxed bg-[#f4f8ff] px-3.5 py-3 rounded-lg border border-[#dce6f5]">
             Items will be sent to{" "}
-            <strong className="text-[#222222]">chandruravichandran1536@gmail.com</strong>{" "}
+            <strong className="text-[#222222]">sales@efocus.in</strong>{" "}
             for consolidated single-vendor pricing.
           </div>
         </div>
@@ -290,7 +290,7 @@ export default function QuoteDrawer() {
       isOpen={isSuccessOpen}
       onClose={handleSuccessClose}
       title="Request Submitted!"
-      message="Your consolidated quote request has been sent to chandruravichandran1536@gmail.com. We will be in touch shortly with unified vendor pricing."
+      message="Your consolidated quote request has been sent to sales@efocus.in. We will be in touch shortly with unified vendor pricing."
       submitterEmail={formData.email}
     />
     </>

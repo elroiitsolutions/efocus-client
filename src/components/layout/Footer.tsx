@@ -1,394 +1,310 @@
-import React, { useState } from "react"
-import { Link } from "react-router-dom"
-import { Linkedin, Twitter, Youtube, Mail, Phone, Globe } from "lucide-react"
+import { Link } from "react-router-dom";
+import { 
+  MapPin, 
+  PhoneCall, 
+  Mail, 
+  Clock, 
+  ShieldCheck, 
+  ArrowUpRight,
+  MessageCircle,
+  Headphones
+} from "lucide-react";
 
 export default function Footer() {
-  const [email, setEmail] = useState("")
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    alert(`Thank you! Please email your line list files directly to chandruravichandran1536@gmail.com`)
-    setEmail("")
-  }
-
-  const clients = [
-    {
-      name: "Delta",
-      logo: (
-        <div className="flex items-center gap-1.5 opacity-65 hover:opacity-100 transition-opacity duration-200">
-          <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
-            <polygon points="12,2 2,22 22,22" />
-          </svg>
-          <span className="font-extrabold text-[15px] tracking-wider text-white">DELTA</span>
-        </div>
-      )
-    },
-    {
-      name: "Bharat FIH",
-      logo: (
-        <div className="flex flex-col items-start opacity-65 hover:opacity-100 transition-opacity duration-200 leading-none">
-          <span className="font-extrabold text-[14px] tracking-tight text-white">BHARAT FIH</span>
-          <span className="text-[7px] text-[#777777] mt-0.5">A Foxconn Technology Group Company</span>
-        </div>
-      )
-    },
-    {
-      name: "Ashok Leyland",
-      logo: (
-        <div className="flex items-center gap-1.5 opacity-65 hover:opacity-100 transition-opacity duration-200">
-          <div className="w-5 h-5 rounded-full border border-white flex items-center justify-center font-bold text-[9px] text-white">L</div>
-          <span className="font-bold text-[12px] tracking-wider text-white">ASHOK LEYLAND</span>
-        </div>
-      )
-    },
-    {
-      name: "Valeo",
-      logo: (
-        <div className="flex items-center opacity-65 hover:opacity-100 transition-opacity duration-200">
-          <span className="font-black text-[17px] italic text-[#90d53f]">Valeo</span>
-        </div>
-      )
-    },
-    {
-      name: "Hyundai",
-      logo: (
-        <div className="flex flex-col items-center opacity-65 hover:opacity-100 transition-opacity duration-200 leading-none">
-          <svg className="w-6 h-4 text-white" viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="1.5">
-            <ellipse cx="12" cy="8" rx="10" ry="6" />
-            <path d="M8,4 L10,4 L11,12 L9,12 Z M14,4 L16,4 L15,12 L13,12 Z M9.5,8 L14.5,8" stroke="currentColor" strokeWidth="1.5" />
-          </svg>
-          <span className="text-[7.5px] font-bold tracking-widest text-white mt-1">HYUNDAI</span>
-        </div>
-      )
-    },
-    {
-      name: "Tata Electronics",
-      logo: (
-        <div className="flex flex-col items-start opacity-65 hover:opacity-100 transition-opacity duration-200 leading-none">
-          <span className="font-bold text-[13px] tracking-wider text-white">TATA</span>
-          <span className="text-[7px] tracking-wider text-[#777777] uppercase mt-0.5">ELECTRONICS</span>
-        </div>
-      )
-    },
-    {
-      name: "Motorola",
-      logo: (
-        <div className="flex items-center gap-1.5 opacity-65 hover:opacity-100 transition-opacity duration-200">
-          <div className="w-5 h-5 rounded-full border border-white flex items-center justify-center font-extrabold text-[11px] italic text-white">M</div>
-          <span className="font-bold text-[13px] tracking-tight text-white">motorola</span>
-        </div>
-      )
-    },
-    {
-      name: "Wistron",
-      logo: (
-        <div className="flex items-center opacity-65 hover:opacity-100 transition-opacity duration-200">
-          <span className="font-extrabold text-[15px] tracking-tight text-white italic">wistron</span>
-        </div>
-      )
-    },
-    {
-      name: "CVRDE (DRDO)",
-      logo: (
-        <div className="flex items-center gap-1.5 opacity-65 hover:opacity-100 transition-opacity duration-200">
-          <div className="w-5 h-5 rounded-full border border-white flex items-center justify-center font-bold text-[7px] text-white">DRDO</div>
-          <span className="font-bold text-[11px] tracking-tight text-white">CVRDE</span>
-        </div>
-      )
-    },
-    {
-      name: "ISRO",
-      logo: (
-        <div className="flex items-center gap-1.5 opacity-65 hover:opacity-100 transition-opacity duration-200">
-          <span className="font-bold text-[13px] tracking-widest text-white">ISRO</span>
-        </div>
-      )
-    },
-    {
-      name: "TANGEDCO",
-      logo: (
-        <div className="flex items-center opacity-65 hover:opacity-100 transition-opacity duration-200">
-          <span className="font-bold text-[12px] tracking-wider text-white">TANGEDCO</span>
-        </div>
-      )
-    },
-    {
-      name: "HCL",
-      logo: (
-        <div className="flex items-center opacity-65 hover:opacity-100 transition-opacity duration-200">
-          <span className="font-black text-[17px] tracking-tight text-white">HCL</span>
-        </div>
-      )
-    }
-  ]
+  const triggerProcurement = (mode: "quote" | "bom" = "quote") => {
+    window.dispatchEvent(
+      new CustomEvent("open-procurement-modal", { detail: { mode } })
+    );
+  };
 
   return (
-    <footer className="bg-[#121214] text-[#ffffff] pt-[36px] pb-0 border-t border-[#222226]">
-      <div className="site-container">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-          {/* Column 1: About & Contact */}
-          <div className="flex flex-col gap-6">
-            <img
-              src="/images/logo.png"
-              alt="eFocus Industrial Solutions"
-              className="bg-white px-3 py-1.5 rounded-[6px] h-10 w-auto self-start"
-            />
-            <p className="text-[14px] text-[#777777] leading-relaxed">
-              Industrial Solutions — Test leads, RF assemblies, automation cabling & custom builds, engineered to spec and stocked deep.
+    <footer className="w-full pt-20 pb-32 sm:pb-16 px-4 sm:px-6 lg:px-8 bg-[#fbfcfd] border-t border-gray-200/80 flex flex-col items-center" id="footer">
+      <div className="w-full max-w-[102rem] mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 xl:gap-10 pb-16">
+          
+          {/* Column 1: Corporate Profile */}
+          <div className="sm:col-span-2 lg:col-span-4 space-y-5">
+            <div className="space-y-3">
+              <Link to="/" className="inline-block group">
+                <img
+                  src="/logo.png"
+                  alt="eFocus Logo"
+                  className="h-8 sm:h-9 w-auto object-contain transition-transform group-hover:scale-[1.02]"
+                />
+              </Link>
+              <h3 className="text-base font-bold text-[#0d0f11] tracking-tight">
+                eFocus Industrial Solutions Pvt. Ltd.
+              </h3>
+            </div>
+
+            <p className="text-sm text-gray-600 leading-relaxed max-w-sm">
+              Your trusted technical marketplace and B2B supply partner for precision test & measurement instruments, SMT assembly equipment, power electronics, and industrial hardware.
             </p>
 
-            <div className="flex flex-col gap-3 text-[14px]">
-              <div className="flex items-center gap-2">
-                <Mail size={16} className="text-[#c8102e]" />
-                <span>
-                  <strong>Sales Email:</strong>{" "}
-                  <a
-                    href="mailto:chandruravichandran1536@gmail.com"
-                    className="hover:text-[#c8102e] transition-colors"
-                  >
-                    chandruravichandran1536@gmail.com
-                  </a>
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Phone size={16} className="text-[#c8102e]" />
-                <span>
-                  <strong>Phone / WhatsApp:</strong>{" "}
-                  <a
-                    href="tel:+917397242650"
-                    className="hover:text-[#c8102e] transition-colors"
-                  >
-                    +91 7397 242 650
-                  </a>
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Globe size={16} className="text-[#c8102e]" />
-                <span>
-                  <strong>Web Catalogue:</strong>{" "}
-                  <a
-                    href="https://efocusinds.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-[#c8102e] transition-colors"
-                  >
-                    efocusinds.com
-                  </a>
-                </span>
-              </div>
+            {/* Compliance & Certification Pill */}
+            <div className="inline-flex flex-wrap items-center gap-2 p-2.5 rounded-2xl bg-gray-50 border border-gray-200/80 text-xs text-gray-700">
+              <span className="flex items-center gap-1 font-semibold text-gray-900">
+                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                GST No:
+              </span>
+              <span className="font-mono text-gray-800 font-medium">33AAECE0038M1ZU</span>  
             </div>
 
-            {/* Socials */}
-            <div className="flex gap-4">
-              <a
-                href="#"
+            {/* Social Channels */}
+            {/* <div className="pt-2 flex items-center gap-3 text-gray-600"> */}
+              {/* LinkedIn */}
+              {/* <a 
+                href="https://linkedin.com" 
+                target="_blank" 
+                rel="noreferrer"
+                className="w-8 h-8 rounded-full bg-gray-100 hover:bg-[#111315] hover:text-white flex items-center justify-center transition-all cursor-pointer" 
                 aria-label="LinkedIn"
-                className="hover:text-[#c8102e] transition-colors"
               >
-                <Linkedin size={20} />
-              </a>
-              <a
-                href="#"
-                aria-label="Twitter"
-                className="hover:text-[#c8102e] transition-colors"
-              >
-                <Twitter size={20} />
-              </a>
-              <a
-                href="#"
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                </svg>
+              </a> */}
+
+              {/* YouTube */}
+              {/* <a 
+                href="https://youtube.com" 
+                target="_blank" 
+                rel="noreferrer"
+                className="w-8 h-8 rounded-full bg-gray-100 hover:bg-[#111315] hover:text-white flex items-center justify-center transition-all cursor-pointer" 
                 aria-label="YouTube"
-                className="hover:text-[#c8102e] transition-colors"
               >
-                <Youtube size={20} />
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+              </a> */}
+
+              {/* Facebook */}
+              {/* <a 
+                href="https://facebook.com" 
+                target="_blank" 
+                rel="noreferrer"
+                className="w-8 h-8 rounded-full bg-gray-100 hover:bg-[#111315] hover:text-white flex items-center justify-center transition-all cursor-pointer" 
+                aria-label="Facebook"
+              >
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <path d="M9 8H6v4h3v12h5V12h3.642L18 8h-4V6.333C14 5.374 14.5 5 15.7 5H18V0h-3.808C10.595 0 9 1.583 9 4.615V8z"/>
+                </svg>
+              </a> */}
+
+              {/* Instagram */}
+              {/* <a 
+                href="https://instagram.com" 
+                target="_blank" 
+                rel="noreferrer"
+                className="w-8 h-8 rounded-full bg-gray-100 hover:bg-[#111315] hover:text-white flex items-center justify-center transition-all cursor-pointer" 
+                aria-label="Instagram"
+              >
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
               </a>
-            </div>
+            </div> */}
           </div>
 
-          {/* Column 2: Categories */}
-          <div>
-            <h4 className="font-heading text-[18px] font-bold mb-6 text-white">
-              Product Categories
+          {/* Column 2: Hardware Matrix */}
+          <div className="sm:col-span-1 lg:col-span-2 space-y-4">
+            <h4 className="text-sm font-bold text-[#0d0f11] uppercase tracking-wider">
+              Hardware Matrix
             </h4>
-            <ul className="flex flex-col gap-3 text-[14px] text-[#777777]">
+            <ul className="space-y-2.5 text-sm text-gray-600">
               <li>
-                <Link
-                  to="/categories/smt-rework-assembly"
-                  className="hover:text-[#c8102e] transition-colors"
-                >
+                <Link to="/products?category=smt-assembly-rework" className="hover:text-red-600 transition-colors">
                   SMT, Rework & Assembly
                 </Link>
               </li>
               <li>
-                <Link
-                  to="/categories/cables-connectivity"
-                  className="hover:text-[#c8102e] transition-colors"
-                >
+                <Link to="/products?category=cables-connectivity" className="hover:text-red-600 transition-colors">
                   Cables & Connectivity
                 </Link>
               </li>
               <li>
-                <Link
-                  to="/categories/tools-mro"
-                  className="hover:text-[#c8102e] transition-colors"
-                >
+                <Link to="/products?category=tools-mro" className="hover:text-red-600 transition-colors">
                   Tools & MRO
                 </Link>
               </li>
               <li>
-                <Link
-                  to="/categories/power-electrical"
-                  className="hover:text-[#c8102e] transition-colors"
-                >
+                <Link to="/products?category=power-electrical" className="hover:text-red-600 transition-colors">
                   Power & Electrical
                 </Link>
               </li>
               <li>
-                <Link
-                  to="/categories/esd-rf"
-                  className="hover:text-[#c8102e] transition-colors"
-                >
+                <Link to="/products?category=esd-rf" className="hover:text-red-600 transition-colors">
                   ESD & RF Control
                 </Link>
               </li>
               <li>
-                <Link
-                  to="/categories/testing-measurement"
-                  className="hover:text-[#c8102e] transition-colors"
-                >
-                  Testing & Measurement
+                <Link to="/products?category=test-measurement" className="hover:text-red-600 transition-colors">
+                  Test & Measurement
                 </Link>
               </li>
               <li>
-                <Link
-                  to="/custom-assembly"
-                  className="hover:text-[#c8102e] transition-colors"
-                >
-                  Custom Harness Builds
+                <Link to="/products?category=it-hardware-workstations" className="hover:text-red-600 transition-colors">
+                  IT Hardware & Workstations
+                </Link>
+              </li>
+              <li>
+                <Link to="/products?category=labelling-identification" className="hover:text-red-600 transition-colors">
+                  Labelling & Identification
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Column 3: Quick Links */}
-          <div>
-            <h4 className="font-heading text-[18px] font-bold mb-6 text-white">
-              Quick Links
+          {/* Column 3: Procurement Solutions */}
+          <div className="sm:col-span-1 lg:col-span-3 space-y-4">
+            <h4 className="text-sm font-bold text-[#0d0f11] uppercase tracking-wider">
+              Procurement Solutions
             </h4>
-            <ul className="flex flex-col gap-3 text-[14px] text-[#777777]">
+            <ul className="space-y-2.5 text-sm text-gray-600">
               <li>
-                <a href="#brochure" className="hover:text-[#c8102e] transition-colors">
-                  2026 Product Brochure
-                </a>
-              </li>
-              <li>
-                <Link to="/products" className="hover:text-[#c8102e] transition-colors">
-                  Single-Vendor Procurement
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/custom-assembly"
-                  className="hover:text-[#c8102e] transition-colors"
+                <button 
+                  onClick={() => triggerProcurement("bom")} 
+                  className="hover:text-red-600 transition-colors flex items-center gap-1.5 text-left cursor-pointer"
                 >
-                  Custom Build Request
+                  <span>BOM Procurement</span>
+                  <ArrowUpRight className="w-3.5 h-3.5 text-gray-400" />
+                </button>
+              </li>
+              <li>
+                <Link to="/custom-assembly" className="hover:text-red-600 transition-colors">
+                  Vendor Consolidation
                 </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-[#c8102e] transition-colors">
-                  Datasheets & Compliance
-                </a>
+                <Link to="/quote" className="hover:text-red-600 transition-colors">
+                  Annual Rate Contracts (ARC)
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-[#c8102e] transition-colors">
-                  Terms & Conditions
-                </a>
+                <Link to="/custom-assembly" className="hover:text-red-600 transition-colors">
+                  Project Procurement
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-[#c8102e] transition-colors">
-                  Privacy Policy
-                </a>
+                <Link to="/products?category=it-hardware-workstations" className="hover:text-red-600 transition-colors">
+                  Turnkey Workstations
+                </Link>
+              </li>
+              <li>
+                <Link to="/quote" className="hover:text-red-600 transition-colors">
+                  Recurring Procurement
+                </Link>
               </li>
             </ul>
-          </div>
 
-          {/* Column 4: Newsletter Consolidation */}
-          <div className="flex flex-col gap-6">
-            <h4 className="font-heading text-[18px] font-bold text-white">
-              Let's consolidate your supply.
-            </h4>
-            <p className="text-[14px] text-[#777777] leading-relaxed">
-              Send us your current component line list — we'll match it, brand for brand, and quote as one single order.
-            </p>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your business email..."
-                required
-                className="w-full bg-[#1a1a1e] border border-[#222226] rounded-[6px] px-4 py-3 text-[14px] outline-none text-white focus:border-[#c8102e] transition-colors"
-                aria-label="Enter email for quote consolidation"
-              />
+            {/* Quick Sourcing CTA Card */}
+            <div className="pt-2">
               <button
-                type="submit"
-                className="bg-[#c8102e] hover:bg-[#a80c25] text-white py-3 rounded-[6px] text-[14px] font-bold transition-colors cursor-pointer"
+                onClick={() => triggerProcurement("bom")}
+                className="w-full text-left p-3 rounded-2xl bg-gray-50 hover:bg-red-50/50 border border-gray-200/80 hover:border-red-300 transition-all cursor-pointer group"
               >
-                Submit Line List
+                <p className="text-xs font-semibold text-gray-900 group-hover:text-red-600">
+                  Ready with a multi-line BOM?
+                </p>
+                <p className="text-[11px] text-gray-500 mt-0.5">
+                  Upload file for 2-hour turnaround quote →
+                </p>
               </button>
-            </form>
-          </div>
-        </div>
-
-        {/* ─── Our Valuable Clients Ticker ─── */}
-        <div className="mt-1 pt-6 border-t border-[#1a1a1e]">
-          <div className="text-center mb-4">
-            <h4 className="text-[12px] font-bold tracking-[0.2em] text-[#777777] uppercase font-hero-heading">
-              Our Valuable Clients
-            </h4>
-          </div>
-          
-          <div className="relative w-full overflow-hidden mask-gradient-x py-4 bg-[#18181b]/30 rounded-xl border border-[#222226]/50">
-            <div className="flex gap-20 items-center w-max animate-infinite-scroll hover:[animation-play-state:paused] cursor-pointer">
-              {/* First loop */}
-              {clients.map((client, idx) => (
-                <div key={`c1-${idx}`} className="flex items-center justify-center shrink-0">
-                  {client.logo}
-                </div>
-              ))}
-              {/* Second loop (seamless looping) */}
-              {clients.map((client, idx) => (
-                <div key={`c2-${idx}`} className="flex items-center justify-center shrink-0">
-                  {client.logo}
-                </div>
-              ))}
             </div>
           </div>
+
+          {/* Column 4: Technical Sales & Direct Contact */}
+          <div className="sm:col-span-2 lg:col-span-3 space-y-4">
+            <h4 className="text-sm font-bold text-[#0d0f11] uppercase tracking-wider">
+              Technical Sales & Contact
+            </h4>
+            
+            <div className="space-y-3 text-xs sm:text-sm text-gray-600">
+              {/* Address */}
+              <div className="flex items-start gap-2.5">
+                <MapPin className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
+                <span className="leading-snug">
+                  66, Pallavan Nagar Main Rd, Extn, Pallavan Nagar, Maduravoyal, Chennai, Tamil Nadu 600095
+                </span>
+              </div>
+
+              {/* Sales Desk */}
+              <div className="flex items-center gap-2.5">
+                <PhoneCall className="w-4 h-4 text-gray-500 shrink-0" />
+                <div>
+                  <span className="text-gray-400 text-xs block">Sales Desk:</span>
+                  <a href="tel:+914428001234" className="font-semibold text-gray-900 hover:text-red-600 transition-colors">
+                    +91 44 2800 1234
+                  </a>
+                </div>
+              </div>
+
+              {/* WhatsApp Desk */}
+              <div className="flex items-center gap-2.5">
+                <MessageCircle className="w-4 h-4 text-emerald-600 shrink-0" />
+                <div>
+                  <span className="text-gray-400 text-xs block">WhatsApp Desk:</span>
+                  <a 
+                    href="https://wa.me/919840012345" 
+                    target="_blank" 
+                    rel="noreferrer"
+                    className="font-semibold text-emerald-700 hover:underline transition-colors"
+                  >
+                    +91 98400 12345
+                  </a>
+                </div>
+              </div>
+
+              {/* Quote Requests */}
+              <div className="flex items-center gap-2.5">
+                <Mail className="w-4 h-4 text-gray-500 shrink-0" />
+                <div>
+                  <span className="text-gray-400 text-xs block">Quote Requests:</span>
+                  <a href="mailto:sales@efocus.in" className="font-semibold text-gray-900 hover:text-red-600 transition-colors">
+                    sales@efocus.in
+                  </a>
+                </div>
+              </div>
+
+              {/* Technical Support */}
+              <div className="flex items-center gap-2.5">
+                <Headphones className="w-4 h-4 text-gray-500 shrink-0" />
+                <div>
+                  <span className="text-gray-400 text-xs block">Technical Support:</span>
+                  <a href="mailto:support@efocus.in" className="font-semibold text-gray-900 hover:text-red-600 transition-colors">
+                    support@efocus.in
+                  </a>
+                </div>
+              </div>
+
+              {/* Working Hours */}
+              <div className="flex items-start gap-2.5 pt-1 border-t border-gray-100 text-xs text-gray-500">
+                <Clock className="w-3.5 h-3.5 text-gray-400 shrink-0 mt-0.5" />
+                <span>
+                  Monday – Saturday | 9:00 AM – 6:30 PM IST
+                </span>
+              </div>
+            </div>
+          </div>
+
         </div>
 
-        {/* Footer Bottom */}
-        <div className="mt-10 pt-4 border-t border-[#1a1a1e] flex flex-col sm:flex-row justify-between items-center gap-4 text-[13px] text-[#777777]">
+        {/* Bottom Line */}
+        <div className="pt-8 border-t border-gray-200/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
           <div>
-            &copy; 2026 eFOCUS Industrial Solutions. All Rights Reserved. CAT. No. EF-2026/CI
+            Copyright © {new Date().getFullYear()} eFocus Industrial Solutions Pvt. Ltd. All rights reserved.
           </div>
-          <div>
-            Direct Sales:{" "}
-            <strong>
-              <a
-                href="mailto:chandruravichandran1536@gmail.com"
-                className="text-white hover:text-[#c8102e]"
-              >
-                chandruravichandran1536@gmail.com
-              </a>
-            </strong>{" "}
-            |{" "}
-            <strong>
-              <a href="tel:+917397242650" className="text-white hover:text-[#c8102e]">
-                +91 7397 242 650
-              </a>
-            </strong>
+          <div className="flex flex-wrap items-center gap-4 text-gray-500 sm:pr-60">
+            <Link to="/about" className="hover:text-black transition-colors">About eFocus</Link>
+            <span>•</span>
+            <Link to="/categories" className="hover:text-black transition-colors">All Categories</Link>
+            <span>•</span>
+            <Link to="/products" className="hover:text-black transition-colors">Products</Link>
+            <span>•</span>
+            <Link to="/contact" className="hover:text-black transition-colors">Contact Support</Link>
           </div>
         </div>
       </div>
     </footer>
-  )
+  );
 }

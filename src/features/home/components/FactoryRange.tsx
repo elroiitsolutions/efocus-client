@@ -7,7 +7,7 @@ export default function FactoryRange() {
     "TRUSTED EMS & R&D ASSEMBLY",
     "47 STOCKED LINE ITEMS",
     "100% IPC-WHMA-A-620 CERTIFIED",
-    "chandruravichandran1536@gmail.com",
+    "sales@efocus.in",
     "+91 7397 242 650",
   ]
 

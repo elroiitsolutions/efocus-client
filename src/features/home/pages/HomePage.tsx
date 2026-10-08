@@ -1,46 +1,42 @@
-import Hero from "../components/Hero"
-import ValueProposition from "../components/ValueProposition"
-import BrandSupplyBar from "../components/BrandSupplyBar"
-import TrendingCollections from "../components/TrendingCollections"
-import PopularProducts from "../components/PopularProducts"
-import ProductHighlight from "../components/ProductHighlight"
-import FactoryRange from "../components/FactoryRange"
-import BestSellers from "../components/BestSellers"
-import BlogSection from "../components/BlogSection"
-import GallerySection from "../components/GallerySection"
+import HeroSection from "../components/HeroSection";
+import ChallengesSolutionsSection from "../components/ChallengesSolutionsSection";
+import StatsCounterSection from "../components/StatsCounterSection";
+import BrandSupplyBar from "../components/BrandSupplyBar";
+import BenefitsSection from "../components/BenefitsSection";
+import FAQSection from "../components/FAQSection";
+import CoreFeaturesSection from "../components/CoreFeaturesSection";
+import PricingSection from "../components/PricingSection";
+import IntegrationSection from "../components/IntegrationSection";
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col">
-      {/* 1. Hero with 5 Category Cards */}
-      <Hero />
+    <div className="w-full flex flex-col items-center">
+      {/* 1. Hero Section with Video Background & Interactive Slide Cards */}
+      <HeroSection />
 
-      {/* 2. 3 Trust Badges (Fast Turnaround, Compliance Ready, Production Stock) */}
-      <ValueProposition />
+      {/* 2. Operational Matrix: Challenges & Engineering Solutions */}
+      <ChallengesSolutionsSection />
 
-      {/* 3. Authorized & Multi-Brand Industrial Supply */}
+      {/* 3. Dynamic Metric Counter Section (Slide from Sides with Count-Up) */}
+      <StatsCounterSection />
+
+      {/* 4. Authorized Multi-Brand Supply Bar */}
       <BrandSupplyBar />
 
-      {/* 4. Trending Collections Circle Grid */}
-      <TrendingCollections />
+      {/* 5. Benefits & Industrial Value Proposition */}
+      <BenefitsSection />
 
-      {/* 5. Popular Now Tabs Grid */}
-      <PopularProducts />
+      {/* 6. FAQ Section with Interactive Accordions */}
+      <FAQSection />
 
-      {/* 6. Custom Specs Build Highlight Configurator */}
-      <ProductHighlight />
+      {/* 7. Core Features & Capabilities Matrix */}
+      <CoreFeaturesSection />
 
-      {/* 7. Looping Marquee Marquee & Bento ranges */}
-      <FactoryRange />
+      {/* 8. Procurement Solutions & SLA Commitment */}
+      <PricingSection />
 
-      {/* 8. Best Sellers Grid */}
-      <BestSellers />
-
-      {/* 9. Technical Guides Lists */}
-      <BlogSection />
-
-      {/* 10. Dispatched custom harness items gallery */}
-      <GallerySection />
+      {/* 9. Interactive Brand Integration Ribbon */}
+      <IntegrationSection />
     </div>
-  )
+  );
 }

@@ -4,13 +4,22 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 13.3%;
+    --background: #fbfcfd;
+    --foreground: #0d0f11;
+    --surface: #ffffff;
+    --surface-muted: #f4f5f8;
+    --surface-border: #eaedf1;
     --border: 0 0% 92%;
     --input: 218 11% 84%;
     --ring: 350 85% 42%;
-    --primary: 350 85% 42%;
+    --primary: #111315;
     --primary-foreground: 0 0% 100%;
+
+    --accent-lime: #AF0202;
+    --accent-lime-hover: #8f0202;
+    --accent-purple: #7c3aed;
+    --accent-purple-light: #f3e8ff;
+    --accent-yellow: #fde047;
 
     --primary-rose: #c8102e;
     --primary-rose-hover: #a80c25;
@@ -21,12 +30,12 @@
     --dark-surface: #1a1a1e;
     --dark-card: #222226;
     
-    --text-primary: #222222;
-    --text-secondary: #555555;
-    --text-muted: #777777;
+    --text-primary: #0d0f11;
+    --text-secondary: #575e6d;
+    --text-muted: #8b92a1;
     --text-white: #ffffff;
     
-    --bg-main: #ffffff;
+    --bg-main: #fbfcfd;
     --bg-light: #f9f9fb;
     --bg-subtle: #f4f5f8;
     
@@ -35,12 +44,17 @@
     --card-mint: #e2f7f8;
     --card-cyan: #e0f2fe;
     
-    --border-light: #eaeaea;
+    --border-light: #eaedf2;
     --border-medium: #d1d5db;
+    --border-subtle: #f0f2f6;
+
+    --shadow-card: 0 4px 20px -2px rgba(13, 15, 17, 0.04), 0 2px 6px -1px rgba(13, 15, 17, 0.02);
+    --shadow-dropdown: 0 12px 32px -4px rgba(13, 15, 17, 0.08), 0 4px 12px -2px rgba(13, 15, 17, 0.04);
+    --shadow-hero: 0 24px 60px -12px rgba(13, 15, 17, 0.12);
     
     --container-max: 1600px;
-    --font-heading: 'Open Sauce One', 'Canva Sans', 'Plus Jakarta Sans', sans-serif;
-    --font-body: 'Open Sauce One', 'Canva Sans', 'Plus Jakarta Sans', sans-serif;
+    --font-heading: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+    --font-body: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
     
     --radius-sm: 6px;
     --radius-md: 10px;
@@ -66,18 +80,296 @@
   }
 }
 
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: auto !important;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
 body {
   font-family: var(--font-body);
   color: var(--text-primary);
   background-color: var(--bg-main);
-  line-height: 1.5;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  overflow-x: clip;
   width: 100%;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
+}
+
+/* Nexsas Container Centering Utility */
+.nex-container {
+  width: 100%;
+  max-width: 100rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.nex-container-narrow {
+  width: 100%;
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Nexsas Signature Pill Button */
+.nex-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #111315;
+  color: #ffffff;
+  padding: 8px 24px 8px 10px;
+  border-radius: 9999px;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.nex-btn-primary:hover {
+  background-color: #000000;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.16);
+}
+
+.nex-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #ffffff;
+  color: #111315;
+  padding: 8px 24px 8px 10px;
+  border-radius: 9999px;
+  font-size: 15px;
+  font-weight: 500;
+  border: 1px solid #e2e5eb;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.nex-btn-secondary:hover {
+  background-color: #f8fafc;
+  border-color: #cbd2dc;
+  transform: translateY(-1px);
+}
+
+/* Nexsas Red Icon Circle inside button */
+.nex-icon-chip {
+  width: 32px;
+  height: 32px;
+  border-radius: 9999px;
+  background-color: #AF0202;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.nex-btn-primary:hover .nex-icon-chip,
+.nex-btn-secondary:hover .nex-icon-chip {
+  transform: scale(1.08);
+}
+
+/* Reference-style pill buttons: the icon swaps from left to right on hover. */
+.nex-button-swap {
+  position: relative;
+  padding-left: 52px !important;
+  padding-right: 24px !important;
+  transition: padding 1.15s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.45s ease, box-shadow 0.45s ease, transform 0.65s ease;
+}
+
+.nex-button-swap > :first-child {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  z-index: 1;
+  transform: translateY(-50%);
+  transition: left 1.15s cubic-bezier(0.16, 1, 0.3, 1), transform 1.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nex-button-swap:hover {
+  padding-left: 24px !important;
+  padding-right: 52px !important;
+}
+
+.nex-button-swap:hover > :first-child {
+  left: calc(100% - 40px);
+}
+
+/* Navbar specific swap button with pixel-perfect alignment and fitted width */
+.nex-button-swap-nav {
+  position: relative;
+  height: 38px !important;
+  padding-left: 44px !important;
+  padding-right: 18px !important;
+  transition: padding 0.85s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.nex-button-swap-nav > :first-child {
+  position: absolute;
+  left: 4px;
+  top: 50%;
+  z-index: 1;
+  transform: translateY(-50%);
+  transition: left 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nex-button-swap-nav:hover {
+  padding-left: 18px !important;
+  padding-right: 44px !important;
+}
+
+.nex-button-swap-nav:hover > :first-child {
+  left: calc(100% - 34px);
+}
+
+/* Benefit cards turn black on hover, moving the icon to the center while the title stays grounded. */
+.benefit-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.benefit-card > h3 {
+  margin-top: auto;
+}
+
+.benefit-icon {
+  position: relative;
+  z-index: 1;
+  transform-origin: center;
+  transition: top 0.85s cubic-bezier(0.16, 1, 0.3, 1), left 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.55s ease, border-color 0.55s ease;
+}
+
+.benefit-card:hover {
+  background: #000000;
+  border-color: #000000;
+}
+
+.benefit-card:hover .benefit-icon {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -58%) scale(1.18);
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.benefit-card:hover .benefit-icon svg {
+  width: 42px;
+  height: 42px;
+  color: #ffffff;
+  transform: scale(1.22);
+  transition: color 0.45s ease, transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.benefit-card:hover h3 {
+  color: #ffffff;
+}
+
+/* Nexsas Section Pill Badge */
+.nex-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px 6px 8px;
+  border-radius: 9999px;
+  background-color: #ffffff;
+  border: 1px solid #e7eaee;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1d21;
+}
+
+.nex-badge-dark {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px 6px 8px;
+  border-radius: 9999px;
+  background-color: #111315;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.nex-badge-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 9999px;
+  background-color: #111315;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nex-badge-dark .nex-badge-icon {
+  background-color: #ffffff;
+  color: #111315;
+}
+
+/* Nexsas Glass & Card Styling */
+.nex-card {
+  background: #ffffff;
+  border-radius: 28px;
+  border: 1px solid #eaedf2;
+  box-shadow: 0 4px 20px -2px rgba(13, 15, 17, 0.04);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nex-card:hover {
+  box-shadow: 0 12px 30px -4px rgba(13, 15, 17, 0.08);
+  transform: translateY(-2px);
+}
+
+.nex-card-gray {
+  background: #f7f8fa;
+  border-radius: 28px;
+  border: 1px solid #eaedf2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Custom scrolling ticker marquee animations */
@@ -119,158 +411,22 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--primary-rose);
 }
 
-/* Custom Specific Element Font Helper Classes */
-.font-hero-heading {
-  font-family: "Manrope", sans-serif;
-  font-weight: 800; /* ExtraBold */
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
 }
 
-.font-category-name {
-  font-family: "Inter", sans-serif;
-  font-weight: 600; /* SemiBold */
+::-webkit-scrollbar-track {
+  background: #f1f3f6;
 }
 
-.font-description {
-  font-family: "Inter", sans-serif;
-  font-weight: 400; /* Regular */
+::-webkit-scrollbar-thumb {
+  background: #c9ced8;
+  border-radius: 4px;
 }
 
-.font-button {
-  font-family: "Inter", sans-serif;
-  font-weight: 700; /* Bold */
-}
-
-.font-navigation {
-  font-family: "Inter", sans-serif;
-  font-weight: 500; /* Medium */
-}
-
-.font-product-name {
-  font-family: "Manrope", sans-serif;
-  font-weight: 700; /* Bold */
-}
-
-/* ────────────────────────────────────────────────────────── */
-/* PREMIUM INTERACTIVE CSS ANIMATIONS                        */
-/* ────────────────────────────────────────────────────────── */
-
-/* Premium diagonal sweep shimmer effect for cards */
-.shimmer-card {
-  position: relative;
-  overflow: hidden;
-}
-.shimmer-card::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -60%;
-  width: 30%;
-  height: 200%;
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.4) 30%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  transform: rotate(30deg);
-  transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-  opacity: 0;
-  pointer-events: none;
-}
-.shimmer-card:hover::after {
-  left: 130%;
-  opacity: 1;
-}
-
-/* Micro-animations for Header Icons */
-.hover-rotate-icon {
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-.hover-rotate-icon:hover {
-  transform: rotate(12deg) scale(1.15);
-  color: var(--primary-rose) !important;
-}
-
-.hover-bounce-icon {
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-.hover-bounce-icon:hover {
-  transform: translateY(-3px);
-  color: var(--primary-rose) !important;
-}
-
-/* Button Arrow Slide */
-.btn-arrow-slide {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.btn-arrow-slide .arrow-icon {
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-.btn-arrow-slide:hover .arrow-icon {
-  transform: translateX(4px);
-}
-
-/* Soft Glow Pulses */
-@keyframes softPulseGlow {
-  0%, 100% {
-    box-shadow: 0 0 4px rgba(238, 39, 97, 0.1);
-  }
-  50% {
-    box-shadow: 0 0 12px rgba(238, 39, 97, 0.3);
-  }
-}
-.pulse-glow-hover:hover {
-  animation: softPulseGlow 2s infinite ease-in-out;
-}
-
-/* Smooth Category sidebar items transition */
-.filter-item-transition {
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.filter-item-transition:hover {
-  padding-left: 2px;
-  color: var(--primary-rose);
-}
-
-/* SuccessModal custom keyframes animations */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes scaleUp {
-  from {
-    transform: scale(0.95);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes bounceSlow {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-6px);
-  }
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.animate-scale-up {
-  animation: scaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) 0.05s forwards;
-}
-
-.animate-bounce-slow {
-  animation: bounceSlow 3s infinite ease-in-out;
+::-webkit-scrollbar-thumb:hover {
+  background: #a5acb9;
 }
 
 /* Infinite Scrolling Marquee for Clients */

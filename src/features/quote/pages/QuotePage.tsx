@@ -34,7 +34,7 @@ export default function QuotePage() {
         `${idx + 1}. [${item.name}] - Part/SKU: ${item.code || item.id} | Category: ${item.category} | Qty: ${item.qty}`
       ).join('\n\n');
 
-      const response = await fetch(`https://formsubmit.co/ajax/chandruravichandran1536@gmail.com`, {
+      const response = await fetch(`https://formsubmit.co/ajax/sales@efocus.in`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -231,7 +231,7 @@ export default function QuotePage() {
       isOpen={isSuccessOpen}
       onClose={handleSuccessClose}
       title="Request Submitted!"
-      message="Your consolidated quote request has been sent to chandruravichandran1536@gmail.com. Sourced matches will also be emailed to you."
+      message="Your consolidated quote request has been sent to sales@efocus.in. Sourced matches will also be emailed to you."
       submitterEmail={formData.email}
     />
     </>
