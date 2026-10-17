@@ -117,13 +117,12 @@ export default function HeroSection() {
       className="relative w-full overflow-hidden pt-28 sm:pt-36 lg:pt-40 pb-10 sm:pb-14 px-4 sm:px-6 lg:px-8 flex items-center justify-center min-h-[92vh] sm:min-h-screen" 
       id="hero"
     >
-      {/* Background Video with Cinematic Dark Contrast Overlays */}
+      {/* Background Video */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none bg-black">
         <video
           ref={videoRef}
-          className="absolute inset-0 h-full w-full object-cover object-center filter brightness-[0.92] contrast-[1.05]"
+          className="absolute inset-0 h-full w-full object-cover object-center scale-[1.03] filter brightness-[0.95] contrast-[1.05]"
           src="/hero%20video/video.mp4"
-          poster="/hero%20video/frame_35_hd.jpg"
           autoPlay
           muted
           loop
@@ -134,18 +133,11 @@ export default function HeroSection() {
           <source src="/hero%20video/video.mp4" type="video/mp4" />
         </video>
 
-        {/* Primary directional dark gradient for typography contrast */}
+        {/* Primary directional dark gradient for typography contrast (horizontal only, no top/bottom line) */}
         <div
-          className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/45 to-black/45"
+          className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/35 to-black/15"
           aria-hidden="true"
         />
-
-        {/* Vignette top & bottom */}
-        <div
-          className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/50"
-          aria-hidden="true"
-        />
-
       </div>
 
 
@@ -193,20 +185,23 @@ export default function HeroSection() {
 
           {/* Call to Actions (CTAs) */}
           <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-6">
-            {slides[currentSlide].ctas.map((cta, idx) => (
-              <button
-                key={idx}
-                onClick={cta.action}
-                className={`inline-flex items-center gap-2.5 px-6 sm:px-8 py-3 sm:py-3.5 rounded-full font-bold text-xs sm:text-sm tracking-wide transition-all cursor-pointer shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] ${
-                  cta.variant === "primary"
-                    ? "bg-white hover:bg-gray-100 text-[#0d0f11]"
-                    : "bg-white/15 hover:bg-white/25 text-white border border-white/30 backdrop-blur-md"
-                }`}
-              >
-                {cta.variant === "primary" && <NexChipIcon />}
-                <span>{cta.label}</span>
-              </button>
-            ))}
+            {slides[currentSlide].ctas.map((cta, idx) => {
+              const isPrimary = cta.variant === "primary";
+              return (
+                <button
+                  key={idx}
+                  onClick={cta.action}
+                  className={
+                    isPrimary
+                      ? "nex-button-swap group inline-flex items-center justify-center bg-white hover:bg-gray-100 text-[#0d0f11] py-3 sm:py-3.5 rounded-full font-bold text-xs sm:text-sm tracking-wide transition-all cursor-pointer shadow-lg hover:shadow-xl active:scale-[0.98] whitespace-nowrap"
+                      : "inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-3.5 rounded-full font-bold text-xs sm:text-sm tracking-wide transition-all cursor-pointer shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] bg-white/15 hover:bg-white/25 text-white border border-white/30 backdrop-blur-md"
+                  }
+                >
+                  {isPrimary && <NexChipIcon />}
+                  <span>{cta.label}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 

@@ -552,26 +552,11 @@ export default function ProductDetailsPage() {
             </div>
 
             {/* 4. SKU Line in Blue Accent */}
-            <div className="text-xs sm:text-[13px] font-bold text-gray-900 mb-2">
+            <div className="text-xs sm:text-[13px] font-bold text-gray-900 mb-2.5">
               SKU: <span className="text-[#0284c7] font-bold font-mono">{product.catalog_number || product.sku}</span>
             </div>
 
-            {/* 5. Pricing / Commercial Quote Line matching Image 2 */}
-            <div className="flex items-baseline gap-2 mb-1">
-              <span className="text-2xl sm:text-[26px] font-extrabold text-[#111315]">
-                Custom B2B Quotation
-              </span>
-              <span className="text-xs font-semibold text-gray-500">
-                (Incl. GST)
-              </span>
-            </div>
-
-            {/* 6. Rewards / Procurement Loyalty Line */}
-            <p className="text-xs text-gray-600 mb-2 font-normal">
-              Purchase this product now and earn <span className="font-bold text-gray-800">64 eFocus Points</span>!
-            </p>
-
-            {/* 7. Availability */}
+            {/* 5. Availability */}
             <div className="text-xs sm:text-[13px] font-medium text-gray-900 mb-2.5">
               Availability:{" "}
               {product.stock_status === "out_of_stock" ? (
@@ -920,51 +905,6 @@ export default function ProductDetailsPage() {
                 />
               ))}
             </div>
-          </div>
-        </section>
-
-        {/* Section 3: Support / Help Section matching PDF clean icons */}
-        <section className="py-14">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto">
-            {/* 1. Need Support ? -> Navigates to Contact Us page */}
-            <Link
-              to="/contact"
-              onClick={() => {
-                window.scrollTo({ top: 0, left: 0, behavior: "instant" })
-                if (window.__lenis) {
-                  window.__lenis.scrollTo(0, { immediate: true })
-                }
-                navigate("/contact")
-              }}
-              className="flex flex-col items-center justify-center gap-3 text-center cursor-pointer group hover:scale-[1.03] transition-all duration-200 p-5 rounded-2xl hover:bg-gray-50/80 active:scale-95"
-              title="Need Support? Contact our technical team"
-            >
-              <img
-                src="/images/support_headset.png"
-                alt="Need Support"
-                className="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-200"
-              />
-              <h4 className="font-heading font-extrabold text-[17px] sm:text-[18px] text-[#111111] group-hover:text-[#b91c1c] transition-colors">
-                Need Support ?
-              </h4>
-            </Link>
-
-            {/* 2. Didn't find what you are looking for? -> Opens popup form modal */}
-            <button
-              type="button"
-              onClick={() => setIsRequestProductOpen(true)}
-              className="flex flex-col items-center justify-center gap-3 text-center cursor-pointer group hover:scale-[1.03] transition-all duration-200 p-5 rounded-2xl hover:bg-gray-50/80 active:scale-95"
-              title="Didn't find what you are looking for? Submit a request"
-            >
-              <img
-                src="/images/support_search.png"
-                alt="Didn't find what you are looking for"
-                className="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-200"
-              />
-              <h4 className="font-heading font-extrabold text-[17px] sm:text-[18px] text-[#111111] group-hover:text-[#b91c1c] transition-colors">
-                Didn’t find what you are looking for?
-              </h4>
-            </button>
           </div>
         </section>
 

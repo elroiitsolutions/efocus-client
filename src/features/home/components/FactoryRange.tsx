@@ -17,7 +17,7 @@ export default function FactoryRange() {
       title: "SMT, Rework & Assembly",
       desc: "Everything the pick-and-place, stencil printer & rework bench consume — splice to squeegee.",
       link: "/categories/smt-rework-assembly",
-      image: "/images/bento_smt_1785994353600.png",
+      image: "/images/products/smt/quick-203h-station.webp",
     },
     medium: {
       cat: "CAT 02",
