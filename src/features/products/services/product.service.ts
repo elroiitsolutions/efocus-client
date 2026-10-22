@@ -2731,14 +2731,12 @@ export class ProductService {
       // Apply local client-side search & filtering mock fallbacks
       let filtered = [...mockProducts]
 
-      if (params.search) {
-        const query = params.search.toLowerCase()
-        filtered = filtered.filter(
-          (p) =>
-            p.product_name.toLowerCase().includes(query) ||
-            p.sku.toLowerCase().includes(query) ||
-            (p.brand && p.brand.toLowerCase().includes(query))
-        )
+      if (params.search && params.search.trim()) {
+        const terms = params.search.toLowerCase().split(/\s+/).filter(Boolean)
+        filtered = filtered.filter((p) => {
+          const combined = `${p.product_name || ""} ${p.sku || ""} ${p.catalog_number || ""} ${p.brand || ""} ${p.category_name || ""} ${p.subcategory_name || ""}`.toLowerCase()
+          return terms.every(t => combined.includes(t))
+        })
       }
 
       const catSlugs = params.category ? params.category.split(",").map((c) => slugify(c.trim())).filter(Boolean) : []

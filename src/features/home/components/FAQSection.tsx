@@ -19,7 +19,7 @@ export default function FAQSection() {
     },
     {
       number: "03",
-      title: "Application Engineering Validation",
+      title: "Application Validation & Field Support",
       details:
         "In-house engineers pre-verify hardware specifications, electrical parameters, and application suitability before fulfillment to eliminate ordering errors.",
       highlight: "In-House Pre-Verification",
@@ -44,13 +44,6 @@ export default function FAQSection() {
       details:
         "Lock in fixed unit pricing on high-turnover items through Annual Rate Contracts to insulate your plant budget against market inflation.",
       highlight: "Fixed Annual Unit Pricing",
-    },
-    {
-      number: "07",
-      title: "Complete Lifecycle Field Support",
-      details:
-        "Beyond delivery, get hands-on support including on-site product demos, bench repairs, preventive maintenance (AMC), and operator training.",
-      highlight: "On-Site AMC & Demos",
     },
   ];
 
@@ -177,25 +170,19 @@ export default function FAQSection() {
           </h2>
         </div>
 
-        {/* Box Type Contents: Row 1 = 3 cols, Row 2 = 3 cols, Row 3 = Last one centered */}
+        {/* Box Type Contents: Balanced 3x2 Grid */}
         <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
-          {whyEfocusItems.map((item, idx) => {
-            const isLast = idx === whyEfocusItems.length - 1;
-            return (
-              <div
-                key={idx}
-                style={{
-                  animation: isGridVisible
-                    ? `whyBoxEntrance 0.75s cubic-bezier(0.16, 1, 0.3, 1) ${idx * 130}ms both`
-                    : "none",
-                  opacity: isGridVisible ? undefined : 0,
-                }}
-                className={`rounded-2xl p-5 sm:p-6 flex flex-col justify-between transform transition-all duration-300 ease-out hover:scale-105 hover:-translate-y-2 hover:z-30 relative group bg-white/95 backdrop-blur-md border border-gray-200/80 hover:border-red-300 shadow-[0_2px_10px_rgba(0,0,0,0.03)] hover:shadow-[0_24px_48px_-12px_rgba(175,2,2,0.2),0_8px_20px_rgba(0,0,0,0.06)] cursor-pointer select-none will-change-transform before:absolute before:inset-x-0 before:top-0 before:h-[2.5px] before:bg-gradient-to-r before:from-transparent before:via-[#AF0202] before:to-transparent before:opacity-0 group-hover:before:opacity-100 before:transition-opacity before:duration-300 after:absolute after:inset-0 after:rounded-2xl after:bg-gradient-to-br after:from-red-500/[0.03] after:to-transparent after:opacity-0 group-hover:after:opacity-100 after:transition-opacity after:duration-300 after:pointer-events-none ${
-                  isLast
-                    ? "md:col-span-2 md:max-w-xl md:mx-auto lg:max-w-none lg:col-span-1 lg:col-start-2 lg:mx-0 w-full"
-                    : ""
-                }`}
-              >
+          {whyEfocusItems.map((item, idx) => (
+            <div
+              key={idx}
+              style={{
+                animation: isGridVisible
+                  ? `whyBoxEntrance 0.75s cubic-bezier(0.16, 1, 0.3, 1) ${idx * 130}ms both`
+                  : "none",
+                opacity: isGridVisible ? undefined : 0,
+              }}
+              className="rounded-2xl p-5 sm:p-6 flex flex-col justify-between transform transition-all duration-300 ease-out hover:scale-105 hover:-translate-y-2 hover:z-30 relative group bg-white/95 backdrop-blur-md border border-gray-200/80 hover:border-red-300 shadow-[0_2px_10px_rgba(0,0,0,0.03)] hover:shadow-[0_24px_48px_-12px_rgba(175,2,2,0.2),0_8px_20px_rgba(0,0,0,0.06)] cursor-pointer select-none will-change-transform before:absolute before:inset-x-0 before:top-0 before:h-[2.5px] before:bg-gradient-to-r before:from-transparent before:via-[#AF0202] before:to-transparent before:opacity-0 group-hover:before:opacity-100 before:transition-opacity before:duration-300 after:absolute after:inset-0 after:rounded-2xl after:bg-gradient-to-br after:from-red-500/[0.03] after:to-transparent after:opacity-0 group-hover:after:opacity-100 after:transition-opacity after:duration-300 after:pointer-events-none w-full"
+            >
                 <div className="relative z-10">
                   {/* Top Row: Highlight Title Badge in Brand Logo Color */}
                   <div className="flex items-center mb-4">
@@ -225,9 +212,8 @@ export default function FAQSection() {
                     <span className="pt-0.5">{item.title}</span>
                   </h3>
                 </div>
-              </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
 
       </div>

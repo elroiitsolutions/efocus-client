@@ -219,24 +219,20 @@ export default function PricingSection() {
   };
 
   const current = solutions[selectedPlan];
-  const currentPlanIdx = planKeys.indexOf(selectedPlan);
 
   const tabItems = [
     {
       id: "setup" as const,
-      num: "1",
       title: "New Plant & Facility Setup",
       // subtitle: "Turnkey lines, workstations & commissioning",
     },
     {
       id: "consolidation" as const,
-      num: "2",
       title: "Consolidate Supplier Base",
       // subtitle: "Shift 500+ suppliers under 1 GST partner",
     },
     {
       id: "bom" as const,
-      num: "3",
       title: "BOM Requirement Sourcing",
       // subtitle: "Batch spreadsheets & single quote",
     },
@@ -414,7 +410,7 @@ export default function PricingSection() {
                     <div className={`text-sm sm:text-[15px] lg:text-base font-semibold tracking-tight transition-colors text-center ${
                       isActive ? "text-[#0d0f11] font-bold" : "text-gray-700 group-hover:text-black"
                     }`}>
-                      {tab.num}. {tab.title}
+                      {tab.title}
                     </div>
                   </div>
 
@@ -449,14 +445,11 @@ export default function PricingSection() {
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#AF0202]/30 to-transparent" />
 
               <div>
-                {/* Header Row: Badge & Model Tag + Quick Slide Indicators (Centered) */}
+                {/* Header Row: Badge & Model Tag (Centered) */}
                 <div className="flex flex-wrap items-center justify-center gap-3 mb-3">
                   <div className="flex items-center gap-2">
                     <span className="px-3.5 py-1 rounded-full border border-gray-200 bg-gray-50 text-xs font-semibold text-gray-800">
                       {current.badge}
-                    </span>
-                    <span className="text-[11px] font-mono text-gray-400">
-                      0{currentPlanIdx + 1} / 0{planKeys.length}
                     </span>
                   </div>
                   {current.scopeLabel && (

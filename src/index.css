@@ -67,6 +67,10 @@
   .site-container {
     @apply w-full max-w-[1780px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10;
   }
+
+  .card-aspect-4-3 {
+    aspect-ratio: 4 / 3;
+  }
   
   /* Completely hide scrollbars */
   .no-scrollbar::-webkit-scrollbar {

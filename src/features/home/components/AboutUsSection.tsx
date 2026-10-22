@@ -51,29 +51,26 @@ export default function AboutUsSection() {
               <div className="md:col-span-5 grid grid-cols-2 gap-y-8 gap-x-4">
                 <div>
                   <div className="text-3xl sm:text-4xl font-semibold text-[#0d0f11] tracking-tight">
+                    <CountUp value={12} suffix="+" />
+                  </div>
+                  <div className="text-xs sm:text-sm text-gray-500 mt-1 font-normal">
+                    Years of Experience
+                  </div>
+                </div>
+                <div>
+                  <div className="text-3xl sm:text-4xl font-semibold text-[#0d0f11] tracking-tight">
                     <CountUp value={90} suffix="%" />
                   </div>
                   <div className="text-xs sm:text-sm text-gray-500 mt-1 font-normal">
                     Client Satisfaction
                   </div>
                 </div>
-                <div>
-                  <div className="text-3xl sm:text-4xl font-semibold text-[#0d0f11] tracking-tight">
-                    <CountUp value={10} suffix="M+" />
-                  </div>
-                  <div className="text-xs sm:text-sm text-gray-500 mt-1 font-normal">
-                    automated workflows
-                  </div>
-                </div>
                 <div className="col-span-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-3xl sm:text-4xl font-semibold text-[#0d0f11] tracking-tight">
-                      <CountUp value={4.9} decimals={1} />
-                    </span>
-                    <span className="text-xl text-[#7c3aed]">★</span>
+                  <div className="text-3xl sm:text-4xl font-semibold text-[#0d0f11] tracking-tight">
+                    <CountUp value={10} suffix="K+" />
                   </div>
                   <div className="text-xs sm:text-sm text-gray-500 mt-1 font-normal">
-                    user rating
+                    Line Items/Year
                   </div>
                 </div>
               </div>

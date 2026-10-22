@@ -91,11 +91,12 @@ export function ProductCard({ product }: ProductCardProps) {
 
   const imageSrc = getProductPrimaryImage(product)
   const hoverImageSrc = getProductHoverImage(product)
+  const hasMultipleImages = Boolean(hoverImageSrc && hoverImageSrc !== imageSrc)
 
   const badgeText = product.catalog_number || product.sku
 
   return (
-    <div className="bg-white border border-[#e5e7eb] rounded-lg overflow-hidden shadow-2xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between relative group">
+    <div className="bg-white border border-[#e5e7eb] rounded-lg overflow-hidden shadow-2xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between relative group h-full">
       {/* Top-Left: OUT OF STOCK with Red Dot OR Regular SKU badge tag */}
       {isOutOfStock ? (
         <div className="absolute top-2.5 left-2.5 z-20 pointer-events-none select-none flex items-center gap-1.5">
@@ -143,14 +144,19 @@ export function ProductCard({ product }: ProductCardProps) {
         </button>
       </div>
 
-      {/* Card Image - UP BACKGROUND SET TO GRAY */}
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#f4f5f7] border-b border-[#e5e7eb] flex items-center justify-center pt-6 pb-2 px-2 sm:pt-7 sm:pb-2.5 sm:px-2.5">
+      {/* Card Image - Locked 4:3 Aspect Ratio across all cards */}
+      <div
+        className="relative w-full overflow-hidden bg-white border-b border-[#e5e7eb] flex items-center justify-center pt-6 pb-2 px-2 sm:pt-7 sm:pb-2.5 sm:px-2.5 shrink-0"
+        style={{ aspectRatio: "4 / 3" }}
+      >
         <Link to={`/products/${product.sku}`} className="block w-full h-full relative flex items-center justify-center">
           {/* Primary Image */}
           <img
             src={imageSrc}
             alt={product.product_name}
-            className={`max-h-[80px] sm:max-h-[100px] max-w-full object-contain transition-all duration-300 group-hover:scale-105 group-hover:opacity-0 ${
+            className={`max-h-[100px] sm:max-h-[160px] max-w-full object-contain transition-all duration-300 group-hover:scale-105 ${
+              hasMultipleImages ? "group-hover:opacity-0" : ""
+            } ${
               isOutOfStock ? "grayscale contrast-95 opacity-85" : ""
             }`}
             onError={(e) => {
@@ -158,41 +164,42 @@ export function ProductCard({ product }: ProductCardProps) {
                 "/images/cat_cables_1785994179162.png"
             }}
           />
-          {/* Hover Image */}
-          <img
-            src={hoverImageSrc}
-            alt={`${product.product_name} Alternative`}
-            className={`max-h-[80px] sm:max-h-[100px] max-w-full object-contain absolute inset-0 m-auto opacity-0 transition-all duration-300 group-hover:scale-105 group-hover:opacity-100 ${
-              isOutOfStock ? "grayscale contrast-95 opacity-85" : ""
-            }`}
-            onError={(e) => {
-              ;(e.target as HTMLImageElement).src =
-                "/images/bento_net_1785994371883.png"
-            }}
-          />
+          {/* Hover Image (only rendered when product actually has multiple authentic images) */}
+          {hasMultipleImages && (
+            <img
+              src={hoverImageSrc}
+              alt={`${product.product_name} Alternative`}
+              className={`max-h-[100px] sm:max-h-[160px] max-w-full object-contain absolute inset-0 m-auto opacity-0 transition-all duration-300 group-hover:scale-105 group-hover:opacity-100 ${
+                isOutOfStock ? "grayscale contrast-95 opacity-85" : ""
+              }`}
+              onError={(e) => {
+                ;(e.target as HTMLImageElement).src = imageSrc
+              }}
+            />
+          )}
         </Link>
       </div>
 
-      {/* Card Details body - SET TO WHITE */}
-      <div className="p-2 sm:p-3 flex flex-col justify-between flex-grow bg-white">
+      {/* Card Details body - Standardized height matching first page */}
+      <div className="p-2.5 sm:p-3 flex flex-col justify-between flex-grow bg-white min-h-[114px] sm:min-h-[120px]">
         <div>
-          <div className="flex items-start justify-between gap-1 min-w-0">
-            <span className="text-[8.5px] sm:text-[7.5px] font-bold text-[#c8102e] uppercase tracking-wider min-w-0 flex-1 truncate leading-tight">
+          <div className="flex items-center justify-between gap-1 min-w-0 h-[14px]">
+            <span className="text-[.5px] sm:text-[8.5px] font-bold text-[#c8102e] uppercase tracking-wider min-w-0 flex-1 truncate leading-tight">
               {product.category_name || "Industrial Solutions"}
             </span>
             {product.brand && (
-              <span className="text-[8.5px] sm:text-[9px] font-bold text-gray-700 shrink-0 leading-tight">
+              <span className="text-[8.5px] sm:text-[10px] font-bold text-gray-700 shrink-0 leading-tight max-w-[48%] truncate text-right">
                 {product.brand}
               </span>
             )}
           </div>
-          <h4 className="font-heading text-[11px] sm:text-[11px] font-bold text-[#222222] mt-0.5 leading-snug line-clamp-2 hover:text-[#c8102e] transition-colors">
+          <h4 className="font-heading text-[11px] sm:text-[12px] font-bold text-[#222222] mt-1 leading-[15px] sm:leading-[16px] h-[30px] sm:h-[32px] line-clamp-2 hover:text-[#c8102e] transition-colors flex items-start">
             <Link to={`/products/${product.sku}`}>{product.product_name}</Link>
           </h4>
         </div>
 
         {/* Action button bar */}
-        <div className="mt-2 pt-1.5 sm:pt-2 border-t border-[#e5e7eb] flex items-center justify-between gap-1 min-w-0">
+        <div className="mt-2 pt-1.5 sm:pt-2 border-t border-[#e5e7eb] flex items-center justify-between gap-1 min-w-0 h-[34px] shrink-0">
           <span
             className="text-[9px] sm:text-[10px] font-bold text-[#111111] min-w-0 flex-1 leading-tight truncate"
             title={product.sku}

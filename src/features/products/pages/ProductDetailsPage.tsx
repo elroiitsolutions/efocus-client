@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react"
-import { useParams, Link, useNavigate } from "react-router-dom"
+import { useParams, Link } from "react-router-dom"
 import { useProduct } from "../hooks/useProduct"
 import { useProducts } from "../hooks/useProducts"
 import { useQuoteStore } from "@/features/quote/store/quote.store"
@@ -23,7 +23,7 @@ import { mockProducts } from "../services/product.service"
 import {
   getProductPrimaryImage,
   getProductThumbnails,
-  getCarouselProductImage,
+  getProductHoverImage,
 } from "../utils/productImages"
 import RequestProductModal from "../components/RequestProductModal"
 
@@ -57,18 +57,21 @@ function BrandBadge({ name }: { name: string }) {
 // Carousel product card matching PDF styling
 function CarouselProductCard({
   image,
+  hoverImage,
   title,
   sku,
   brand,
   stockStatus = "in_stock"
 }: {
   image: string
+  hoverImage?: string
   title: string
   sku: string
   brand: string
   stockStatus?: "in_stock" | "out_of_stock" | "on_backorder" | string | null
 }) {
   const isOutOfStock = stockStatus === "out_of_stock"
+  const hasMultipleImages = Boolean(hoverImage && hoverImage !== image)
 
   return (
     <Link
@@ -77,17 +80,30 @@ function CarouselProductCard({
     >
       <div>
         {/* Soft rounded image backdrop matching PDF */}
-        <div className="aspect-square w-full rounded-md bg-transparent flex items-center justify-center p-2 mb-2 group-hover:scale-102 transition-transform duration-200 overflow-hidden">
+        <div className="aspect-square w-full rounded-md bg-transparent flex items-center justify-center p-2 mb-2 group-hover:scale-102 transition-transform duration-200 overflow-hidden relative">
           <img
             src={image}
             alt={title}
-            className={`max-h-[110px] sm:max-h-[125px] w-auto object-contain ${isOutOfStock ? "grayscale contrast-95 opacity-80" : ""
-              }`}
+            className={`max-h-[110px] sm:max-h-[125px] w-auto object-contain transition-all duration-300 ${
+              hasMultipleImages ? "group-hover:opacity-0" : ""
+            } ${isOutOfStock ? "grayscale contrast-95 opacity-80" : ""}`}
             onError={(e) => {
               ; (e.target as HTMLImageElement).src =
                 "/images/cat_cables_1785994179162.png"
             }}
           />
+          {hasMultipleImages && (
+            <img
+              src={hoverImage}
+              alt={title}
+              className={`max-h-[110px] sm:max-h-[125px] w-auto object-contain absolute inset-0 m-auto opacity-0 transition-all duration-300 group-hover:opacity-100 ${
+                isOutOfStock ? "grayscale contrast-95 opacity-80" : ""
+              }`}
+              onError={(e) => {
+                ; (e.target as HTMLImageElement).src = image
+              }}
+            />
+          )}
         </div>
 
         {/* Product Title */}
@@ -218,7 +234,6 @@ const customerReviews = [
 
 export default function ProductDetailsPage() {
   const { slug } = useParams<{ slug: string }>()
-  const navigate = useNavigate()
   const { data: product, isLoading, error } = useProduct(slug || "")
   const { data: productsData } = useProducts({ limit: 100 })
 
@@ -285,15 +300,11 @@ export default function ProductDetailsPage() {
     image.style.transform = "scale(1)"
   }
 
-  // Reset selected thumbnail and scroll to top whenever product slug changes
+  // Reset selected thumbnail and quantity whenever product slug changes
   useEffect(() => {
     setSelectedImageIndex(0)
     setQty(1)
     resetZoom()
-    if (window.__lenis) {
-      window.__lenis.scrollTo(0, { immediate: true })
-    }
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior })
   }, [slug])
 
   const handleAddToQuote = () => {
@@ -566,7 +577,7 @@ export default function ProductDetailsPage() {
               )}
             </div>
 
-            {/* 8. B2B / Bulk Inquiries Note matching Image 2 */}
+            {/* 8. B2B / Bulk Inquiries Note */}
             <div className="text-xs text-gray-700 space-y-1 mb-3 leading-relaxed">
               <p>
                 For bulk orders or B2B inquiries, email us:{" "}
@@ -574,13 +585,6 @@ export default function ProductDetailsPage() {
                   sales@efocus.in
                 </a>
               </p>
-              {product.family_name && (
-                <p className="text-amber-800 text-[11.5px] font-medium">
-                  <span className="font-bold text-amber-900">Note: </span>
-                  Looking for the latest model? Check out the all new{" "}
-                  <span className="font-semibold text-amber-900 underline">{product.family_name}</span>.
-                </p>
-              )}
             </div>
 
             {/* 9. Key Specs Table with Clean Aligned Colons (Robu.in hallmark) */}
@@ -724,13 +728,6 @@ export default function ProductDetailsPage() {
                 {/* 1. Have a Bulk Order? */}
                 <Link
                   to="/contact"
-                  onClick={() => {
-                    window.scrollTo({ top: 0, left: 0, behavior: "instant" })
-                    if (window.__lenis) {
-                      window.__lenis.scrollTo(0, { immediate: true })
-                    }
-                    navigate("/contact")
-                  }}
                   className="flex flex-col items-center justify-center p-2 rounded-lg bg-gray-50/60 hover:bg-red-50/50 hover:border-red-200 border border-transparent transition-all group cursor-pointer text-center select-none"
                   title="Have a Bulk Order? Contact our sales team"
                 >
@@ -749,13 +746,6 @@ export default function ProductDetailsPage() {
                 {/* 2. Need Support? */}
                 <Link
                   to="/contact"
-                  onClick={() => {
-                    window.scrollTo({ top: 0, left: 0, behavior: "instant" })
-                    if (window.__lenis) {
-                      window.__lenis.scrollTo(0, { immediate: true })
-                    }
-                    navigate("/contact")
-                  }}
                   className="flex flex-col items-center justify-center p-2 rounded-lg bg-gray-50/60 hover:bg-red-50/50 hover:border-red-200 border border-transparent transition-all group cursor-pointer text-center select-none"
                   title="Need Support? Contact our technical support team"
                 >
@@ -849,13 +839,14 @@ export default function ProductDetailsPage() {
             </button>
 
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 sm:gap-4">
-              {relatedItems.map((item, idx) => (
+              {relatedItems.map((item) => (
                 <CarouselProductCard
                   key={item.sku}
                   sku={item.sku}
                   title={item.product_name}
                   brand={item.brand || "Generic"}
-                  image={getCarouselProductImage(item, (safeRelatedPage - 1) * relatedPageSize + idx)}
+                  image={getProductPrimaryImage(item)}
+                  hoverImage={getProductHoverImage(item)}
                   stockStatus={item.stock_status || "in_stock"}
                 />
               ))}
@@ -894,13 +885,14 @@ export default function ProductDetailsPage() {
             </button>
 
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 sm:gap-4">
-              {viewedItems.map((item, idx) => (
+              {viewedItems.map((item) => (
                 <CarouselProductCard
                   key={item.sku}
                   sku={item.sku}
                   title={item.product_name}
                   brand={item.brand || "Generic"}
-                  image={getCarouselProductImage(item, 5 + (safeViewedPage - 1) * viewedPageSize + idx)}
+                  image={getProductPrimaryImage(item)}
+                  hoverImage={getProductHoverImage(item)}
                   stockStatus={item.stock_status || "in_stock"}
                 />
               ))}

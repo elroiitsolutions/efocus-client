@@ -15,9 +15,9 @@ module.exports = {
   	},
   	extend: {
   		fontFamily: {
-  			sans: ['"Open Sauce One"', '"Canva Sans"', '"Plus Jakarta Sans"', 'sans-serif'],
-  			heading: ['"Open Sauce One"', '"Canva Sans"', '"Plus Jakarta Sans"', 'sans-serif'],
-  			body: ['"Open Sauce One"', '"Canva Sans"', '"Plus Jakarta Sans"', 'sans-serif'],
+  			sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+  			heading: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+  			body: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
   		},
   		colors: {
   			border: 'hsl(var(--border))',

@@ -163,9 +163,6 @@ export default function HeroSection() {
               >
                 <span className={`w-2 h-2 rounded-full ${isActive ? "bg-red-500 animate-pulse" : "bg-white/40"}`} />
                 <span>{s.tabLabel}</span>
-                <span className={`text-[11px] font-mono ${isActive ? "text-white" : "text-white/50"}`}>
-                  0{idx + 1}
-                </span>
               </button>
             );
           })}
@@ -174,7 +171,7 @@ export default function HeroSection() {
         {/* Animated Playing Text Directly Over Background (Reference Styling) */}
         <div key={slides[currentSlide].id} className="animate-in fade-in slide-in-from-bottom-3 duration-500 max-w-4xl">
           {/* Main Headline */}
-          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight uppercase leading-[1.14] mb-4 sm:mb-5 drop-shadow-[0_4px_18px_rgba(0,0,0,0.6)]">
+          <h1 className="font-heading text-2xl sm:text-4xl lg:text-5xl font-extrabold sm:font-black text-white tracking-normal sm:tracking-[0.015em] uppercase leading-[1.14] mb-4 sm:mb-5 drop-shadow-[0_4px_18px_rgba(0,0,0,0.6)]">
             {slides[currentSlide].heading}
           </h1>
 

@@ -1,3 +1,5 @@
+import { config } from "@/app/config"
+
 export interface ProductLike {
   sku?: string | null
   catalog_number?: string | null
@@ -6,6 +8,20 @@ export interface ProductLike {
   subcategory_name?: string | null
   brand?: string | null
   family_name?: string | null
+  primary_image?: string | null
+  images?: string[]
+}
+
+/**
+ * Resolves a backend-served or local image path to a full accessible URL.
+ */
+export function resolveBackendImageUrl(url?: string | null): string {
+  if (!url) return ""
+  if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("data:") || url.startsWith("blob:")) {
+    return url
+  }
+  const cleanPath = url.startsWith("/") ? url : `/${url}`
+  return `${config.serverUrl}${cleanPath}`
 }
 
 // Authentic SMT, Rework & Assembly product image assets
@@ -1076,7 +1092,12 @@ export function isProductImageUserProvided(product?: ProductLike | null): boolea
  * Returns the primary product image from the authentic product assets.
  */
 export function getProductPrimaryImage(product?: ProductLike | null): string {
-  if (!product) return EXISTING_IMAGES.cables
+  if (!product) return resolveBackendImageUrl(EXISTING_IMAGES.cables)
+
+  // 0. Prioritize backend-provided primary image from database
+  if (product.primary_image && product.primary_image.trim() !== "") {
+    return resolveBackendImageUrl(product.primary_image)
+  }
 
   // 1. Prioritize SMT, Rework & Assembly authentic product images provided by user
   const smtImage = getSmtProductImage(product)
@@ -1248,9 +1269,15 @@ export function getProductPrimaryImage(product?: ProductLike | null): string {
 }
 
 /**
- * Ensures each card in a carousel receives a distinct, visually varied image.
+ * Ensures each card in a carousel receives its authentic product image.
+ * Always prioritizes the product's authentic primary image.
+ * If the product is unavailable or missing, falls back to the carousel palette.
  */
 export function getCarouselProductImage(product?: ProductLike | null, slotIndex?: number): string {
+  if (product) {
+    const primary = getProductPrimaryImage(product)
+    if (primary) return primary
+  }
   if (slotIndex !== undefined) {
     const paletteIndex = slotIndex % CAROUSEL_PALETTE.length
     return CAROUSEL_PALETTE[paletteIndex]
@@ -1260,41 +1287,47 @@ export function getCarouselProductImage(product?: ProductLike | null, slotIndex?
 
 /**
  * Returns the secondary hover image for product cards.
- * For the products the user provided images for (SMT and Testing & Measurement), it strictly returns that product's own image.
- * For other categories, it returns the category-specific secondary image.
+ * Strictly adheres to the rule:
+ * - Only products that have MORE THAN ONE authentic product image switch to a second image on hover.
+ * - Products with only one image do NOT change to an unrelated image on hover (returns same primary image).
  */
 export function getProductHoverImage(product?: ProductLike | null): string {
-  if (!product) return EXISTING_IMAGES.cables
+  if (!product) return ""
 
-  // Products the user gave images for: strictly keep their own image, no other products
-  if (isProductImageUserProvided(product)) {
-    return getProductPrimaryImage(product)
-  }
+  const primary = getProductPrimaryImage(product)
 
-  const cat = (product.category_name || "").toLowerCase()
-  const sku = (product.sku || "").toUpperCase()
-
-  // Other categories: maintain their alternate hover preview
-  if (cat.includes("cable") || cat.includes("connect")) {
-    return EXISTING_IMAGES.net
-  }
-  if (cat.includes("test") || cat.includes("measur") || sku.includes("TST")) {
-    return EXISTING_IMAGES.custom
-  }
-  if (cat.includes("rf") || cat.includes("wave") || sku.includes("RF")) {
-    return EXISTING_IMAGES.power
-  }
-  if (cat.includes("tool") || cat.includes("mro") || sku.includes("MRO")) {
-    return EXISTING_IMAGES.tools
-  }
-  if (cat.includes("power") || sku.includes("PWR")) {
-    return EXISTING_IMAGES.cables
-  }
-  if (cat.includes("label") || cat.includes("ident") || sku.includes("MAC")) {
-    return EXISTING_IMAGES.tools
+  // 1. Check if backend product object has multiple images in `product.images`
+  if (product.images && product.images.length > 1) {
+    const secondImg = resolveBackendImageUrl(product.images[1])
+    if (secondImg && secondImg !== primary) {
+      return secondImg
+    }
   }
 
-  return EXISTING_IMAGES.net
+  // 2. Check PRODUCT_GALLERY_IMAGES by SKU or product_name
+  const sku = (product.sku || "").toUpperCase().trim()
+  const name = (product.product_name || "").toLowerCase().trim()
+
+  if (sku && PRODUCT_GALLERY_IMAGES[sku] && PRODUCT_GALLERY_IMAGES[sku].length > 1) {
+    const secondImg = resolveBackendImageUrl(PRODUCT_GALLERY_IMAGES[sku][1])
+    if (secondImg && secondImg !== primary) {
+      return secondImg
+    }
+  }
+
+  for (const [key, images] of Object.entries(PRODUCT_GALLERY_IMAGES)) {
+    if ((sku && sku.includes(key)) || (name && name.includes(key.toLowerCase()))) {
+      if (images && images.length > 1) {
+        const secondImg = resolveBackendImageUrl(images[1])
+        if (secondImg && secondImg !== primary) {
+          return secondImg
+        }
+      }
+    }
+  }
+
+  // 3. For any product with only one image, do NOT change on hover (return same primary image)
+  return primary
 }
 
 /**
@@ -1325,6 +1358,11 @@ export const PRODUCT_GALLERY_IMAGES: Record<string, string[]> = {
 export function getProductThumbnails(product?: ProductLike | null): string[] {
   const primary = getProductPrimaryImage(product)
   if (!product) return [primary]
+
+  // 0. Prioritize backend-provided gallery images from database
+  if (product.images && product.images.length > 0) {
+    return product.images.map(img => resolveBackendImageUrl(img))
+  }
 
   const sku = (product.sku || "").toUpperCase().trim()
   const cat = (product.category_name || "").toLowerCase().trim()
