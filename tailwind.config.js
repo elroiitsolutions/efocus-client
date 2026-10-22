@@ -8,16 +8,16 @@ module.exports = {
   theme: {
   	container: {
   		center: true,
-  		padding: '2rem',
+  		padding: '2rem',	
   		screens: {
   			'2xl': '1400px'
   		}
   	},
   	extend: {
   		fontFamily: {
-  			sans: ['"Open Sauce One"', '"Canva Sans"', '"Plus Jakarta Sans"', 'sans-serif'],
-  			heading: ['"Open Sauce One"', '"Canva Sans"', '"Plus Jakarta Sans"', 'sans-serif'],
-  			body: ['"Open Sauce One"', '"Canva Sans"', '"Plus Jakarta Sans"', 'sans-serif'],
+  			sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+  			heading: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+  			body: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
   		},
   		colors: {
   			border: 'hsl(var(--border))',

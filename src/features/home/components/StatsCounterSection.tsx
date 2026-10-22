@@ -26,23 +26,23 @@ export default function StatsCounterSection() {
 
   const stats = [
     {
-      value: 90,
-      suffix: "%",
-      label: "Client Satisfaction",
+      value: 12,
+      suffix: "+",
+      label: "Years of Experience",
       delay: "80ms",
       fromSide: "-translate-x-12 sm:-translate-x-20",
     },
     {
-      value: 10,
-      suffix: "M+",
-      label: "automated workflows",
+      value: 90,
+      suffix: "%",
+      label: "Client Satisfaction",
       delay: "180ms",
       fromSide: "translate-y-8 scale-95",
     },
     {
-      value: 90,
-      suffix: "%",
-      label: "Client Satisfaction",
+      value: 10,
+      suffix: "K+",
+      label: "Line Items/Year",
       delay: "280ms",
       fromSide: "translate-x-12 sm:translate-x-20",
     },

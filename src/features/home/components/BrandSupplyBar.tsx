@@ -4,112 +4,48 @@ export default function BrandSupplyBar() {
   const clients = [
     {
       name: "Delta",
-      customRender: (
-        <div className="flex items-center gap-1.5 opacity-80 hover:opacity-100 transition-all duration-200">
-          <svg className="w-5 h-5 text-[#0066b2] fill-current shrink-0" viewBox="0 0 24 24">
-            <polygon points="12,2 2,22 22,22" />
-          </svg>
-          <span className="font-extrabold text-[15px] sm:text-[16px] tracking-wider text-[#111315]">
-            DELTA
-          </span>
-        </div>
-      ),
+      logo: "/images/clients/delta.webp",
+      className: "h-3.5 sm:h-4 md:h-[18px] max-w-[95px] sm:max-w-[110px] md:max-w-[120px]",
     },
     {
       name: "Bharat FIH",
-      customRender: (
-        <div className="flex flex-col items-start opacity-80 hover:opacity-100 transition-all duration-200 leading-none">
-          <span className="font-extrabold text-[14px] sm:text-[15px] tracking-tight text-[#111315]">
-            BHARAT FIH
-          </span>
-          <span className="text-[7.5px] text-gray-500 font-medium mt-0.5 tracking-tight">
-            A Foxconn Technology Group Company
-          </span>
-        </div>
-      ),
+      logo: "/images/clients/bharat-fih.webp",
+      className: "h-4 sm:h-4.5 md:h-[20px] max-w-[80px] sm:max-w-[95px] md:max-w-[105px]",
     },
     {
       name: "Ashok Leyland",
-      customRender: (
-        <div className="flex items-center gap-2 opacity-80 hover:opacity-100 transition-all duration-200">
-          <div className="w-5 h-5 rounded-full border border-gray-900 flex items-center justify-center font-bold text-[9px] text-gray-900 shrink-0">
-            L
-          </div>
-          <span className="font-bold text-[12px] sm:text-[13px] tracking-wider text-[#111315]">
-            ASHOK LEYLAND
-          </span>
-        </div>
-      ),
+      logo: "/images/clients/ashok-leyland.webp",
+      className: "h-4.5 sm:h-5 md:h-[24px] max-w-[75px] sm:max-w-[90px] md:max-w-[100px]",
     },
     {
       name: "Valeo",
-      customRender: (
-        <div className="flex items-center opacity-85 hover:opacity-100 transition-all duration-200">
-          <span className="font-black text-[18px] sm:text-[19px] italic text-[#6ca82b]">
-            Valeo
-          </span>
-        </div>
-      ),
+      logo: "/images/clients/valeo.webp",
+      className: "h-4 sm:h-4.5 md:h-[22px] max-w-[65px] sm:max-w-[75px] md:max-w-[85px]",
     },
     {
       name: "Hyundai",
-      customRender: (
-        <div className="flex flex-col items-center opacity-80 hover:opacity-100 transition-all duration-200 leading-none">
-          <svg className="w-6 h-4 text-[#002c6c] shrink-0" viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="1.6">
-            <ellipse cx="12" cy="8" rx="10" ry="6" />
-            <path d="M8,4 L10,4 L11,12 L9,12 Z M14,4 L16,4 L15,12 L13,12 Z M9.5,8 L14.5,8" stroke="currentColor" strokeWidth="1.6" />
-          </svg>
-          <span className="text-[7.5px] font-bold tracking-widest text-[#111315] mt-1">
-            HYUNDAI
-          </span>
-        </div>
-      ),
+      logo: "/images/clients/hyundai.webp",
+      className: "h-4.5 sm:h-5 md:h-[24px] max-w-[60px] sm:max-w-[72px] md:max-w-[80px]",
     },
     {
       name: "Tata Electronics",
-      customRender: (
-        <div className="flex flex-col items-start opacity-80 hover:opacity-100 transition-all duration-200 leading-none">
-          <span className="font-bold text-[13px] sm:text-[14px] tracking-wider text-[#004B87]">
-            TATA
-          </span>
-          <span className="text-[7.5px] tracking-wider text-gray-500 uppercase mt-0.5 font-semibold">
-            ELECTRONICS
-          </span>
-        </div>
-      ),
+      logo: "/images/clients/tata-electronics.webp",
+      className: "h-4.5 sm:h-5 md:h-[25px] max-w-[65px] sm:max-w-[78px] md:max-w-[88px]",
     },
     {
       name: "Motorola",
-      customRender: (
-        <div className="flex items-center gap-1.5 opacity-80 hover:opacity-100 transition-all duration-200">
-          <div className="w-5 h-5 rounded-full border border-gray-900 flex items-center justify-center font-extrabold text-[11px] italic text-gray-900 shrink-0">
-            M
-          </div>
-          <span className="font-bold text-[13px] sm:text-[14px] tracking-tight text-[#111315]">
-            motorola
-          </span>
-        </div>
-      ),
+      logo: "/images/clients/motorola.webp",
+      className: "h-4 sm:h-4.5 md:h-[20px] max-w-[80px] sm:max-w-[95px] md:max-w-[105px]",
     },
     {
       name: "Wistron",
-      customRender: (
-        <div className="flex items-center opacity-80 hover:opacity-100 transition-all duration-200">
-          <span className="font-extrabold text-[15px] sm:text-[16px] tracking-tight text-[#111315] italic">
-            wistron
-          </span>
-        </div>
-      ),
+      logo: "/images/clients/wistron.webp",
+      className: "h-3.5 sm:h-4 md:h-[18px] max-w-[85px] sm:max-w-[100px] md:max-w-[110px]",
     },
     {
       name: "HCL",
-      customRender: (
-        <div className="flex items-center opacity-85 hover:opacity-100 transition-all duration-200">
-          <span className="font-black text-[17px] sm:text-[18px] tracking-tight text-[#0066B2]">
-            HCL
-          </span>
-        </div>
-      ),
+      logo: "/images/clients/hcl.webp",
+      className: "h-3.5 sm:h-4 md:h-[18px] max-w-[85px] sm:max-w-[100px] md:max-w-[110px]",
     },
   ];
 
@@ -117,7 +53,7 @@ export default function BrandSupplyBar() {
   const trackClients = [...clients, ...clients];
 
   return (
-    <section 
+    <section
       aria-label="Our Valuable Clients"
       className="w-full bg-[#fbfcfd] pt-3 pb-4 sm:pt-3.5 sm:pb-5 border-b border-gray-200/70 relative overflow-hidden select-none"
     >
@@ -136,21 +72,21 @@ export default function BrandSupplyBar() {
           align-items: center;
           flex-shrink: 0;
           min-width: 100%;
-          animation: brandRibbonTickerReverse 65s linear infinite;
+          animation: brandRibbonTickerReverse 50s linear infinite;
           will-change: transform;
         }
       `}</style>
 
       {/* Left Gradient Edge Fade */}
-      <div 
-        className="pointer-events-none absolute left-0 top-0 bottom-0 w-20 sm:w-36 md:w-48 bg-gradient-to-r from-[#fbfcfd] via-[#fbfcfd]/90 to-transparent z-10" 
-        aria-hidden="true" 
+      <div
+        className="pointer-events-none absolute left-0 top-0 bottom-0 w-20 sm:w-36 md:w-48 bg-gradient-to-r from-[#fbfcfd] via-[#fbfcfd]/90 to-transparent z-10"
+        aria-hidden="true"
       />
 
       {/* Right Gradient Edge Fade */}
-      <div 
-        className="pointer-events-none absolute right-0 top-0 bottom-0 w-20 sm:w-36 md:w-48 bg-gradient-to-l from-[#fbfcfd] via-[#fbfcfd]/90 to-transparent z-10" 
-        aria-hidden="true" 
+      <div
+        className="pointer-events-none absolute right-0 top-0 bottom-0 w-20 sm:w-36 md:w-48 bg-gradient-to-l from-[#fbfcfd] via-[#fbfcfd]/90 to-transparent z-10"
+        aria-hidden="true"
       />
 
       {/* Section Heading */}
@@ -163,16 +99,21 @@ export default function BrandSupplyBar() {
       </div>
 
       {/* Dual Track Container for 100% Gapless Loop moving Left-to-Right */}
-      <div className="flex w-full overflow-hidden items-center">
+      <div className="flex w-full overflow-hidden items-center min-h-[44px] sm:min-h-[48px]">
         {/* Track 1 */}
         <div className="brand-ribbon-track">
           {trackClients.map((client, idx) => (
             <div
               key={`client-1-${client.name}-${idx}`}
-              className="shrink-0 px-6 sm:px-8 md:px-10 py-2 flex items-center justify-center grayscale opacity-80 transition-all duration-300 select-none cursor-default"
+              className="shrink-0 px-4 sm:px-6 md:px-8 py-0.5 flex items-center justify-center h-10 sm:h-11 md:h-12 opacity-85 hover:opacity-100 hover:scale-105 transition-all duration-200 select-none cursor-default"
               title={client.name}
             >
-              {client.customRender}
+              <img
+                src={client.logo}
+                alt={client.name}
+                className={`${client.className} w-auto object-contain select-none pointer-events-none`}
+                loading="eager"
+              />
             </div>
           ))}
         </div>
@@ -182,10 +123,15 @@ export default function BrandSupplyBar() {
           {trackClients.map((client, idx) => (
             <div
               key={`client-2-${client.name}-${idx}`}
-              className="shrink-0 px-6 sm:px-8 md:px-10 py-2 flex items-center justify-center grayscale opacity-80 transition-all duration-300 select-none cursor-default"
+              className="shrink-0 px-4 sm:px-6 md:px-8 py-0.5 flex items-center justify-center h-10 sm:h-11 md:h-12 opacity-85 hover:opacity-100 hover:scale-105 transition-all duration-200 select-none cursor-default"
               title={client.name}
             >
-              {client.customRender}
+              <img
+                src={client.logo}
+                alt={client.name}
+                className={`${client.className} w-auto object-contain select-none pointer-events-none`}
+                loading="eager"
+              />
             </div>
           ))}
         </div>

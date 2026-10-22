@@ -1,14 +1,14 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { NexChipIcon } from "@/components/ui/NexIcons";
-import { useQuoteStore } from "@/features/quote/store/quote.store";
-import { useWishlistStore } from "@/features/wishlist/store/wishlist.store";
+// import { useQuoteStore } from "@/features/quote/store/quote.store";
+// import { useWishlistStore } from "@/features/wishlist/store/wishlist.store";
 import { useCompareStore } from "@/features/compare/store/compare.store";
 import {
   Search,
   ChevronDown,
   UploadCloud,
-  Heart,
+  // Heart,
   ArrowLeftRight,
   Cpu,
   Cable,
@@ -43,21 +43,27 @@ import {
   Phone,
   X,
   Sparkles,
-  FileText,
-  Menu
+  // FileText,
+  Menu,
+  ChevronRight,
+  Loader2,
+  Package
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { ProductService } from "@/features/products/services/product.service";
+import type { Product } from "@/features/products/types/product.types";
+import { getProductPrimaryImage } from "@/features/products/utils/productImages";
 
 export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const isHomePage = location.pathname === "/";
   const isProductPage = location.pathname.startsWith("/products") || location.pathname.startsWith("/compare");
-  const quoteItems = useQuoteStore((state) => state.items);
-  const openQuoteDrawer = useQuoteStore((state) => state.openDrawer);
-  const totalQuoteCount = quoteItems.reduce((sum, item) => sum + item.qty, 0);
-  const wishlistItems = useWishlistStore((state) => state.items);
-  const wishlistCount = wishlistItems.length;
+  // const quoteItems = useQuoteStore((state) => state.items);
+  // const openQuoteDrawer = useQuoteStore((state) => state.openDrawer);
+  // const totalQuoteCount = quoteItems.reduce((sum, item) => sum + item.qty, 0);
+  // const wishlistItems = useWishlistStore((state) => state.items);
+  // const wishlistCount = wishlistItems.length;
   const compareItems = useCompareStore((state) => state.items);
   const compareCount = compareItems.length;
 
@@ -65,9 +71,40 @@ export default function Navbar() {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [matchingProducts, setMatchingProducts] = useState<Product[]>([]);
+  const [isSearchingProducts, setIsSearchingProducts] = useState(false);
+  const [totalProductMatches, setTotalProductMatches] = useState(0);
   const [activeMobileAccordion, setActiveMobileAccordion] = useState<string | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const dropdownTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Live product search as user types
+  useEffect(() => {
+    const trimmed = searchQuery.trim();
+    if (!trimmed) {
+      setMatchingProducts([]);
+      setTotalProductMatches(0);
+      setIsSearchingProducts(false);
+      return;
+    }
+
+    setIsSearchingProducts(true);
+    const timer = setTimeout(async () => {
+      try {
+        const res = await ProductService.getProducts({ search: trimmed, limit: 6 });
+        setMatchingProducts(res.data || []);
+        setTotalProductMatches(res.pagination?.total || (res.data ? res.data.length : 0));
+      } catch (err) {
+        console.error("Live product search error:", err);
+        setMatchingProducts([]);
+        setTotalProductMatches(0);
+      } finally {
+        setIsSearchingProducts(false);
+      }
+    }, 180);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   // Trigger procurement modal from nav
   const handleOpenProcurement = (mode: "quote" | "bom" = "quote") => {
@@ -215,7 +252,7 @@ export default function Navbar() {
     <>
       <header className="fixed top-3 sm:top-5 left-0 right-0 z-50 px-3 sm:px-6 transition-all duration-300 pointer-events-none">
         <div className="w-full max-w-[102rem] mx-auto pointer-events-auto">
-          <nav className="w-full bg-white/95 backdrop-blur-md rounded-full px-3.5 sm:px-4 lg:px-5 py-2 sm:py-2.5 border-[5px] border-white/90 shadow-[0_8px_30px_rgba(0,0,0,0.08)] flex items-center justify-between gap-1.5 lg:gap-2">
+          <nav className="w-full bg-white/95 backdrop-blur-md rounded-full px-4 sm:px-5 lg:px-6 py-2 sm:py-2.5 border-[5px] border-white/90 shadow-[0_8px_30px_rgba(0,0,0,0.08)] flex items-center justify-between gap-2 sm:gap-3 lg:gap-4 xl:gap-6">
             
             {/* 1. Official Logo (eFocus) */}
             <Link to="/" className="flex items-center gap-2 group shrink-0 pl-1">
@@ -227,7 +264,7 @@ export default function Navbar() {
             </Link>
 
             {/* 2. Desktop Main Navigation Links */}
-            <div className="hidden lg:flex items-center gap-3 xl:gap-4.5 2xl:gap-6 text-[13px] xl:text-[13.5px] font-medium text-gray-700">
+            <div className="hidden lg:flex items-center gap-3.5 xl:gap-5 2xl:gap-6 text-[13px] xl:text-[13.5px] font-medium text-gray-700">
               
               {/* Products Dropdown */}
               <div
@@ -581,8 +618,8 @@ export default function Navbar() {
 
             </div>
 
-            {/* 3. Right Action Area: Search Trigger + Upload BOM + Quote Basket + Get a Quote */}
-            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            {/* 3. Right Action Area: Search Trigger + Wishlist + Quote Basket + Get a Quote */}
+            <div className="flex items-center gap-1.5 sm:gap-2 xl:gap-2.5 shrink-0">
               
               {/* Search Modal Trigger (⌘K) */}
               <button
@@ -599,18 +636,8 @@ export default function Navbar() {
                 </kbd>
               </button>
 
-              {/* Upload BOM Pill Button */}
-              <button
-                type="button"
-                onClick={() => handleOpenProcurement("bom")}
-                className="hidden xl:inline-flex items-center gap-1.5 h-9 px-3.5 rounded-full bg-red-50 hover:bg-red-100/80 text-red-600 hover:text-red-700 text-xs xl:text-[13px] font-semibold transition-all border border-red-200/80 shadow-2xs cursor-pointer shrink-0"
-              >
-                <UploadCloud className="w-3.5 h-3.5" />
-                <span>Upload BOM</span>
-              </button>
-
-              {/* Wishlist Icon Button */}
-              <Link
+              {/* Wishlist Icon Button (Commented out) */}
+              {/* <Link
                 to="/wishlist"
                 className="relative flex items-center justify-center w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-800 transition-colors cursor-pointer shrink-0"
                 title="View Wishlist"
@@ -622,7 +649,7 @@ export default function Navbar() {
                     {wishlistCount}
                   </span>
                 )}
-              </Link>
+              </Link> */}
 
               {/* Compare Icon Button (Only shown on product & compare pages) */}
               {isProductPage && (
@@ -641,8 +668,8 @@ export default function Navbar() {
                 </Link>
               )}
 
-              {/* Quote Basket Drawer Trigger */}
-              <button
+              {/* Quote Basket Drawer Trigger (Commented out) */}
+              {/* <button
                 type="button"
                 onClick={openQuoteDrawer}
                 className="relative flex items-center justify-center w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-800 transition-colors cursor-pointer shrink-0"
@@ -655,7 +682,7 @@ export default function Navbar() {
                     {totalQuoteCount}
                   </span>
                 )}
-              </button>
+              </button> */}
 
               {/* Get a Quote Action Button (Only on Home Page, with signature icon swap animation & safe fit inside header) */}
               {isHomePage && (
@@ -980,7 +1007,7 @@ export default function Navbar() {
                 type="button"
                 onClick={() => {
                   setIsSearchOpen(false);
-                  navigate("/products?category=smt-assembly-rework");
+                  navigate("/products?category=smt-rework-assembly");
                 }}
                 className="px-2.5 py-1 rounded-full bg-white border border-gray-200 hover:border-red-400 hover:text-red-600 transition-colors cursor-pointer"
               >
@@ -1019,60 +1046,234 @@ export default function Navbar() {
             </div>
 
             {/* Results List */}
-            <div className="p-3 max-h-96 overflow-y-auto space-y-1">
-              {searchResults.length > 0 ? (
-                searchResults.map((item, idx) => {
-                  const Icon = item.icon;
-                  return (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => {
-                        setIsSearchOpen(false);
-                        if (item.action) {
-                          item.action();
-                        } else if (item.href) {
-                          navigate(item.href);
-                        }
-                      }}
-                      className="w-full flex items-center justify-between p-3 rounded-2xl hover:bg-gray-50 transition-colors group text-left cursor-pointer"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-xl bg-gray-100 group-hover:bg-red-50 text-gray-700 group-hover:text-red-600 flex items-center justify-center transition-colors">
-                          <Icon className="w-4 h-4" />
-                        </div>
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm font-semibold text-gray-900 group-hover:text-red-600 transition-colors">
-                              {item.name}
-                            </span>
-                            <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
-                              {item.category}
-                            </span>
+            <div className="p-3 max-h-[460px] overflow-y-auto space-y-3">
+              {/* State 1: User hasn't typed anything - show suggested categories & solutions */}
+              {searchQuery.trim() === "" && (
+                <div>
+                  <div className="px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-gray-400">
+                    Suggested Categories & Solutions
+                  </div>
+                  <div className="space-y-1 mt-1">
+                    {searchResults.map((item, idx) => {
+                      const Icon = item.icon;
+                      return (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => {
+                            setIsSearchOpen(false);
+                            if (item.action) {
+                              item.action();
+                            } else if (item.href) {
+                              navigate(item.href);
+                            }
+                          }}
+                          className="w-full flex items-center justify-between p-3 rounded-2xl hover:bg-gray-50 transition-colors group text-left cursor-pointer"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-xl bg-gray-100 group-hover:bg-red-50 text-gray-700 group-hover:text-red-600 flex items-center justify-center transition-colors">
+                              <Icon className="w-4 h-4" />
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm font-semibold text-gray-900 group-hover:text-red-600 transition-colors">
+                                  {item.name}
+                                </span>
+                                <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
+                                  {item.category}
+                                </span>
+                              </div>
+                            </div>
                           </div>
-                          {/* <p className="text-xs text-gray-500 line-clamp-1 mt-0.5">{item.desc}</p> */}
-                        </div>
-                      </div>
-                      <ChevronDown className="w-4 h-4 text-gray-300 -rotate-90 group-hover:text-red-600 group-hover:translate-x-1 transition-all" />
-                    </button>
-                  );
-                })
-              ) : (
-                <div className="p-8 text-center space-y-2">
-                  <p className="text-sm font-medium text-gray-700">No exact matches for &quot;{searchQuery}&quot;</p>
-                  <p className="text-xs text-gray-500">
-                    Can&apos;t find your part? Upload your BOM to our Quick Procurement Desk for human sourcing.
-                  </p>
-                  <button
-                    onClick={() => {
-                      setIsSearchOpen(false);
-                      handleOpenProcurement("bom");
-                    }}
-                    className="mt-3 px-4 py-2 rounded-full bg-red-600 text-white text-xs font-semibold hover:bg-red-700 transition-colors cursor-pointer"
-                  >
-                    Upload BOM to Quick Desk
-                  </button>
+                          <ChevronDown className="w-4 h-4 text-gray-300 -rotate-90 group-hover:text-red-600 group-hover:translate-x-1 transition-all" />
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
+              )}
+
+              {/* State 2: User is searching */}
+              {searchQuery.trim() !== "" && (
+                <>
+                  {/* Loading indicator */}
+                  {isSearchingProducts && matchingProducts.length === 0 && (
+                    <div className="py-8 flex items-center justify-center gap-2 text-xs text-gray-500">
+                      <Loader2 className="w-4 h-4 animate-spin text-red-600" />
+                      <span>Searching catalog for &ldquo;{searchQuery}&rdquo;...</span>
+                    </div>
+                  )}
+
+                  {/* Matching Products Section */}
+                  {matchingProducts.length > 0 && (
+                    <div>
+                      <div className="px-3 pb-1 text-[11px] font-bold uppercase tracking-wider text-gray-400 flex items-center justify-between">
+                        <span className="flex items-center gap-1.5">
+                          <Package className="w-3.5 h-3.5 text-red-600" />
+                          Matching Products ({totalProductMatches})
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsSearchOpen(false);
+                            navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
+                          }}
+                          className="text-red-600 hover:underline normal-case font-semibold text-xs cursor-pointer"
+                        >
+                          View all in catalog →
+                        </button>
+                      </div>
+
+                      <div className="space-y-1.5 mt-1.5">
+                        {matchingProducts.map((prod) => {
+                          const imageSrc = getProductPrimaryImage(prod);
+                          const isOutOfStock = prod.stock_status === "out_of_stock";
+
+                          return (
+                            <button
+                              key={prod.sku || prod.id}
+                              type="button"
+                              onClick={() => {
+                                setIsSearchOpen(false);
+                                navigate(`/products/${prod.sku || prod.id}`);
+                              }}
+                              className="w-full flex items-center gap-3 p-2.5 rounded-2xl hover:bg-red-50/50 border border-transparent hover:border-red-100 transition-all group text-left cursor-pointer"
+                            >
+                              {/* Product Thumbnail */}
+                              <div className="w-12 h-12 rounded-xl bg-gray-50 border border-gray-200/90 p-1 flex items-center justify-center shrink-0 overflow-hidden group-hover:border-red-200">
+                                <img
+                                  src={imageSrc}
+                                  alt={prod.product_name}
+                                  className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform"
+                                  onError={(e) => {
+                                    (e.target as HTMLImageElement).src = "/images/cat_cables_1785994179162.png";
+                                  }}
+                                />
+                              </div>
+
+                              {/* Product Details */}
+                              <div className="flex-1 min-w-0">
+                                <div className="text-[13.5px] font-bold text-gray-900 group-hover:text-red-600 transition-colors truncate leading-snug">
+                                  {prod.product_name}
+                                </div>
+                                <div className="flex items-center gap-2 mt-1 text-[11px] text-gray-500 flex-wrap">
+                                  <span className="font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded font-medium text-[10.5px]">
+                                    {prod.sku}
+                                  </span>
+                                  {prod.brand && (
+                                    <span className="font-semibold text-gray-700">
+                                      {prod.brand}
+                                    </span>
+                                  )}
+                                  {prod.category_name && (
+                                    <span className="text-gray-400 truncate max-w-[140px]">
+                                      • {prod.category_name}
+                                    </span>
+                                  )}
+                                  <span className={isOutOfStock ? "text-red-600 font-semibold" : "text-green-600 font-semibold"}>
+                                    • {isOutOfStock ? "Out of Stock" : "In Stock"}
+                                  </span>
+                                </div>
+                              </div>
+
+                              <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-red-600 group-hover:translate-x-1 transition-all shrink-0" />
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      {/* Bottom 'View all X products' button */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsSearchOpen(false);
+                          navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
+                        }}
+                        className="w-full mt-2 py-2 px-3 bg-red-50/70 hover:bg-red-100/70 border border-red-100 text-red-700 text-xs font-bold rounded-xl text-center transition-colors cursor-pointer"
+                      >
+                        View all {totalProductMatches} results for &ldquo;{searchQuery}&rdquo; →
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Matching Categories & Navigation Items */}
+                  {searchResults.length > 0 && (
+                    <div className={matchingProducts.length > 0 ? "pt-2 border-t border-gray-100" : ""}>
+                      <div className="px-3 pb-1 text-[11px] font-bold uppercase tracking-wider text-gray-400">
+                        Categories & Navigation ({searchResults.length})
+                      </div>
+                      <div className="space-y-1 mt-1">
+                        {searchResults.map((item, idx) => {
+                          const Icon = item.icon;
+                          return (
+                            <button
+                              key={idx}
+                              type="button"
+                              onClick={() => {
+                                setIsSearchOpen(false);
+                                if (item.action) {
+                                  item.action();
+                                } else if (item.href) {
+                                  navigate(item.href);
+                                }
+                              }}
+                              className="w-full flex items-center justify-between p-2.5 rounded-2xl hover:bg-gray-50 transition-colors group text-left cursor-pointer"
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 rounded-xl bg-gray-100 group-hover:bg-red-50 text-gray-700 group-hover:text-red-600 flex items-center justify-center transition-colors">
+                                  <Icon className="w-4 h-4" />
+                                </div>
+                                <div>
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-sm font-semibold text-gray-900 group-hover:text-red-600 transition-colors">
+                                      {item.name}
+                                    </span>
+                                    <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
+                                      {item.category}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                              <ChevronDown className="w-4 h-4 text-gray-300 -rotate-90 group-hover:text-red-600 group-hover:translate-x-1 transition-all" />
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Empty state: No products and no categories found */}
+                  {matchingProducts.length === 0 && searchResults.length === 0 && !isSearchingProducts && (
+                    <div className="p-8 text-center space-y-2">
+                      <p className="text-sm font-bold text-gray-800">No exact matches for &quot;{searchQuery}&quot;</p>
+                      <p className="text-xs text-gray-500 max-w-md mx-auto">
+                        Can&apos;t find your part? You can browse the full catalog or upload your BOM to our Quick Procurement Desk for human sourcing.
+                      </p>
+                      <div className="flex items-center justify-center gap-2.5 pt-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsSearchOpen(false);
+                            navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
+                          }}
+                          className="px-4 py-2 rounded-full border border-gray-300 text-gray-700 text-xs font-semibold hover:border-red-600 hover:text-red-600 transition-colors cursor-pointer"
+                        >
+                          Search Catalog Anyway
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsSearchOpen(false);
+                            handleOpenProcurement("bom");
+                          }}
+                          className="px-4 py-2 rounded-full bg-red-600 text-white text-xs font-semibold hover:bg-red-700 transition-colors cursor-pointer shadow-xs"
+                        >
+                          Upload BOM to Desk
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
             </div>
 

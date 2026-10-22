@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 export default function PromiseSection({ embedded = false }: { embedded?: boolean }) {
-  const fullText = 'Our Promise: "We help you source the right product—not simply the available product."';
+  const fullText = 'Our Promise: “We help you source the right product—not just the available product.”';
   const [displayedCount, setDisplayedCount] = useState(0);
   const [hasStarted, setHasStarted] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);

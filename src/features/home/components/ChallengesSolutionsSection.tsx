@@ -502,7 +502,7 @@ export default function ChallengesSolutionsSection() {
           <h2 className={`text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-[#0d0f11] mb-3 leading-[1.2] transition-all duration-700 delay-200 ease-out ${
             hasEntered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           }`}>
-            Your Requirement Challenges,<br className="hidden sm:inline" /> Our Responsibility
+            Your Requirement Challenges,<br className="hidden sm:inline" /> Our Solutions
           </h2>
 
           {/* <p className={`text-sm sm:text-base md:text-lg text-gray-600 leading-relaxed font-normal transition-all duration-700 delay-300 ease-out ${
@@ -569,7 +569,7 @@ export default function ChallengesSolutionsSection() {
                 ✓
               </span>
               <span className="font-extrabold text-sm sm:text-lg tracking-tight text-[#15803d]">
-                eFocus Industrial Responsibility
+                eFocus Solutions
               </span>
             </div>
           </div>

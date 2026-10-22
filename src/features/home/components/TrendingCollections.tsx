@@ -4,7 +4,7 @@ import { Loader2 } from "lucide-react"
 import { slugify } from "@/lib/utils"
 
 const categoryImages: Record<string, string> = {
-  "01": "/images/bento_smt_1785994353600.png",
+  "01": "/images/products/smt/quick-203h-station.webp",
   "02": "/images/cat_cables_1785994179162.png",
   "03": "/images/cat_tools_1785994233090.png",
   "04": "/images/cat_cables_1785994179162.png",

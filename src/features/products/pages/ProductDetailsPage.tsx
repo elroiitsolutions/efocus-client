@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react"
-import { useParams, Link, useNavigate } from "react-router-dom"
+import { useParams, Link } from "react-router-dom"
 import { useProduct } from "../hooks/useProduct"
 import { useProducts } from "../hooks/useProducts"
 import { useQuoteStore } from "@/features/quote/store/quote.store"
@@ -23,7 +23,7 @@ import { mockProducts } from "../services/product.service"
 import {
   getProductPrimaryImage,
   getProductThumbnails,
-  getCarouselProductImage,
+  getProductHoverImage,
 } from "../utils/productImages"
 import RequestProductModal from "../components/RequestProductModal"
 
@@ -57,18 +57,21 @@ function BrandBadge({ name }: { name: string }) {
 // Carousel product card matching PDF styling
 function CarouselProductCard({
   image,
+  hoverImage,
   title,
   sku,
   brand,
   stockStatus = "in_stock"
 }: {
   image: string
+  hoverImage?: string
   title: string
   sku: string
   brand: string
   stockStatus?: "in_stock" | "out_of_stock" | "on_backorder" | string | null
 }) {
   const isOutOfStock = stockStatus === "out_of_stock"
+  const hasMultipleImages = Boolean(hoverImage && hoverImage !== image)
 
   return (
     <Link
@@ -77,17 +80,30 @@ function CarouselProductCard({
     >
       <div>
         {/* Soft rounded image backdrop matching PDF */}
-        <div className="aspect-square w-full rounded-md bg-transparent flex items-center justify-center p-2 mb-2 group-hover:scale-102 transition-transform duration-200 overflow-hidden">
+        <div className="aspect-square w-full rounded-md bg-transparent flex items-center justify-center p-2 mb-2 group-hover:scale-102 transition-transform duration-200 overflow-hidden relative">
           <img
             src={image}
             alt={title}
-            className={`max-h-[110px] sm:max-h-[125px] w-auto object-contain ${isOutOfStock ? "grayscale contrast-95 opacity-80" : ""
-              }`}
+            className={`max-h-[110px] sm:max-h-[125px] w-auto object-contain transition-all duration-300 ${
+              hasMultipleImages ? "group-hover:opacity-0" : ""
+            } ${isOutOfStock ? "grayscale contrast-95 opacity-80" : ""}`}
             onError={(e) => {
               ; (e.target as HTMLImageElement).src =
                 "/images/cat_cables_1785994179162.png"
             }}
           />
+          {hasMultipleImages && (
+            <img
+              src={hoverImage}
+              alt={title}
+              className={`max-h-[110px] sm:max-h-[125px] w-auto object-contain absolute inset-0 m-auto opacity-0 transition-all duration-300 group-hover:opacity-100 ${
+                isOutOfStock ? "grayscale contrast-95 opacity-80" : ""
+              }`}
+              onError={(e) => {
+                ; (e.target as HTMLImageElement).src = image
+              }}
+            />
+          )}
         </div>
 
         {/* Product Title */}
@@ -218,7 +234,6 @@ const customerReviews = [
 
 export default function ProductDetailsPage() {
   const { slug } = useParams<{ slug: string }>()
-  const navigate = useNavigate()
   const { data: product, isLoading, error } = useProduct(slug || "")
   const { data: productsData } = useProducts({ limit: 100 })
 
@@ -285,15 +300,11 @@ export default function ProductDetailsPage() {
     image.style.transform = "scale(1)"
   }
 
-  // Reset selected thumbnail and scroll to top whenever product slug changes
+  // Reset selected thumbnail and quantity whenever product slug changes
   useEffect(() => {
     setSelectedImageIndex(0)
     setQty(1)
     resetZoom()
-    if (window.__lenis) {
-      window.__lenis.scrollTo(0, { immediate: true })
-    }
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior })
   }, [slug])
 
   const handleAddToQuote = () => {
@@ -552,26 +563,11 @@ export default function ProductDetailsPage() {
             </div>
 
             {/* 4. SKU Line in Blue Accent */}
-            <div className="text-xs sm:text-[13px] font-bold text-gray-900 mb-2">
+            <div className="text-xs sm:text-[13px] font-bold text-gray-900 mb-2.5">
               SKU: <span className="text-[#0284c7] font-bold font-mono">{product.catalog_number || product.sku}</span>
             </div>
 
-            {/* 5. Pricing / Commercial Quote Line matching Image 2 */}
-            <div className="flex items-baseline gap-2 mb-1">
-              <span className="text-2xl sm:text-[26px] font-extrabold text-[#111315]">
-                Custom B2B Quotation
-              </span>
-              <span className="text-xs font-semibold text-gray-500">
-                (Incl. GST)
-              </span>
-            </div>
-
-            {/* 6. Rewards / Procurement Loyalty Line */}
-            <p className="text-xs text-gray-600 mb-2 font-normal">
-              Purchase this product now and earn <span className="font-bold text-gray-800">64 eFocus Points</span>!
-            </p>
-
-            {/* 7. Availability */}
+            {/* 5. Availability */}
             <div className="text-xs sm:text-[13px] font-medium text-gray-900 mb-2.5">
               Availability:{" "}
               {product.stock_status === "out_of_stock" ? (
@@ -581,7 +577,7 @@ export default function ProductDetailsPage() {
               )}
             </div>
 
-            {/* 8. B2B / Bulk Inquiries Note matching Image 2 */}
+            {/* 8. B2B / Bulk Inquiries Note */}
             <div className="text-xs text-gray-700 space-y-1 mb-3 leading-relaxed">
               <p>
                 For bulk orders or B2B inquiries, email us:{" "}
@@ -589,13 +585,6 @@ export default function ProductDetailsPage() {
                   sales@efocus.in
                 </a>
               </p>
-              {product.family_name && (
-                <p className="text-amber-800 text-[11.5px] font-medium">
-                  <span className="font-bold text-amber-900">Note: </span>
-                  Looking for the latest model? Check out the all new{" "}
-                  <span className="font-semibold text-amber-900 underline">{product.family_name}</span>.
-                </p>
-              )}
             </div>
 
             {/* 9. Key Specs Table with Clean Aligned Colons (Robu.in hallmark) */}
@@ -739,13 +728,6 @@ export default function ProductDetailsPage() {
                 {/* 1. Have a Bulk Order? */}
                 <Link
                   to="/contact"
-                  onClick={() => {
-                    window.scrollTo({ top: 0, left: 0, behavior: "instant" })
-                    if (window.__lenis) {
-                      window.__lenis.scrollTo(0, { immediate: true })
-                    }
-                    navigate("/contact")
-                  }}
                   className="flex flex-col items-center justify-center p-2 rounded-lg bg-gray-50/60 hover:bg-red-50/50 hover:border-red-200 border border-transparent transition-all group cursor-pointer text-center select-none"
                   title="Have a Bulk Order? Contact our sales team"
                 >
@@ -764,13 +746,6 @@ export default function ProductDetailsPage() {
                 {/* 2. Need Support? */}
                 <Link
                   to="/contact"
-                  onClick={() => {
-                    window.scrollTo({ top: 0, left: 0, behavior: "instant" })
-                    if (window.__lenis) {
-                      window.__lenis.scrollTo(0, { immediate: true })
-                    }
-                    navigate("/contact")
-                  }}
                   className="flex flex-col items-center justify-center p-2 rounded-lg bg-gray-50/60 hover:bg-red-50/50 hover:border-red-200 border border-transparent transition-all group cursor-pointer text-center select-none"
                   title="Need Support? Contact our technical support team"
                 >
@@ -864,13 +839,14 @@ export default function ProductDetailsPage() {
             </button>
 
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 sm:gap-4">
-              {relatedItems.map((item, idx) => (
+              {relatedItems.map((item) => (
                 <CarouselProductCard
                   key={item.sku}
                   sku={item.sku}
                   title={item.product_name}
                   brand={item.brand || "Generic"}
-                  image={getCarouselProductImage(item, (safeRelatedPage - 1) * relatedPageSize + idx)}
+                  image={getProductPrimaryImage(item)}
+                  hoverImage={getProductHoverImage(item)}
                   stockStatus={item.stock_status || "in_stock"}
                 />
               ))}
@@ -909,62 +885,18 @@ export default function ProductDetailsPage() {
             </button>
 
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 sm:gap-4">
-              {viewedItems.map((item, idx) => (
+              {viewedItems.map((item) => (
                 <CarouselProductCard
                   key={item.sku}
                   sku={item.sku}
                   title={item.product_name}
                   brand={item.brand || "Generic"}
-                  image={getCarouselProductImage(item, 5 + (safeViewedPage - 1) * viewedPageSize + idx)}
+                  image={getProductPrimaryImage(item)}
+                  hoverImage={getProductHoverImage(item)}
                   stockStatus={item.stock_status || "in_stock"}
                 />
               ))}
             </div>
-          </div>
-        </section>
-
-        {/* Section 3: Support / Help Section matching PDF clean icons */}
-        <section className="py-14">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto">
-            {/* 1. Need Support ? -> Navigates to Contact Us page */}
-            <Link
-              to="/contact"
-              onClick={() => {
-                window.scrollTo({ top: 0, left: 0, behavior: "instant" })
-                if (window.__lenis) {
-                  window.__lenis.scrollTo(0, { immediate: true })
-                }
-                navigate("/contact")
-              }}
-              className="flex flex-col items-center justify-center gap-3 text-center cursor-pointer group hover:scale-[1.03] transition-all duration-200 p-5 rounded-2xl hover:bg-gray-50/80 active:scale-95"
-              title="Need Support? Contact our technical team"
-            >
-              <img
-                src="/images/support_headset.png"
-                alt="Need Support"
-                className="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-200"
-              />
-              <h4 className="font-heading font-extrabold text-[17px] sm:text-[18px] text-[#111111] group-hover:text-[#b91c1c] transition-colors">
-                Need Support ?
-              </h4>
-            </Link>
-
-            {/* 2. Didn't find what you are looking for? -> Opens popup form modal */}
-            <button
-              type="button"
-              onClick={() => setIsRequestProductOpen(true)}
-              className="flex flex-col items-center justify-center gap-3 text-center cursor-pointer group hover:scale-[1.03] transition-all duration-200 p-5 rounded-2xl hover:bg-gray-50/80 active:scale-95"
-              title="Didn't find what you are looking for? Submit a request"
-            >
-              <img
-                src="/images/support_search.png"
-                alt="Didn't find what you are looking for"
-                className="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-200"
-              />
-              <h4 className="font-heading font-extrabold text-[17px] sm:text-[18px] text-[#111111] group-hover:text-[#b91c1c] transition-colors">
-                Didn’t find what you are looking for?
-              </h4>
-            </button>
           </div>
         </section>
 

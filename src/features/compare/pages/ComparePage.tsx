@@ -46,7 +46,6 @@ export default function ComparePage() {
       category: item.category,
       qty: 1,
       code: item.code || item.sku,
-      image: item.image,
     })
     setAddedId(item.id || item.sku)
     setTimeout(() => setAddedId(null), 1800)
@@ -61,7 +60,6 @@ export default function ComparePage() {
         category: item.category,
         qty: 1,
         code: item.code || item.sku,
-        image: item.image,
       })
     })
     openDrawer()

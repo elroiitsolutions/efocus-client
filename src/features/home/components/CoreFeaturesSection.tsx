@@ -108,16 +108,10 @@ export default function CoreFeaturesSection() {
       <div className="w-full max-w-[100rem] mx-auto">
         
         {/* Main Feature Strip Container Card */}
-        <div className="relative bg-gradient-to-r from-[#C93636] via-[#C93636] to-[#A91F1F] border border-red-700/60 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:px-9 lg:py-7 shadow-[0_12px_36px_rgba(175,2,2,0.22)] hover:shadow-[0_16px_48px_rgba(175,2,2,0.3)] transition-all duration-300 overflow-hidden">
+        <div className="relative bg-gradient-to-r from-[#c8102e] via-[#b80e2a] to-[#991b1b] border border-[#c8102e]/30 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:px-9 lg:py-7 shadow-[0_12px_32px_rgba(200,16,46,0.22)] hover:shadow-[0_18px_44px_rgba(200,16,46,0.28)] transition-all duration-300 overflow-hidden">
           
-          {/* Subtle Top Specular Glass Sheen */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(255,255,255,0.18)_0%,transparent_60%)] pointer-events-none" />
-
-          {/* Left Decorative Accent Stripe in Bright White Highlight */}
-          <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-white/70 via-white/35 to-transparent" />
-
-          {/* Soft Ambient Radial Lights */}
-          <div className="absolute -right-16 -top-16 w-80 h-80 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+          {/* Soft Ambient Radial Depth */}
+          <div className="absolute -right-16 -top-16 w-80 h-80 bg-white/[0.07] rounded-full blur-3xl pointer-events-none" />
           <div className="absolute left-1/3 -bottom-20 w-80 h-80 bg-black/15 rounded-full blur-3xl pointer-events-none" />
 
           {/* Main Row: Left (Icon + Text) | Right (Action Buttons) */}

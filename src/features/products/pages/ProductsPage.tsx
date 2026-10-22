@@ -156,7 +156,7 @@ export default function ProductsPage() {
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
-  const limit = isBigScreen ? 15 : 12
+  const limit = isBigScreen ? 16 : 12
 
   // Contextual parameter for dynamic specs & brand filtering
   const pendingFamilyParam = pendingFamilies.join(",")
@@ -385,8 +385,8 @@ export default function ProductsPage() {
   )
 
   return (
-    <div className="bg-white min-h-screen">
-      <div className="py-4 sm:py-6 lg:py-8">
+    <div className="w-full bg-white min-h-screen">
+      <div className="w-full py-4 sm:py-6 lg:py-8">
         <div className="site-container flex flex-col lg:flex-row gap-6 xl:gap-8 items-start">
         
         {/* Mobile Filters Toggle Button */}
@@ -919,6 +919,22 @@ export default function ProductsPage() {
           {/* Single clean bar: Active filters on the left with red bullets, and bold red "Showing X of Y products" on the right */}
           <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 mb-4 text-[13px] text-[#222222] font-medium text-left">
             <div className="flex flex-wrap items-center gap-x-5 sm:gap-x-6 gap-y-2 flex-1 min-w-0">
+              {/* 0. Active Search Query */}
+              {searchQuery && (
+                <div className="inline-flex items-center gap-1.5 bg-red-50/90 border border-red-200 text-[#c8102e] px-2.5 py-1 rounded-full text-[12px] font-bold">
+                  <span className="w-2 h-2 rounded-full bg-[#c8102e] shrink-0" />
+                  <span>Search: &ldquo;{searchQuery}&rdquo;</span>
+                  <button
+                    type="button"
+                    onClick={() => updateParams({ search: null, page: null })}
+                    className="hover:bg-red-200/60 rounded-full w-4 h-4 flex items-center justify-center text-xs ml-0.5 cursor-pointer"
+                    title="Clear search"
+                  >
+                    &times;
+                  </button>
+                </div>
+              )}
+
               {/* 1. Stock */}
               {activeStocks.length > 0 && (
                 <div className="inline-flex items-center gap-2">
@@ -1045,21 +1061,21 @@ export default function ProductsPage() {
 
           {/* Cards listing - 2 columns on mobile, 5 columns on big screen as requested */}
           {isLoading ? (
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2.5 sm:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-2.5 sm:gap-4">
               {Array.from({ length: limit }).map((_, idx) => (
-                <div
-                  key={idx}
-                  className="bg-white border border-[#e5e7eb] rounded-sm h-[270px] flex flex-col justify-between overflow-hidden shadow-2xs"
-                >
-                  <Skeleton className="w-full aspect-[4/3] bg-[#f4f5f7] border-b border-[#e5e7eb]" />
-                  <div className="p-2.5 sm:p-3 flex flex-col justify-between flex-grow bg-white">
-                    <div className="flex flex-col gap-1.5">
-                      <Skeleton className="h-3 w-1/3 bg-gray-200" />
-                      <Skeleton className="h-4 w-3/4 bg-gray-200" />
+                  <div
+                    key={idx}
+                    className="bg-white border border-[#e5e7eb] rounded-lg flex flex-col justify-between overflow-hidden shadow-2xs h-full"
+                  >
+                    <Skeleton className="w-full bg-white border-b border-[#e5e7eb] shrink-0" style={{ aspectRatio: "4 / 3" }} />
+                    <div className="p-2.5 sm:p-3 flex flex-col justify-between flex-grow bg-white min-h-[114px] sm:min-h-[120px]">
+                      <div className="flex flex-col gap-1.5">
+                        <Skeleton className="h-3 w-1/3 bg-gray-200" />
+                        <Skeleton className="h-4 w-3/4 bg-gray-200 mt-1" />
+                      </div>
+                      <Skeleton className="h-7 w-full mt-2 bg-gray-200 rounded-sm" />
                     </div>
-                    <Skeleton className="h-7 w-full mt-2 bg-gray-200 rounded-sm" />
                   </div>
-                </div>
               ))}
             </div>
           ) : data?.data.length === 0 ? (
@@ -1081,7 +1097,7 @@ export default function ProductsPage() {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2.5 sm:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-2.5 sm:gap-4">
               {data?.data.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
