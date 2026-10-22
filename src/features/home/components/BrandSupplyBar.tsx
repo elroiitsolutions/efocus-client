@@ -1,181 +1,141 @@
-import { Link } from "react-router-dom"
-import { useRef, useEffect, useState } from "react"
-import { slugify } from "@/lib/utils"
+"use client";
 
 export default function BrandSupplyBar() {
-  const scrollRef = useRef<HTMLDivElement>(null)
-  const [isPaused, setIsPaused] = useState(false)
+  const clients = [
+    {
+      name: "Delta",
+      logo: "/images/clients/delta.webp",
+      className: "h-3.5 sm:h-4 md:h-[18px] max-w-[95px] sm:max-w-[110px] md:max-w-[120px]",
+    },
+    {
+      name: "Bharat FIH",
+      logo: "/images/clients/bharat-fih.webp",
+      className: "h-4 sm:h-4.5 md:h-[20px] max-w-[80px] sm:max-w-[95px] md:max-w-[105px]",
+    },
+    {
+      name: "Ashok Leyland",
+      logo: "/images/clients/ashok-leyland.webp",
+      className: "h-4.5 sm:h-5 md:h-[24px] max-w-[75px] sm:max-w-[90px] md:max-w-[100px]",
+    },
+    {
+      name: "Valeo",
+      logo: "/images/clients/valeo.webp",
+      className: "h-4 sm:h-4.5 md:h-[22px] max-w-[65px] sm:max-w-[75px] md:max-w-[85px]",
+    },
+    {
+      name: "Hyundai",
+      logo: "/images/clients/hyundai.webp",
+      className: "h-4.5 sm:h-5 md:h-[24px] max-w-[60px] sm:max-w-[72px] md:max-w-[80px]",
+    },
+    {
+      name: "Tata Electronics",
+      logo: "/images/clients/tata-electronics.webp",
+      className: "h-4.5 sm:h-5 md:h-[25px] max-w-[65px] sm:max-w-[78px] md:max-w-[88px]",
+    },
+    {
+      name: "Motorola",
+      logo: "/images/clients/motorola.webp",
+      className: "h-4 sm:h-4.5 md:h-[20px] max-w-[80px] sm:max-w-[95px] md:max-w-[105px]",
+    },
+    {
+      name: "Wistron",
+      logo: "/images/clients/wistron.webp",
+      className: "h-3.5 sm:h-4 md:h-[18px] max-w-[85px] sm:max-w-[100px] md:max-w-[110px]",
+    },
+    {
+      name: "HCL",
+      logo: "/images/clients/hcl.webp",
+      className: "h-3.5 sm:h-4 md:h-[18px] max-w-[85px] sm:max-w-[100px] md:max-w-[110px]",
+    },
+  ];
 
-  const brands = [
-    {
-      name: "FLUKE",
-      color: "#FFC20E",
-      textColor: "#000000",
-      customRender: (
-        <span className="bg-[#FFC20E] text-black font-black italic px-3 py-1 text-[16px] tracking-wider rounded-[2px]">
-          FLUKE
-        </span>
-      ),
-    },
-    {
-      name: "QUICK",
-      color: "#00A3E0",
-      textColor: "#00A3E0",
-      customRender: (
-        <span className="font-extrabold text-[#00A3E0] tracking-tight text-[18px] font-mono">
-          QUICK
-        </span>
-      ),
-    },
-    {
-      name: "Weller",
-      color: "#005596",
-      textColor: "#005596",
-      customRender: (
-        <span className="font-black text-[#005596] tracking-tight text-[19px] italic font-serif">
-          Weller
-        </span>
-      ),
-    },
-    {
-      name: "ZEBRA",
-      color: "#000000",
-      textColor: "#000000",
-      customRender: (
-        <span className="font-black text-black tracking-[0.18em] text-[16px]">
-          ZEBRA
-        </span>
-      ),
-    },
-    {
-      name: "3M",
-      color: "#ED1C24",
-      textColor: "#ED1C24",
-      customRender: (
-        <span className="font-black text-[#ED1C24] text-[22px] tracking-tighter">
-          3M
-        </span>
-      ),
-    },
-    {
-      name: "KNIPEX",
-      color: "#D5001C",
-      textColor: "#D5001C",
-      customRender: (
-        <span className="bg-[#D5001C] text-white font-extrabold px-3 py-1 rounded-[4px] text-[14px] tracking-widest">
-          KNIPEX
-        </span>
-      ),
-    },
-    {
-      name: "GOODEN",
-      color: "#0284c7",
-      textColor: "#0284c7",
-      customRender: (
-        <span className="font-extrabold text-[#0284c7] text-[16px] tracking-wider">
-          GOODEN
-        </span>
-      ),
-    },
-    {
-      name: "Chroma",
-      color: "#1e3a8a",
-      textColor: "#1e3a8a",
-      customRender: (
-        <span className="font-bold text-[#1e3a8a] text-[18px] tracking-normal font-sans">
-          Chroma
-        </span>
-      ),
-    },
-    {
-      name: "TE Connectivity",
-      color: "#E26B00",
-      textColor: "#E26B00",
-      customRender: (
-        <span className="font-black text-[#E26B00] text-[17px] tracking-tight">
-          TE Connectivity
-        </span>
-      ),
-    },
-    {
-      name: "Amphenol",
-      color: "#004B87",
-      textColor: "#004B87",
-      customRender: (
-        <span className="font-bold text-[#004B87] text-[17px] tracking-tight">
-          Amphenol
-        </span>
-      ),
-    },
-  ]
-
-  // Duplicated list for seamless infinite looping
-  const displayBrands = [...brands, ...brands, ...brands]
-
-  // Auto-running continuous smooth scroll
-  useEffect(() => {
-    const el = scrollRef.current
-    if (!el) return
-
-    let animationId: number
-    let pos = el.scrollLeft
-
-    const step = () => {
-      if (!isPaused && el) {
-        pos += 0.85
-        const oneSetWidth = el.scrollWidth / 3
-        if (oneSetWidth > 0 && pos >= oneSetWidth) {
-          pos -= oneSetWidth
-        }
-        el.scrollLeft = pos
-      } else if (el) {
-        pos = el.scrollLeft
-      }
-      animationId = requestAnimationFrame(step)
-    }
-
-    animationId = requestAnimationFrame(step)
-
-    return () => cancelAnimationFrame(animationId)
-  }, [isPaused])
-
-
+  // Repeat clients to ensure seamless continuous coverage on any display
+  const trackClients = [...clients, ...clients];
 
   return (
-    <section className="bg-white py-8 border-b border-[#eaeaea]">
-      <div className="site-container">
-        {/* Section Heading matching home.pdf */}
-        <div className="text-center mb-6">
-          <h3 className="font-heading text-[18px] sm:text-[20px] font-bold text-[#1a1a1a] tracking-tight">
-            Authorized &amp; Multi-Brand Industrial Supply
-          </h3>
+    <section
+      aria-label="Our Valuable Clients"
+      className="w-full bg-[#fbfcfd] pt-3 pb-4 sm:pt-3.5 sm:pb-5 border-b border-gray-200/70 relative overflow-hidden select-none"
+    >
+      {/* Reverse 60fps Butter-Smooth Infinite Ribbon Marquee Keyframes */}
+      <style>{`
+        @keyframes brandRibbonTickerReverse {
+          0% {
+            transform: translate3d(-100%, 0, 0);
+          }
+          100% {
+            transform: translate3d(0, 0, 0);
+          }
+        }
+        .brand-ribbon-track {
+          display: flex;
+          align-items: center;
+          flex-shrink: 0;
+          min-width: 100%;
+          animation: brandRibbonTickerReverse 50s linear infinite;
+          will-change: transform;
+        }
+      `}</style>
+
+      {/* Left Gradient Edge Fade */}
+      <div
+        className="pointer-events-none absolute left-0 top-0 bottom-0 w-20 sm:w-36 md:w-48 bg-gradient-to-r from-[#fbfcfd] via-[#fbfcfd]/90 to-transparent z-10"
+        aria-hidden="true"
+      />
+
+      {/* Right Gradient Edge Fade */}
+      <div
+        className="pointer-events-none absolute right-0 top-0 bottom-0 w-20 sm:w-36 md:w-48 bg-gradient-to-l from-[#fbfcfd] via-[#fbfcfd]/90 to-transparent z-10"
+        aria-hidden="true"
+      />
+
+      {/* Section Heading */}
+      <div className="w-full max-w-[100rem] mx-auto px-4 text-center mb-4 sm:mb-5">
+        <div className="inline-flex items-center gap-2.5">
+          <h2 className="text-base sm:text-lg md:text-3xl font-black text-[#0d0f11] tracking-tight">
+            Our Valuable Clients
+          </h2>
+        </div>
+      </div>
+
+      {/* Dual Track Container for 100% Gapless Loop moving Left-to-Right */}
+      <div className="flex w-full overflow-hidden items-center min-h-[44px] sm:min-h-[48px]">
+        {/* Track 1 */}
+        <div className="brand-ribbon-track">
+          {trackClients.map((client, idx) => (
+            <div
+              key={`client-1-${client.name}-${idx}`}
+              className="shrink-0 px-4 sm:px-6 md:px-8 py-0.5 flex items-center justify-center h-10 sm:h-11 md:h-12 opacity-85 hover:opacity-100 hover:scale-105 transition-all duration-200 select-none cursor-default"
+              title={client.name}
+            >
+              <img
+                src={client.logo}
+                alt={client.name}
+                className={`${client.className} w-auto object-contain select-none pointer-events-none`}
+                loading="eager"
+              />
+            </div>
+          ))}
         </div>
 
-        {/* Carousel Row with Arrows & Infinite Auto-Running Track */}
-        <div className="relative flex items-center">         
-
-          {/* Brands Auto-Running Scroll Track - Zero scrollbar, pure seamless flow */}
-          <div
-            ref={scrollRef}
-            onMouseEnter={() => setIsPaused(true)}
-            onMouseLeave={() => setIsPaused(false)}
-            onTouchStart={() => setIsPaused(true)}
-            onTouchEnd={() => setIsPaused(false)}
-            className="flex items-center gap-8 sm:gap-12 overflow-hidden no-scrollbar py-2 px-2 flex-grow select-none"
-          >
-            {displayBrands.map((b, idx) => (
-              <Link
-                key={`${b.name}-${idx}`}
-                to={`/products?brand=${slugify(b.name)}`}
-                className="shrink-0 grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition-all duration-300 py-2 px-3 flex items-center justify-center hover:scale-105"
-                title={`Filter products by ${b.name}`}
-              >
-                {b.customRender}
-              </Link>
-            ))}
-          </div>
+        {/* Track 2 (Identical clone for seamless continuous infinite marquee) */}
+        <div className="brand-ribbon-track" aria-hidden="true">
+          {trackClients.map((client, idx) => (
+            <div
+              key={`client-2-${client.name}-${idx}`}
+              className="shrink-0 px-4 sm:px-6 md:px-8 py-0.5 flex items-center justify-center h-10 sm:h-11 md:h-12 opacity-85 hover:opacity-100 hover:scale-105 transition-all duration-200 select-none cursor-default"
+              title={client.name}
+            >
+              <img
+                src={client.logo}
+                alt={client.name}
+                className={`${client.className} w-auto object-contain select-none pointer-events-none`}
+                loading="eager"
+              />
+            </div>
+          ))}
         </div>
       </div>
     </section>
-  )
+  );
 }
