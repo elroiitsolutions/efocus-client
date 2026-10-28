@@ -3,14 +3,17 @@ import { NexChipIcon } from "@/components/ui/NexIcons";
 
 export default function HeroSection() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isVideoReady, setIsVideoReady] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.muted = true;
-      videoRef.current.play().catch(() => {
-        // Autoplay policy fallback
-      });
+      if (videoRef.current.paused) {
+        videoRef.current.play().catch(() => {
+          // Autoplay policy fallback
+        });
+      }
     }
   }, []);
 
@@ -117,27 +120,41 @@ export default function HeroSection() {
       className="relative w-full overflow-hidden pt-28 sm:pt-36 lg:pt-40 pb-10 sm:pb-14 px-4 sm:px-6 lg:px-8 flex items-center justify-center min-h-[92vh] sm:min-h-screen" 
       id="hero"
     >
-      {/* Background Video */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none bg-black">
+      {/* Background Video with Seamless First-Frame Backdrop */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none bg-slate-950">
+        {/* Instant Static Poster matching exact Frame 0 (Prevents flash/glitch on hard refresh) */}
+        <img
+          src="/hero%20video/video1.jpg"
+          alt=""
+          className={`absolute inset-0 h-full w-full object-cover object-center scale-[1.06] filter brightness-[0.95] contrast-[1.05] transition-opacity duration-700 ease-out ${
+            isVideoReady ? "opacity-0" : "opacity-100"
+          }`}
+          aria-hidden="true"
+        />
+
         <video
           ref={videoRef}
-          className="absolute inset-0 h-full w-full object-cover object-center scale-[1.03] filter brightness-[0.95] contrast-[1.05]"
-          src="/hero%20video/video.mp4"
+          className={`absolute inset-0 h-full w-full object-cover object-center scale-[1.06] filter brightness-[0.95] contrast-[1.05] transition-opacity duration-500 ease-out ${
+            isVideoReady ? "opacity-100" : "opacity-0"
+          }`}
+          poster="/hero%20video/video1.jpg"
           autoPlay
           muted
           loop
           playsInline
           preload="auto"
+          onPlaying={() => setIsVideoReady(true)}
+          onLoadedData={() => setIsVideoReady(true)}
           aria-hidden="true"
         >
-          <source src="/hero%20video/video.mp4" type="video/mp4" />
+          <source src="/hero%20video/video1.mp4" type="video/mp4" />
         </video>
 
         {/* Primary directional dark gradient for typography contrast (horizontal only, no top/bottom line) */}
-        <div
+        {/* <div
           className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/35 to-black/15"
           aria-hidden="true"
-        />
+        /> */}
       </div>
 
 

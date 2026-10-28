@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { createPortal } from "react-dom"
 import { X, CheckCircle2, RotateCw, Loader2 } from "lucide-react"
+import { FormSubmissionService } from "@/services/formSubmission.service"
 
 interface RequestProductModalProps {
   isOpen: boolean
@@ -50,7 +51,7 @@ export default function RequestProductModal({
 
   if (!isOpen || typeof document === "undefined") return null
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setErrorMessage("")
 
@@ -65,10 +66,24 @@ export default function RequestProductModal({
     }
 
     setIsSubmitting(true)
-    setTimeout(() => {
-      setIsSubmitting(false)
+    try {
+      await FormSubmissionService.submitForm({
+        form_name: "Product Sourcing Request",
+        form_type: "product_request",
+        email: userContact.trim() || "anonymous@sourcing.local",
+        message: query.trim(),
+        subject: `Product Request: ${query.trim().slice(0, 60)}`,
+        product_query: query.trim(),
+        user_contact: userContact.trim() || undefined,
+        current_url: typeof window !== "undefined" ? window.location.href : undefined,
+      })
       setIsSubmitted(true)
-    }, 900)
+    } catch (err: any) {
+      console.error("Product request submission error:", err)
+      setErrorMessage(err.message || "Failed to submit request. Please try again.")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleReset = () => {
