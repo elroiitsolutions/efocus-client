@@ -3,6 +3,7 @@ import { useQuoteStore } from "../store/quote.store"
 import { Trash2, Plus, Minus, FileText } from "lucide-react"
 import { Link } from "react-router-dom"
 import SuccessModal from "@/components/ui/SuccessModal"
+import { FormSubmissionService } from "@/services/formSubmission.service"
 
 export default function QuotePage() {
   const items = useQuoteStore((state) => state.items)
@@ -34,32 +35,23 @@ export default function QuotePage() {
         `${idx + 1}. [${item.name}] - Part/SKU: ${item.code || item.id} | Category: ${item.category} | Qty: ${item.qty}`
       ).join('\n\n');
 
-      const response = await fetch(`https://formsubmit.co/ajax/sales@efocus.in`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-        body: JSON.stringify({
-          _subject: `New Consolidated Quote Request from ${formData.name} (${formData.company})`,
-          "Customer Name": formData.name,
-          "Work Email": formData.email,
-          "Company Name": formData.company,
-          "Additional Message": formData.message || "None",
-          "Requested Products List": itemsFormatted
-        }),
-      })
+      await FormSubmissionService.submitForm({
+        form_name: "Quote Basket Request",
+        form_type: "quote_request",
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        company_name: formData.company.trim() || undefined,
+        message: formData.message.trim() || undefined,
+        subject: `Consolidated Quote Request (${items.length} items)`,
+        quote_items: items,
+        requested_products: itemsFormatted,
+      });
 
-      const data = await response.json()
-      if (response.ok && data.success) {
-        setIsSuccessOpen(true)
-        clearQuote()
-      } else {
-        alert("Failed to submit quote request. Please try again.")
-      }
-    } catch (err) {
-      console.error(err)
-      alert("Failed to connect to the server. Please try again later.")
+      setIsSuccessOpen(true)
+      clearQuote()
+    } catch (err: any) {
+      console.error("Quote submission error:", err)
+      alert(err.message || "Failed to submit quote request. Please try again.")
     } finally {
       setIsSubmitting(false)
     }

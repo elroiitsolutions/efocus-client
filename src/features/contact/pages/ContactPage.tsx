@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { Mail, Phone, MapPin, Send, MessageSquare } from "lucide-react"
 import SuccessModal from "@/components/ui/SuccessModal"
+import { FormSubmissionService } from "@/services/formSubmission.service"
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -23,30 +24,18 @@ export default function ContactPage() {
     e.preventDefault()
     setIsSubmitting(true)
     try {
-      const response = await fetch(`https://formsubmit.co/ajax/sales@efocus.in`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-        body: JSON.stringify({
-          _subject: `New Contact Form Message: ${formData.subject}`,
-          "Sender Name": formData.name,
-          "Sender Email": formData.email,
-          "Subject": formData.subject,
-          "Message Content": formData.message
-        }),
+      await FormSubmissionService.submitForm({
+        form_name: "Contact Direct Sales",
+        form_type: "contact_sales",
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        subject: formData.subject.trim(),
+        message: formData.message.trim(),
       })
-
-      const data = await response.json()
-      if (response.ok && data.success) {
-        setIsSuccessOpen(true)
-      } else {
-        alert("Failed to send message. Please try again.")
-      }
-    } catch (err) {
-      console.error(err)
-      alert("Failed to connect to the server. Please try again later.")
+      setIsSuccessOpen(true)
+    } catch (err: any) {
+      console.error("Contact submission error:", err)
+      alert(err.message || "Failed to send message. Please try again.")
     } finally {
       setIsSubmitting(false)
     }

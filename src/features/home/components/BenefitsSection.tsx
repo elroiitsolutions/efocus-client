@@ -98,7 +98,7 @@ export default function BenefitsSection() {
           </div> */}
 
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#0d0f11] tracking-tight mb-4 leading-[1.2]">
-            Everything Your Engineering &amp; Industrial Teams Need
+            Everything Your Engineering &amp; Industrial Team Needs
           </h2>
         </div>
 
