@@ -64,6 +64,8 @@ export interface Product {
   key_spec_2: string | null
   key_spec_3: string | null
   image_status: string | null
+  primary_image?: string | null
+  images?: string[]
   rfq_eligible: boolean
   created_at: string
   updated_at: string

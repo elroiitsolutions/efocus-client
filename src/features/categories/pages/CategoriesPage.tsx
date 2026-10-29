@@ -21,7 +21,7 @@ export default function CategoriesPage() {
       return "/images/cat_tools_1785994233090.png"
     }
     if (cleanCat.includes("smt") || cleanCat.includes("rework")) {
-      return "/images/bento_smt_1785994353600.png"
+      return "/images/products/smt/quick-203h-station.webp"
     }
     return "/images/cat_cables_1785994179162.png"
   }

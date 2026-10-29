@@ -8,6 +8,7 @@ import CategoryDetailsPage from "@/features/categories/pages/CategoryDetailsPage
 import SearchPage from "@/features/search/pages/SearchPage"
 import QuotePage from "@/features/quote/pages/QuotePage"
 import WishlistPage from "@/features/wishlist/pages/WishlistPage"
+import ComparePage from "@/features/compare/pages/ComparePage"
 import CustomAssemblyPage from "@/features/custom-assembly/pages/CustomAssemblyPage"
 import BlogPage from "@/features/blog/pages/BlogPage"
 import BlogDetailsPage from "@/features/blog/pages/BlogDetailsPage"
@@ -27,6 +28,7 @@ export const router = createBrowserRouter([
       { path: "search", element: <SearchPage /> },
       { path: "quote", element: <QuotePage /> },
       { path: "wishlist", element: <WishlistPage /> },
+      { path: "compare", element: <ComparePage /> },
       { path: "custom-assembly", element: <CustomAssemblyPage /> },
       { path: "blog", element: <BlogPage /> },
       { path: "blog/:slug", element: <BlogDetailsPage /> },

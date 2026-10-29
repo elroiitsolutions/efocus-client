@@ -7,7 +7,7 @@ export default function FactoryRange() {
     "TRUSTED EMS & R&D ASSEMBLY",
     "47 STOCKED LINE ITEMS",
     "100% IPC-WHMA-A-620 CERTIFIED",
-    "chandruravichandran1536@gmail.com",
+    "sales@efocus.in",
     "+91 7397 242 650",
   ]
 
@@ -17,7 +17,7 @@ export default function FactoryRange() {
       title: "SMT, Rework & Assembly",
       desc: "Everything the pick-and-place, stencil printer & rework bench consume — splice to squeegee.",
       link: "/categories/smt-rework-assembly",
-      image: "/images/bento_smt_1785994353600.png",
+      image: "/images/products/smt/quick-203h-station.webp",
     },
     medium: {
       cat: "CAT 02",

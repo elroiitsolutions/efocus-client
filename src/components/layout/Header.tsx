@@ -178,8 +178,8 @@ export default function Header() {
                 )}
 
                 <div className="pt-6 border-t border-gray-100 px-2 flex flex-col gap-1.5 text-[12.5px] text-gray-500">
-                  <a href="mailto:chandruravichandran1536@gmail.com" className="text-[#c8102e] font-semibold hover:underline">
-                    chandruravichandran1536@gmail.com
+                  <a href="mailto:sales@efocus.in" className="text-[#c8102e] font-semibold hover:underline">
+                    sales@efocus.in
                   </a>
                   <span>Direct Sales: +91 7397 242 650</span>
                 </div>

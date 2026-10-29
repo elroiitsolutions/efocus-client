@@ -75,7 +75,7 @@ export default function CustomAssemblyPage() {
                 Configure Custom Build
               </a>
               <a
-                href="mailto:chandruravichandran1536@gmail.com"
+                href="mailto:sales@efocus.in"
                 className="bg-white border border-[#d1d5db] hover:bg-gray-50 text-[#222222] px-6 py-3 rounded-[6px] text-[14px] font-bold transition-colors"
               >
                 Submit Drawing Blueprint
@@ -305,7 +305,7 @@ export default function CustomAssemblyPage() {
                 Have drawing blueprints already?
               </span>
               <p className="text-[12px] text-[#555555] mt-1">
-                Email them to <strong>chandruravichandran1536@gmail.com</strong> with your RFQ lists.
+                Email them to <strong>sales@efocus.in</strong> with your RFQ lists.
               </p>
             </div>
           </div>

@@ -7,7 +7,7 @@ export default function SubHeroBanners() {
       desc: "Soldering wire, paste, flux, nozzles & hot air rework bench systems.",
       bgClass: "bg-[#fff4ea]",
       link: "/categories/smt-rework-assembly",
-      image: "/images/bento_smt_1785994353600.png",
+      image: "/images/products/smt/quick-203h-station.webp",
     },
     {
       title: "RF & Microwave Assemblies",
