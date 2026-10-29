@@ -178,25 +178,25 @@ export default function Navbar() {
       { name: "Labelling & Identification", icon: Tag, desc: "High-temp polyimide PCB labels & industrial barcode printers", href: "/products?category=labelling-identification" },
     ],
     solutions: [
-      { name: "BOM Procurement", icon: Boxes, desc: "Full bill-of-materials line matching with guaranteed pricing", action: () => handleOpenProcurement("bom") },
-      { name: "Vendor Consolidation", icon: Layers, desc: "Single PO invoicing for 100+ hardware and tooling brands", href: "/custom-assembly" },
-      { name: "Annual Rate Contracts", icon: FileCheck, desc: "Fixed volume pricing with buffer stock indexing for 12 months", href: "/quote" },
-      { name: "Project Procurement", icon: FolderGit2, desc: "End-to-end procurement management for NPI & mass production", href: "/custom-assembly" },
-      { name: "Turnkey Workstations", icon: Hammer, desc: "Complete production line setup including ESD & assembly tools", href: "/products?category=it-hardware-workstation" },
+      { name: "BOM Procurement", icon: Boxes, desc: "Full bill-of-materials line matching with guaranteed pricing", href: "/procurement-solutions/bom-procurement" },
+      { name: "Vendor Consolidation", icon: Layers, desc: "Single PO invoicing for 100+ hardware and tooling brands", href: "/procurement-solutions/vendor-consolidation" },
+      { name: "Annual Rate Contracts", icon: FileCheck, desc: "Fixed volume pricing with buffer stock indexing for 12 months", href: "/procurement-solutions/annual-rate-contracts" },
+      { name: "Project Procurement", icon: FolderGit2, desc: "End-to-end procurement management for NPI & mass production", href: "/procurement-solutions/project-procurement" },
+      { name: "Turnkey Workstations", icon: Hammer, desc: "Complete production line setup including ESD & assembly tools", href: "/procurement-solutions/turnkey-workstations" },
       { name: "Recurring Procurement", icon: Repeat, desc: "Automated replenishment workflows for high-wear consumables", href: "/quote" },
-    ],
+    ] as Array<{ name: string; icon: typeof Boxes; desc: string; href?: string; action?: () => void }>,
     services: [
-      { name: "Application Engineering", icon: Sliders, desc: "Component cross-referencing and technical consultation", href: "/contact" },
-      { name: "Calibration", icon: Settings, desc: "NABL/ISO traceable calibration with digital test certificates", href: "/products?category=testing-measurement" },
-      { name: "AMC & Repair", icon: Wrench, desc: "Annual maintenance contracts & authorized repair center", href: "/contact" },
-      { name: "Installation & Setup", icon: ShieldCheck, desc: "On-site commissioning, machine alignment & line testing", href: "/contact" },
-      { name: "Product Demo", icon: PlayCircle, desc: "Hands-on evaluation and trial units at your facility", href: "/contact" },
-      { name: "Technical Training", icon: GraduationCap, desc: "IPC standard training for operators & assembly engineers", href: "/contact" },
+      { name: "Application Engineering", icon: Sliders, desc: "Component cross-referencing and technical consultation", href: "/services" },
+      { name: "Calibration", icon: Settings, desc: "NABL/ISO traceable calibration with digital test certificates", href: "/services" },
+      { name: "AMC & Repair", icon: Wrench, desc: "Annual maintenance contracts & authorized repair center", href: "/services" },
+      { name: "Installation & Setup", icon: ShieldCheck, desc: "On-site commissioning, machine alignment & line testing", href: "/services" },
+      { name: "Product Demo", icon: PlayCircle, desc: "Hands-on evaluation and trial units at your facility", href: "/services" },
+      { name: "Technical Training", icon: GraduationCap, desc: "IPC standard training for operators & assembly engineers", href: "/services" },
     ],
     industries: [
-      { name: "Electronics & EMS", icon: Cpu, desc: "High-yield SMT assembly, box-build & testing", href: "/products?search=Electronics" },
-      { name: "Automotive & EV", icon: Car, desc: "AEC-Q components, battery testing & wire harnesses", href: "/products?search=Automotive" },
-      { name: "Aerospace & Defense", icon: Plane, desc: "MIL-spec reliability, radar testing & ruggedized systems", href: "/products?search=Aerospace" },
+      { name: "Electronics & EMS", icon: Cpu, desc: "High-yield SMT assembly, box-build & testing", href: "/industries/electronics-ems" },
+      { name: "Automotive & EV", icon: Car, desc: "AEC-Q components, battery testing & wire harnesses", href: "/industries/automotive-ev-solutions" },
+      { name: "Aerospace & Defense", icon: Plane, desc: "MIL-spec reliability, radar testing & ruggedized systems", href: "/industries/aerospace-defence" },
       { name: "Semiconductor", icon: Microchip, desc: "Cleanroom ESD, wafer handling & precision metrology", href: "/products?search=Semiconductor" },
       { name: "Telecom & RF", icon: TowerControl, desc: "5G base station testing, antennas & microwave cables", href: "/products?search=Telecom" },
       { name: "Power & Energy", icon: Flame, desc: "Grid monitoring, solar inverters & switchgear tools", href: "/products?search=Power" },
@@ -335,12 +335,14 @@ export default function Navbar() {
                 onMouseEnter={() => handleMouseEnter("solutions")}
                 onMouseLeave={handleMouseLeave}
               >
-                <button 
+                <Link 
+                  to="/procurement-solutions"
+                  onClick={() => setActiveDropdown(null)}
                   className={`flex items-center gap-1.5 hover:text-black transition-colors cursor-pointer py-1 ${activeDropdown === "solutions" ? "text-red-600 font-semibold" : ""}`}
                 >
                   <span>Procurement Solutions</span>
                   <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${activeDropdown === "solutions" ? "rotate-180 text-red-600" : "text-gray-400 group-hover:text-gray-700"}`} />
-                </button>
+                </Link>
 
                 <div 
                   className={`absolute top-full -left-20 xl:-left-32 w-[540px] xl:w-[580px] pt-3 z-50 transition-all duration-200 ${
@@ -352,7 +354,13 @@ export default function Navbar() {
                   <div className="bg-white rounded-3xl p-5 border border-gray-100 shadow-[0_16px_40px_rgba(0,0,0,0.12)]">
                     <div className="flex items-center justify-between pb-3 mb-3 border-b border-gray-100 px-2">
                       <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">B2B Procurement Models</span>
-                      <span className="text-xs text-emerald-600 font-medium bg-emerald-50 px-2 py-0.5 rounded-full">SLA Guaranteed</span>
+                      <Link 
+                        to="/procurement-solutions"
+                        className="text-xs font-medium text-red-600 hover:underline cursor-pointer" 
+                        onClick={() => setActiveDropdown(null)}
+                      >
+                        All Solutions →
+                      </Link>
                     </div>
                     <div className="grid grid-cols-2 gap-2">
                       {navData.solutions.map((item, idx) => {
@@ -415,6 +423,11 @@ export default function Navbar() {
                 onMouseLeave={handleMouseLeave}
               >
                 <button 
+                  type="button"
+                  onClick={() => {
+                    navigate("/services");
+                    setActiveDropdown(null);
+                  }}
                   className={`flex items-center gap-1.5 hover:text-black transition-colors cursor-pointer py-1 ${activeDropdown === "services" ? "text-red-600 font-semibold" : ""}`}
                 >
                   <span>Services</span>
@@ -457,6 +470,17 @@ export default function Navbar() {
                           </Link>
                         );
                       })}
+                    </div>
+                    <div className="pt-3 mt-3 border-t border-gray-100 px-2 flex items-center justify-between">
+                      <span className="text-xs text-gray-500">Need dedicated technical assistance?</span>
+                      <Link
+                        to="/services"
+                        onClick={() => setActiveDropdown(null)}
+                        className="text-xs font-bold text-red-600 hover:text-red-700 flex items-center gap-1"
+                      >
+                        <span>View All Services</span>
+                        <ChevronRight className="w-3.5 h-3.5" />
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -738,14 +762,14 @@ export default function Navbar() {
                 <span>Get Instant Quote</span>
               </button>
 
-              <button
-                type="button"
-                onClick={() => handleOpenProcurement("bom")}
+              <Link
+                to="/procurement-solutions/bom-procurement"
+                onClick={() => setMobileMenuOpen(false)}
                 className="w-full py-2.5 px-4 rounded-full bg-red-50 hover:bg-red-100 text-red-600 font-semibold text-xs flex items-center justify-center gap-2 border border-red-200 transition-colors cursor-pointer"
               >
                 <UploadCloud className="w-4 h-4" />
                 <span>Upload BOM Spreadsheet</span>
-              </button>
+              </Link>
             </div>
 
 
@@ -841,6 +865,13 @@ export default function Navbar() {
                         </Link>
                       );
                     })}
+                    <Link
+                      to="/procurement-solutions"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block py-1.5 text-red-600 font-bold hover:underline"
+                    >
+                      View All Procurement Solutions →
+                    </Link>
                   </div>
                 )}
               </div>
@@ -866,6 +897,13 @@ export default function Navbar() {
                         {item.name}
                       </Link>
                     ))}
+                    <Link
+                      to="/services"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block pt-2 font-bold text-red-600 hover:text-red-700 transition-colors"
+                    >
+                      View All Services →
+                    </Link>
                   </div>
                 )}
               </div>

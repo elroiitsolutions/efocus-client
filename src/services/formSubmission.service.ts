@@ -20,8 +20,10 @@ export interface FormSubmissionPayload {
 export interface FormSubmissionResponse {
   success: boolean;
   message: string;
+  reference_no?: string;
   data?: {
     id: number;
+    reference_no?: string;
     form_name: string;
     form_type: string;
     email: string;

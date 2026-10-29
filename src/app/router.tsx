@@ -14,6 +14,16 @@ import BlogPage from "@/features/blog/pages/BlogPage"
 import BlogDetailsPage from "@/features/blog/pages/BlogDetailsPage"
 import ContactPage from "@/features/contact/pages/ContactPage"
 import AboutPage from "@/features/about/pages/AboutPage"
+import ProcurementSolutionsPage from "@/features/procurement/pages/ProcurementSolutionsPage"
+import BomProcurementPage from "@/features/procurement/pages/BomProcurementPage"
+import VendorConsolidationPage from "@/features/procurement/pages/VendorConsolidationPage"
+import AnnualRateContractPage from "@/features/procurement/pages/AnnualRateContractPage"
+import ProjectProcurementPage from "@/features/procurement/pages/ProjectProcurementPage"
+import TurnkeyWorkstationsPage from "@/features/procurement/pages/TurnkeyWorkstationsPage"
+import ElectronicsEmsPage from "@/features/industries/pages/ElectronicsEmsPage"
+import AutomotiveEvPage from "@/features/industries/pages/AutomotiveEvPage"
+import AerospaceDefencePage from "@/features/industries/pages/AerospaceDefencePage"
+import ServicesPage from "@/features/services/pages/ServicesPage"
 
 export const router = createBrowserRouter([
   {
@@ -21,6 +31,27 @@ export const router = createBrowserRouter([
     element: <MainLayout />,
     children: [
       { path: "", element: <HomePage /> },
+      { path: "procurement-solutions", element: <ProcurementSolutionsPage /> },
+      { path: "solutions", element: <ProcurementSolutionsPage /> },
+      { path: "procurement-solutions/bom-procurement", element: <BomProcurementPage /> },
+      { path: "bom-procurement", element: <BomProcurementPage /> },
+      { path: "procurement-solutions/vendor-consolidation", element: <VendorConsolidationPage /> },
+      { path: "vendor-consolidation", element: <VendorConsolidationPage /> },
+      { path: "procurement-solutions/annual-rate-contracts", element: <AnnualRateContractPage /> },
+      { path: "annual-rate-contracts", element: <AnnualRateContractPage /> },
+      { path: "procurement-solutions/project-procurement", element: <ProjectProcurementPage /> },
+      { path: "project-procurement", element: <ProjectProcurementPage /> },
+      { path: "procurement-solutions/turnkey-workstations", element: <TurnkeyWorkstationsPage /> },
+      { path: "turnkey-workstations", element: <TurnkeyWorkstationsPage /> },
+      { path: "industries/electronics-ems", element: <ElectronicsEmsPage /> },
+      { path: "electronics-ems", element: <ElectronicsEmsPage /> },
+      { path: "industries/automotive-ev-solutions", element: <AutomotiveEvPage /> },
+      { path: "industries/automotive-ev", element: <AutomotiveEvPage /> },
+      { path: "automotive-ev", element: <AutomotiveEvPage /> },
+      { path: "industries/aerospace-defence", element: <AerospaceDefencePage /> },
+      { path: "industries/aerospace-defense", element: <AerospaceDefencePage /> },
+      { path: "aerospace-defence", element: <AerospaceDefencePage /> },
+      { path: "services", element: <ServicesPage /> },
       { path: "products", element: <ProductsPage /> },
       { path: "products/:slug", element: <ProductDetailsPage /> },
       { path: "categories", element: <CategoriesPage /> },

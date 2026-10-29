@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { NexChipIcon } from "@/components/ui/NexIcons";
 
 export default function HeroSection() {
+  const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isVideoReady, setIsVideoReady] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -36,7 +38,7 @@ export default function HeroSection() {
         {
           label: "Consolidate Your Procurement",
           variant: "primary" as const,
-          action: () => openModal("quote", "Vendor Consolidation RFQ"),
+          action: () => navigate("/procurement-solutions/vendor-consolidation"),
         },
         {
           label: "Get a Fast Quote",
@@ -74,7 +76,7 @@ export default function HeroSection() {
         {
           label: "Request Custom BOM Quote",
           variant: "primary" as const,
-          action: () => openModal("bom", "Request Custom BOM Quote"),
+          action: () => navigate("/procurement-solutions/bom-procurement"),
         },
         {
           label: "Talk to an Engineer",

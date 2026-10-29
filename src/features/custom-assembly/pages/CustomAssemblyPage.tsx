@@ -1,6 +1,13 @@
 import { useState } from "react"
 import { useQuoteStore } from "@/features/quote/store/quote.store"
 import { Check, ShieldCheck, Settings, Layers, Send } from "lucide-react"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 export default function CustomAssemblyPage() {
   const addItem = useQuoteStore((state) => state.addItem)
@@ -147,16 +154,17 @@ export default function CustomAssemblyPage() {
                   <label className="text-[13px] font-bold text-[#222222]">
                     Assembly Type
                   </label>
-                  <select
-                    value={assemblyType}
-                    onChange={(e) => setAssemblyType(e.target.value)}
-                    className="w-full bg-[#f4f5f8] border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#c8102e]"
-                  >
-                    <option>Ribbon Cables</option>
-                    <option>Wire Harnesses</option>
-                    <option>Internal Chassis Wiring</option>
-                    <option>RF Coaxial Jumpers</option>
-                  </select>
+                  <Select value={assemblyType} onValueChange={setAssemblyType}>
+                    <SelectTrigger className="w-full bg-[#f4f5f8] border border-[#d1d5db]">
+                      <SelectValue placeholder="Select assembly type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Ribbon Cables">Ribbon Cables</SelectItem>
+                      <SelectItem value="Wire Harnesses">Wire Harnesses</SelectItem>
+                      <SelectItem value="Internal Chassis Wiring">Internal Chassis Wiring</SelectItem>
+                      <SelectItem value="RF Coaxial Jumpers">RF Coaxial Jumpers</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 {/* Insulation option */}
@@ -164,16 +172,17 @@ export default function CustomAssemblyPage() {
                   <label className="text-[13px] font-bold text-[#222222]">
                     Insulation Sheath
                   </label>
-                  <select
-                    value={insulation}
-                    onChange={(e) => setInsulation(e.target.value)}
-                    className="w-full bg-[#f4f5f8] border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#c8102e]"
-                  >
-                    <option>Standard Flat Ribbon</option>
-                    <option>High-Temp Silicone</option>
-                    <option>Shielded Braided Sleeving</option>
-                    <option>Teflon (PTFE) Extruded</option>
-                  </select>
+                  <Select value={insulation} onValueChange={setInsulation}>
+                    <SelectTrigger className="w-full bg-[#f4f5f8] border border-[#d1d5db]">
+                      <SelectValue placeholder="Select insulation sheath" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Standard Flat Ribbon">Standard Flat Ribbon</SelectItem>
+                      <SelectItem value="High-Temp Silicone">High-Temp Silicone</SelectItem>
+                      <SelectItem value="Shielded Braided Sleeving">Shielded Braided Sleeving</SelectItem>
+                      <SelectItem value="Teflon (PTFE) Extruded">Teflon (PTFE) Extruded</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 
@@ -214,16 +223,17 @@ export default function CustomAssemblyPage() {
                   <label className="text-[13px] font-bold text-[#222222]">
                     Connector Pinout
                   </label>
-                  <select
-                    value={pinout}
-                    onChange={(e) => setPinout(e.target.value)}
-                    className="w-full bg-[#f4f5f8] border border-[#d1d5db] rounded-[6px] px-3 py-2 text-[14px] outline-none focus:border-[#c8102e]"
-                  >
-                    <option>Straight-Through (1-to-1)</option>
-                    <option>Reverse Pinout</option>
-                    <option>Custom Crossover Scheme</option>
-                    <option>Schematic Drawing (Mailed)</option>
-                  </select>
+                  <Select value={pinout} onValueChange={setPinout}>
+                    <SelectTrigger className="w-full bg-[#f4f5f8] border border-[#d1d5db]">
+                      <SelectValue placeholder="Select connector pinout" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Straight-Through (1-to-1)">Straight-Through (1-to-1)</SelectItem>
+                      <SelectItem value="Reverse Pinout">Reverse Pinout</SelectItem>
+                      <SelectItem value="Custom Crossover Scheme">Custom Crossover Scheme</SelectItem>
+                      <SelectItem value="Schematic Drawing (Mailed)">Schematic Drawing (Mailed)</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 

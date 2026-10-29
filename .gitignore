@@ -25,3 +25,4 @@ dist.zip
 *.sln
 *.sw?
 
+/public/hero video/videoo.mp4
