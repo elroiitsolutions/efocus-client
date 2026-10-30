@@ -24,4 +24,5 @@ dist.zip
 *.njsproj
 *.sln
 *.sw?
-public/hero video/*.mp4
+
+/public/hero video/videoo.mp4

@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+}
+
+/* Prevent Radix Select / react-remove-scroll from hiding the browser scrollbar and shifting layout */
+html body[data-scroll-locked],
+html body.with-scroll-bars-hidden {
+  overflow: visible !important;
+  margin-right: 0px !important;
+  padding-right: 0px !important;
+}
+
 @layer base {
   :root {
     --background: #fbfcfd;
