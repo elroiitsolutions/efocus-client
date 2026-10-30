@@ -200,8 +200,8 @@ export default function Navbar() {
       { name: "Semiconductor", icon: Microchip, desc: "Cleanroom ESD, wafer handling & precision metrology", href: "/industries/semiconductor-test-and-measurement-solutions" },
       { name: "Telecom & RF", icon: TowerControl, desc: "5G base station testing, antennas & microwave cables", href: "/industries/telecom-rf-test-solutions" },
       { name: "Power & Energy", icon: Flame, desc: "Grid monitoring, solar inverters & switchgear tools", href: "/industries/power-energy-test-solutions" },
-      { name: "Industrial Automation", icon: Factory, desc: "PLC cabling, industrial robotics & sensors", href: "/products?search=Automation" },
-      { name: "Pharma & Medical", icon: Stethoscope, desc: "Medical device assembly, cleanroom equipment & ISO standard tools", href: "/products?search=Medical" },
+      { name: "Industrial Automation", icon: Factory, desc: "PLCs, sensors, drives & control equipment", href: "/industries/industrial-automation" },
+      { name: "Pharma & Medical", icon: Stethoscope, desc: "Medical device assembly, cleanroom equipment & ISO standard tools", href: "/industries/pharma-medical" },
     ],
     resources: [
       { name: "Engineering Insights", icon: BookOpen, desc: "Deep technical papers on SMT yield, ESD control & RF design", href: "/blog" },

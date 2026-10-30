@@ -26,6 +26,8 @@ import AerospaceDefencePage from "@/features/industries/AerospaceDefencePage"
 import SemiconductorPage from "@/features/industries/SemiconductorPage"
 import TelecomRfPage from "@/features/industries/TelecomRfPage"
 import PowerEnergyPage from "@/features/industries/PowerEnergyPage"
+import IndustrialAutomationPage from "@/features/industries/IndustrialAutomationPage"
+import PharmaMedicalPage from "@/features/industries/PharmaMedicalPage"
 import ServicesPage from "@/features/services/ServicesPage"
 
 export const router = createBrowserRouter([
@@ -70,6 +72,14 @@ export const router = createBrowserRouter([
       { path: "industries/power-energy", element: <PowerEnergyPage /> },
       { path: "power-energy-test-solutions", element: <PowerEnergyPage /> },
       { path: "power-energy", element: <PowerEnergyPage /> },
+      { path: "industries/industrial-automation-solutions", element: <IndustrialAutomationPage /> },
+      { path: "industries/industrial-automation", element: <IndustrialAutomationPage /> },
+      { path: "industrial-automation-solutions", element: <IndustrialAutomationPage /> },
+      { path: "industrial-automation", element: <IndustrialAutomationPage /> },
+      { path: "industries/pharma-medical", element: <PharmaMedicalPage /> },
+      { path: "industries/pharma-medical-solutions", element: <PharmaMedicalPage /> },
+      { path: "pharma-medical", element: <PharmaMedicalPage /> },
+      { path: "pharma-medical-solutions", element: <PharmaMedicalPage /> },
       { path: "services", element: <ServicesPage /> },
       { path: "products", element: <ProductsPage /> },
       { path: "products/:slug", element: <ProductDetailsPage /> },
