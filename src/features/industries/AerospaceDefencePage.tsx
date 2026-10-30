@@ -23,8 +23,7 @@ import {
   Layers, 
   Cpu,
   Wrench,
-  HelpCircle,
-  FileText
+  HelpCircle
 } from "lucide-react";
 import { FormSubmissionService } from "@/services/formSubmission.service";
 import SuccessModal from "@/components/ui/SuccessModal";
@@ -186,7 +185,7 @@ export default function AerospaceDefencePage() {
       items: [
         "Spectrum analysers",
         "RF signal generators",
-        "Vector network analysers (VNAs)",
+        "Vector network analysers",
         "RF power meters and sensors"
       ],
       tags: ["Up to 67 GHz", "Phase Noise Analysis", "Multiport S-Parameters"],
@@ -198,8 +197,7 @@ export default function AerospaceDefencePage() {
       items: [
         "MIL-STD-1553 interface and test products",
         "ARINC 429 interface and test products",
-        "Protocol monitoring and analysis hardware",
-        "Dual-redundant bus simulator modules"
+        "Protocol monitoring and analysis hardware"
       ],
       tags: ["MIL-STD-1553", "ARINC 429", "Bus Monitor & Injector"],
     },
@@ -278,7 +276,7 @@ export default function AerospaceDefencePage() {
     },
     {
       title: "Power Subsystem Validation",
-      desc: "Electronic power systems require controlled operating conditions and appropriate electrical measurements. Programmable sources, electronic loads, and power analysers support relevant verification tasks.",
+      desc: "Reliable electronic power system performance depends on stable operating conditions and precise electrical measurements. Programmable sources, electronic loads, and power analysers support relevant verification tasks.",
       icon: Zap,
       category: "Power Conversion & Distribution",
       tags: ["MIL-STD-704", "DO-160 Power Transients", "Inrush Current", "Efficiency"],
@@ -328,7 +326,7 @@ export default function AerospaceDefencePage() {
     {
       number: "05",
       title: "Requirements for Custom Test Setups",
-      desc: "Discuss instrument, switching, and interface hardware requirements for laboratory benches and automated test applications, subject to the agreed scope.",
+      desc: "Explore instrumentation, switching, and interface hardware requirements for laboratory and automated testing applications based on the defined project scope.",
       icon: Boxes,
     },
   ];
@@ -341,7 +339,7 @@ export default function AerospaceDefencePage() {
     },
     {
       question: "Can I enquire about MIL-STD-1553 or ARINC 429 interface products?",
-      answer: "Yes. Share the required standard, interface configuration, and intended test function so relevant products can be reviewed.",
+      answer: "Please share the applicable standards, interface specifications, and intended test applications to help us identify suitable products for your requirements.",
     },
     {
       question: "How do I select an RF or microwave instrument?",
@@ -420,7 +418,7 @@ export default function AerospaceDefencePage() {
               </p>
 
               <p className="text-sm sm:text-base text-gray-600 leading-relaxed max-w-2xl mb-8">
-                eFocus Industrial helps engineering teams source test and measurement instruments, specialised interface hardware, and accessories for electronic development, system validation, and maintenance applications.
+                eFocus helps engineering teams source test and measurement instruments, specialised interface hardware, and accessories for electronic development, system validation, and maintenance applications.
               </p>
 
               {/* Primary Action Buttons */}
@@ -997,13 +995,14 @@ export default function AerospaceDefencePage() {
                   <span>Submit Your Requirements</span>
                 </button>
 
-                <Link
-                  to="/procurement-solutions/bom-procurement"
-                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm sm:text-base font-semibold border border-white/20 transition-all hover:scale-105"
+                <button
+                  type="button"
+                  onClick={scrollToForm}
+                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm sm:text-base font-semibold border border-white/20 transition-all hover:scale-105 cursor-pointer"
                 >
-                  <FileText className="w-4 h-4 text-red-400" />
-                  <span>Send Your BOM</span>
-                </Link>
+                  <Radio className="w-4 h-4 text-red-400" />
+                  <span>Discuss Your Application</span>
+                </button>
               </div>
 
               <div className="pt-8 flex flex-wrap items-center justify-center gap-6 text-xs text-gray-400 border-t border-white/10 mt-8">

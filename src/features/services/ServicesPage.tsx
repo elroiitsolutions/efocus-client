@@ -37,18 +37,13 @@ export default function ServicesPage() {
     
     let metaDescription = document.querySelector('meta[name="description"]');
     const prevDesc = metaDescription?.getAttribute("content") || "";
+    const targetDesc = "Technical services for industrial and engineering equipment, including application engineering, calibration, AMC & repair, installation, and product demonstrations.";
     if (metaDescription) {
-      metaDescription.setAttribute(
-        "content",
-        "Explore application engineering, calibration, AMC and repair, installation, product demonstrations, and technical training from eFocus Industrial."
-      );
+      metaDescription.setAttribute("content", targetDesc);
     } else {
       metaDescription = document.createElement("meta");
       metaDescription.setAttribute("name", "description");
-      metaDescription.setAttribute(
-        "content",
-        "Explore application engineering, calibration, AMC and repair, installation, product demonstrations, and technical training from eFocus Industrial."
-      );
+      metaDescription.setAttribute("content", targetDesc);
       document.head.appendChild(metaDescription);
     }
 

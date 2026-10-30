@@ -14,16 +14,19 @@ import BlogPage from "@/features/blog/pages/BlogPage"
 import BlogDetailsPage from "@/features/blog/pages/BlogDetailsPage"
 import ContactPage from "@/features/contact/pages/ContactPage"
 import AboutPage from "@/features/about/pages/AboutPage"
-import ProcurementSolutionsPage from "@/features/procurement/pages/ProcurementSolutionsPage"
-import BomProcurementPage from "@/features/procurement/pages/BomProcurementPage"
-import VendorConsolidationPage from "@/features/procurement/pages/VendorConsolidationPage"
-import AnnualRateContractPage from "@/features/procurement/pages/AnnualRateContractPage"
-import ProjectProcurementPage from "@/features/procurement/pages/ProjectProcurementPage"
-import TurnkeyWorkstationsPage from "@/features/procurement/pages/TurnkeyWorkstationsPage"
-import ElectronicsEmsPage from "@/features/industries/pages/ElectronicsEmsPage"
-import AutomotiveEvPage from "@/features/industries/pages/AutomotiveEvPage"
-import AerospaceDefencePage from "@/features/industries/pages/AerospaceDefencePage"
-import ServicesPage from "@/features/services/pages/ServicesPage"
+import ProcurementSolutionsPage from "@/features/procurement/ProcurementSolutionsPage"
+import BomProcurementPage from "@/features/procurement/BomProcurementPage"
+import VendorConsolidationPage from "@/features/procurement/VendorConsolidationPage"
+import AnnualRateContractPage from "@/features/procurement/AnnualRateContractPage"
+import ProjectProcurementPage from "@/features/procurement/ProjectProcurementPage"
+import TurnkeyWorkstationsPage from "@/features/procurement/TurnkeyWorkstationsPage"
+import ElectronicsEmsPage from "@/features/industries/ElectronicsEmsPage"
+import AutomotiveEvPage from "@/features/industries/AutomotiveEvPage"
+import AerospaceDefencePage from "@/features/industries/AerospaceDefencePage"
+import SemiconductorPage from "@/features/industries/SemiconductorPage"
+import TelecomRfPage from "@/features/industries/TelecomRfPage"
+import PowerEnergyPage from "@/features/industries/PowerEnergyPage"
+import ServicesPage from "@/features/services/ServicesPage"
 
 export const router = createBrowserRouter([
   {
@@ -43,14 +46,30 @@ export const router = createBrowserRouter([
       { path: "project-procurement", element: <ProjectProcurementPage /> },
       { path: "procurement-solutions/turnkey-workstations", element: <TurnkeyWorkstationsPage /> },
       { path: "turnkey-workstations", element: <TurnkeyWorkstationsPage /> },
+      { path: "industries/electronics-and-ems-solutions", element: <ElectronicsEmsPage /> },
       { path: "industries/electronics-ems", element: <ElectronicsEmsPage /> },
+      { path: "electronics-and-ems-solutions", element: <ElectronicsEmsPage /> },
       { path: "electronics-ems", element: <ElectronicsEmsPage /> },
       { path: "industries/automotive-ev-solutions", element: <AutomotiveEvPage /> },
       { path: "industries/automotive-ev", element: <AutomotiveEvPage /> },
       { path: "automotive-ev", element: <AutomotiveEvPage /> },
+      { path: "industries/aerospace-defence-solutions", element: <AerospaceDefencePage /> },
       { path: "industries/aerospace-defence", element: <AerospaceDefencePage /> },
       { path: "industries/aerospace-defense", element: <AerospaceDefencePage /> },
+      { path: "aerospace-defence-solutions", element: <AerospaceDefencePage /> },
       { path: "aerospace-defence", element: <AerospaceDefencePage /> },
+      { path: "industries/semiconductor-test-and-measurement-solutions", element: <SemiconductorPage /> },
+      { path: "industries/semiconductor", element: <SemiconductorPage /> },
+      { path: "semiconductor-test-and-measurement-solutions", element: <SemiconductorPage /> },
+      { path: "semiconductor", element: <SemiconductorPage /> },
+      { path: "industries/telecom-rf-test-solutions", element: <TelecomRfPage /> },
+      { path: "industries/telecom-rf", element: <TelecomRfPage /> },
+      { path: "telecom-rf-test-solutions", element: <TelecomRfPage /> },
+      { path: "telecom-rf", element: <TelecomRfPage /> },
+      { path: "industries/power-energy-test-solutions", element: <PowerEnergyPage /> },
+      { path: "industries/power-energy", element: <PowerEnergyPage /> },
+      { path: "power-energy-test-solutions", element: <PowerEnergyPage /> },
+      { path: "power-energy", element: <PowerEnergyPage /> },
       { path: "services", element: <ServicesPage /> },
       { path: "products", element: <ProductsPage /> },
       { path: "products/:slug", element: <ProductDetailsPage /> },

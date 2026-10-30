@@ -47,18 +47,13 @@ export default function AutomotiveEvPage() {
     
     let metaDescription = document.querySelector('meta[name="description"]');
     const prevDesc = metaDescription?.getAttribute("content") || "";
+    const targetDesc = "Source battery test systems, high-voltage test equipment, automotive bus analysers, and electrical measurement tools for EV and automotive engineering.";
     if (metaDescription) {
-      metaDescription.setAttribute(
-        "content",
-        "Source battery testing equipment, electrical test instruments, ECU validation tools, and automotive production test solutions with eFocus Industrial."
-      );
+      metaDescription.setAttribute("content", targetDesc);
     } else {
       metaDescription = document.createElement("meta");
       metaDescription.setAttribute("name", "description");
-      metaDescription.setAttribute(
-        "content",
-        "Source battery testing equipment, electrical test instruments, ECU validation tools, and automotive production test solutions with eFocus Industrial."
-      );
+      metaDescription.setAttribute("content", targetDesc);
       document.head.appendChild(metaDescription);
     }
 

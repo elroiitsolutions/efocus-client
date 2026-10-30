@@ -49,18 +49,13 @@ export default function ElectronicsEmsPage() {
     
     let metaDescription = document.querySelector('meta[name="description"]');
     const prevDesc = metaDescription?.getAttribute("content") || "";
+    const targetDesc = "Explore SMT assembly solutions, PCB inspection systems, rework equipment, ESD protection, and component sourcing for electronics manufacturing and EMS.";
     if (metaDescription) {
-      metaDescription.setAttribute(
-        "content",
-        "Find SMT assembly supplies, ESD protection, electronic test equipment, and production tools for electronics manufacturers and EMS providers."
-      );
+      metaDescription.setAttribute("content", targetDesc);
     } else {
       metaDescription = document.createElement("meta");
       metaDescription.setAttribute("name", "description");
-      metaDescription.setAttribute(
-        "content",
-        "Find SMT assembly supplies, ESD protection, electronic test equipment, and production tools for electronics manufacturers and EMS providers."
-      );
+      metaDescription.setAttribute("content", targetDesc);
       document.head.appendChild(metaDescription);
     }
 
