@@ -11,12 +11,6 @@ import {
 } from "lucide-react";
 
 export default function Footer() {
-  const triggerProcurement = (mode: "quote" | "bom" = "quote") => {
-    window.dispatchEvent(
-      new CustomEvent("open-procurement-modal", { detail: { mode } })
-    );
-  };
-
   return (
     <footer className="w-full pt-20 pb-32 sm:pb-16 px-4 sm:px-6 lg:px-8 bg-[#fbfcfd] border-t border-gray-200/80 flex flex-col items-center" id="footer">
       <div className="w-full max-w-[102rem] mx-auto">
@@ -162,31 +156,31 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2.5 text-sm text-gray-600">
               <li>
-                <button 
-                  onClick={() => triggerProcurement("bom")} 
+                <Link 
+                  to="/procurement-solutions/bom-procurement" 
                   className="hover:text-red-600 transition-colors flex items-center gap-1.5 text-left cursor-pointer"
                 >
                   <span>BOM Procurement</span>
                   <ArrowUpRight className="w-3.5 h-3.5 text-gray-400" />
-                </button>
+                </Link>
               </li>
               <li>
-                <Link to="/custom-assembly" className="hover:text-red-600 transition-colors">
+                <Link to="/procurement-solutions/vendor-consolidation" className="hover:text-red-600 transition-colors">
                   Vendor Consolidation
                 </Link>
               </li>
               <li>
-                <Link to="/quote" className="hover:text-red-600 transition-colors">
+                <Link to="/procurement-solutions/annual-rate-contracts" className="hover:text-red-600 transition-colors">
                   Annual Rate Contracts (ARC)
                 </Link>
               </li>
               <li>
-                <Link to="/custom-assembly" className="hover:text-red-600 transition-colors">
+                <Link to="/procurement-solutions/project-procurement" className="hover:text-red-600 transition-colors">
                   Project Procurement
                 </Link>
               </li>
               <li>
-                <Link to="/products?category=it-hardware-workstations" className="hover:text-red-600 transition-colors">
+                <Link to="/procurement-solutions/turnkey-workstations" className="hover:text-red-600 transition-colors">
                   Turnkey Workstations
                 </Link>
               </li>
@@ -199,9 +193,9 @@ export default function Footer() {
 
             {/* Quick Sourcing CTA Card */}
             <div className="pt-2">
-              <button
-                onClick={() => triggerProcurement("bom")}
-                className="w-full text-left p-3 rounded-2xl bg-gray-50 hover:bg-red-50/50 border border-gray-200/80 hover:border-red-300 transition-all cursor-pointer group"
+              <Link
+                to="/procurement-solutions/bom-procurement"
+                className="block w-full text-left p-3 rounded-2xl bg-gray-50 hover:bg-red-50/50 border border-gray-200/80 hover:border-red-300 transition-all cursor-pointer group"
               >
                 <p className="text-xs font-semibold text-gray-900 group-hover:text-red-600">
                   Ready with a multi-line BOM?
@@ -209,7 +203,7 @@ export default function Footer() {
                 <p className="text-[11px] text-gray-500 mt-0.5">
                   Upload file for 2-hour turnaround quote →
                 </p>
-              </button>
+              </Link>
             </div>
           </div>
 

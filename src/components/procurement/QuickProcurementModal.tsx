@@ -10,6 +10,7 @@ import {
   Building2, 
   Mail
 } from "lucide-react";
+import { FormSubmissionService } from "@/services/formSubmission.service";
 
 interface QuickProcurementModalProps {
   isOpen: boolean;
@@ -112,13 +113,32 @@ export default function QuickProcurementModal({
     setFile(uploadedFile);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!email.trim()) {
+      alert("Please provide a valid work email address.");
+      return;
+    }
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      await FormSubmissionService.submitForm({
+        form_name: "Quick Procurement Desk",
+        form_type: "quick_procurement",
+        part_numbers: partNumbers.trim() || undefined,
+        skus: skus.trim() || undefined,
+        description: description.trim() || undefined,
+        quantity: quantity.trim() || undefined,
+        email: email.trim(),
+        company_name: company.trim() || undefined,
+        file: file || null,
+      });
       setIsSubmitted(true);
-    }, 1200);
+    } catch (err: any) {
+      console.error("Quick procurement submission failed:", err);
+      alert(err.message || "Failed to submit request. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const resetForm = () => {

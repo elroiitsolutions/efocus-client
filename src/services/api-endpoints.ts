@@ -5,4 +5,5 @@ export const API_ENDPOINTS = {
   FAMILIES: "/families",
   PRODUCTS: "/products",
   FILTERS: "/filters",
+  FORMS: "/forms/submit",
 }
