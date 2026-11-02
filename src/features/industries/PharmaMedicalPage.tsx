@@ -362,14 +362,22 @@ export default function PharmaMedicalPage() {
       {/* =========================================================================
           SECTION 1: HERO & SOURCING ENQUIRY FORM
           ========================================================================= */}
-      <section className="w-full pt-28 sm:pt-32 pb-16 px-4 sm:px-6 lg:px-8 border-b border-gray-100 bg-gradient-to-b from-white via-gray-50/50 to-white">
-        <div className="w-full max-w-[102rem] mx-auto">
+      <section 
+        id="pharma-medical-hero"
+        className="w-full relative pt-6 sm:pt-10 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-8 border-b border-gray-100 overflow-hidden"
+      >
+        {/* Soft Ambient Radial Backgrounds */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[650px] bg-[radial-gradient(ellipse_75%_50%_at_50%_0%,rgba(175,2,2,0.07),transparent_70%)] pointer-events-none animate-pulse duration-[6000ms]" />
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-red-100/30 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 -left-32 w-80 h-80 bg-rose-100/20 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="w-full max-w-[102rem] mx-auto relative z-10">
           
           {/* Breadcrumbs */}
-          <div className="flex items-center gap-2 text-xs font-medium text-gray-400 mb-6 sm:mb-8">
+          <div className="flex items-center gap-2 text-xs font-medium text-gray-500 mb-6">
             <Link to="/" className="hover:text-black transition-colors">Home</Link>
             <span>/</span>
-            <span className="text-gray-600">Industries</span>
+            <span className="text-gray-400">Industries</span>
             <span>/</span>
             <span className="text-red-600 font-semibold">Pharma & Medical</span>
           </div>
@@ -400,18 +408,18 @@ export default function PharmaMedicalPage() {
                 <button
                   type="button"
                   onClick={() => scrollToForm()}
-                  className="px-6 py-3.5 rounded-full bg-[#AF0202] hover:bg-[#8e0202] text-white text-sm font-bold shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2 cursor-pointer group"
+                  className="group nex-button-swap inline-flex items-center justify-center rounded-full bg-[#111315] hover:bg-black text-white text-sm sm:text-base font-semibold shadow-md hover:shadow-xl transition-all cursor-pointer h-12"
                 >
-                  <NexChipIcon className="w-6 h-6" />
+                  <NexChipIcon className="w-8 h-8" />
                   <span>Share Your Requirement</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
 
                 <a
                   href="#categories"
-                  className="px-6 py-3.5 rounded-full bg-white hover:bg-gray-50 border border-gray-200 text-gray-800 text-sm font-semibold transition-all shadow-2xs hover:border-gray-300"
+                  className="inline-flex items-center gap-2 px-6 h-12 rounded-full bg-white hover:bg-gray-50 text-gray-800 text-sm sm:text-base font-medium border border-gray-200 transition-all hover:scale-[1.02] shadow-2xs"
                 >
-                  Explore Product Categories
+                  <span>Explore Product Categories</span>
+                  <ArrowRight className="w-4 h-4 text-gray-400 group-hover:translate-x-1 transition-transform" />
                 </a>
               </div>
 
@@ -945,19 +953,18 @@ export default function PharmaMedicalPage() {
             <button
               type="button"
               onClick={() => scrollToForm()}
-              className="px-8 py-4 rounded-full bg-[#AF0202] hover:bg-[#8e0202] text-white text-sm font-bold shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
+              className="group nex-button-swap inline-flex items-center justify-center rounded-full bg-white hover:bg-gray-100 text-[#0d0f11] py-3.5 px-8 font-bold text-sm sm:text-base tracking-wide transition-all cursor-pointer shadow-xl hover:scale-105 active:scale-95 h-12"
             >
-              <NexChipIcon className="w-6 h-6" />
+              <NexChipIcon className="w-8 h-8" />
               <span>Submit Your Requirement</span>
-              <ArrowRight className="w-4 h-4" />
             </button>
 
             <button
               type="button"
               onClick={() => scrollToForm()}
-              className="px-7 py-4 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm font-semibold border border-white/20 transition-all cursor-pointer backdrop-blur-sm"
+              className="inline-flex items-center gap-2 px-7 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm sm:text-base font-semibold border border-white/20 transition-all hover:scale-105 cursor-pointer backdrop-blur-sm"
             >
-              Discuss Your Application
+              <span>Discuss Your Application</span>
             </button>
           </div>
 
