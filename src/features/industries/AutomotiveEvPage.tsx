@@ -1,12 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { NexChipIcon, NexBadge } from "@/components/ui/NexIcons";
-import CountUp from "@/components/ui/CountUp";
 import { 
-  CheckCircle2, 
   ArrowRight, 
   ShieldCheck, 
-  Clock, 
   ChevronDown, 
   Car, 
   BatteryCharging, 
@@ -19,9 +16,6 @@ import {
   Sparkles, 
   HelpCircle, 
   FileText, 
-  Upload, 
-  Paperclip, 
-  X, 
   Compass, 
   Layers, 
   Search, 
@@ -29,15 +23,6 @@ import {
   Radio, 
   Boxes
 } from "lucide-react";
-import { FormSubmissionService } from "@/services/formSubmission.service";
-import SuccessModal from "@/components/ui/SuccessModal";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 export default function AutomotiveEvPage() {
   // Page SEO / Metadata Title & Description
@@ -65,27 +50,11 @@ export default function AutomotiveEvPage() {
     };
   }, []);
 
-  // Form State
-  const [fullName, setFullName] = useState("");
-  const [companyName, setCompanyName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [applicationFocus, setApplicationFocus] = useState("EV Battery & BMS Testing");
-  const [testingRequirements, setTestingRequirements] = useState("");
-  const [voltagePowerRating, setVoltagePowerRating] = useState("400V–800V High Voltage");
-  const [file, setFile] = useState<File | null>(null);
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
-  const [submitterEmail, setSubmitterEmail] = useState("");
-
   // FAQ Accordion Active State
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
   // Section Observer Triggers
-  const [statsVisible, setStatsVisible] = useState(false);
-  const statsRef = useRef<HTMLDivElement>(null);
-
+  
   const [categoriesVisible, setCategoriesVisible] = useState(false);
   const categoriesRef = useRef<HTMLElement>(null);
 
@@ -95,9 +64,7 @@ export default function AutomotiveEvPage() {
   const [whyVisible, setWhyVisible] = useState(false);
   const whyRef = useRef<HTMLElement>(null);
 
-  const formRef = useRef<HTMLDivElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
+    
   useEffect(() => {
     const observerOptions = { threshold: 0.15, rootMargin: "0px 0px -40px 0px" };
 
@@ -113,8 +80,7 @@ export default function AutomotiveEvPage() {
     };
 
     const cleanups = [
-      handleObserve(statsRef.current, setStatsVisible),
-      handleObserve(categoriesRef.current, setCategoriesVisible),
+            handleObserve(categoriesRef.current, setCategoriesVisible),
       handleObserve(appsRef.current, setAppsVisible),
       handleObserve(whyRef.current, setWhyVisible),
     ];
@@ -124,67 +90,10 @@ export default function AutomotiveEvPage() {
     };
   }, []);
 
-  const scrollToForm = () => {
-    formRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-    const firstInput = formRef.current?.querySelector("input");
-    firstInput?.focus();
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0]);
-    }
-  };
-
-  const removeFile = () => {
-    setFile(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!fullName.trim() || !companyName.trim() || !email.trim() || !testingRequirements.trim()) {
-      alert("Please fill in all required fields (Full Name, Company Name, Business Email, and Testing Requirements).");
-      return;
-    }
-
-    setIsSubmitting(true);
-    try {
-      await FormSubmissionService.submitForm({
-        form_name: "Automotive & EV Testing Sourcing Enquiry",
-        form_type: "automotive_ev_sourcing",
-        name: fullName.trim(),
-        company_name: companyName.trim(),
-        email: email.trim(),
-        phone: phone.trim() || undefined,
-        application_focus: applicationFocus,
-        voltage_power_rating: voltagePowerRating,
-        message: `Application Focus: ${applicationFocus}\nVoltage/Power Range: ${voltagePowerRating}\n\nTesting & Equipment Requirements:\n${testingRequirements.trim()}`,
-        file: file,
-      });
-
-      setSubmitterEmail(email.trim());
-      setIsSuccessOpen(true);
-      // Reset form
-      setFullName("");
-      setCompanyName("");
-      setEmail("");
-      setPhone("");
-      setApplicationFocus("EV Battery & BMS Testing");
-      setTestingRequirements("");
-      setVoltagePowerRating("400V–800V High Voltage");
-      removeFile();
-    } catch (err: any) {
-      console.error("Automotive & EV submission failed:", err);
-      alert(err.message || "Failed to submit enquiry. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
+  
+  
+  
+  
   // Section 2 Data: 12 Product Categories
   const productCategories = [
     {
@@ -365,14 +274,17 @@ export default function AutomotiveEvPage() {
   ];
 
   // Application Presets for the Form
-  const applicationPresets = [
-    "EV Battery & BMS Testing",
-    "Power Electronics Validation",
-    "ECU & Embedded Electronics",
-    "End-of-Line (EOL) Testing",
-    "Automotive Electrical Systems",
-    "ADAS & Sensor Development",
-  ];
+  
+  
+  const scrollToCategories = () => {
+    const el = document.getElementById("automotive-categories") || document.getElementById("product-categories") || document.getElementById("categories");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+      if (typeof window !== "undefined" && (window as any).__lenis) {
+        (window as any).__lenis.scrollTo(el);
+      }
+    }
+  };
 
   return (
     <div className="w-full flex flex-col items-center bg-[#fbfcfd] overflow-x-hidden">
@@ -382,17 +294,17 @@ export default function AutomotiveEvPage() {
           ========================================================================= */}
       <section 
         id="automotive-hero"
-        className="w-full relative pt-6 sm:pt-10 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-8 border-b border-gray-100 overflow-hidden"
+        className="w-full relative pt-6 sm:pt-10 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-8 xl:px-12 border-b border-gray-100 overflow-hidden"
       >
         {/* Soft Ambient Radial Backgrounds */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[650px] bg-[radial-gradient(ellipse_75%_50%_at_50%_0%,rgba(175,2,2,0.07),transparent_70%)] pointer-events-none animate-pulse duration-[6000ms]" />
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-red-100/30 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute top-1/2 -left-32 w-80 h-80 bg-blue-100/30 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="w-full max-w-[102rem] mx-auto relative z-10">
+        <div className="w-full max-w-[100rem] mx-auto relative z-10 flex flex-col items-center text-center">
           
           {/* Breadcrumb Navigation */}
-          <div className="flex items-center gap-2 text-xs font-medium text-gray-500 mb-6 animate-in fade-in slide-in-from-top-2 duration-500">
+          <div className="flex items-center justify-center gap-2 text-xs font-medium text-gray-500 mb-6 animate-in fade-in slide-in-from-top-2 duration-500">
             <Link to="/" className="hover:text-black transition-colors">Home</Link>
             <span>/</span>
             <span className="text-gray-400">Industries</span>
@@ -400,10 +312,7 @@ export default function AutomotiveEvPage() {
             <span className="text-red-600 font-semibold">Automotive & EV Solutions</span>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 xl:gap-12 items-start">
-            
-            {/* Left Column: Heading, Value Prop, Auto-Increment Stats */}
-            <div className="lg:col-span-7 flex flex-col items-start pt-2">
+          <div className="max-w-5xl mx-auto flex flex-col items-center text-center">
               
               {/* Eyebrow Pill with Pulsing Live Dot */}
               <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-red-50/90 border border-red-200/80 text-red-700 text-xs sm:text-[13px] font-semibold tracking-wide mb-6 shadow-2xs hover:scale-[1.02] transition-transform animate-in fade-in slide-in-from-left-4 duration-500">
@@ -415,7 +324,7 @@ export default function AutomotiveEvPage() {
               </div>
 
               {/* Main H1 */}
-              <h1 className="text-3xl sm:text-4xl md:text-5xl xl:text-[54px] font-extrabold text-[#0d0f11] tracking-tight leading-[1.12] mb-5 animate-in fade-in slide-in-from-left-6 duration-700">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl xl:text-[54px] font-extrabold text-[#0d0f11] tracking-tight leading-[1.12] mb-5 text-center animate-in fade-in slide-in-from-left-6 duration-700">
                 Equip Your Automotive Testing and{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#AF0202] via-[#c8102e] to-black">
                   EV Development
@@ -423,322 +332,24 @@ export default function AutomotiveEvPage() {
               </h1>
 
               {/* Subtitle */}
-              <p className="text-base sm:text-lg md:text-xl text-gray-600 font-normal leading-relaxed max-w-2xl mb-8 animate-in fade-in slide-in-from-left-8 duration-700">
+              <p className="text-base sm:text-lg md:text-xl text-gray-600 font-normal leading-relaxed max-w-4xl mx-auto mb-8 text-center animate-in fade-in slide-in-from-left-8 duration-700">
                 From battery systems and power electronics to vehicle control units, automotive engineering requires dependable testing equipment throughout development and production. We help automotive manufacturers, EV companies, and engineering teams source test instruments, electrical equipment, connectivity products, and production test accessories suited to their technical requirements.
               </p>
 
               {/* Primary Action Buttons */}
-              <div className="flex flex-wrap items-center gap-4 mb-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
-                <button
-                  type="button"
-                  onClick={scrollToForm}
-                  className="group nex-button-swap inline-flex items-center justify-center rounded-full bg-[#111315] hover:bg-black text-white text-sm sm:text-base font-semibold shadow-md hover:shadow-xl transition-all cursor-pointer h-12"
-                >
+              <div className="flex flex-wrap items-center justify-center gap-4 mb-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                <Link to="/quote?industry=automotive-ev" className="group nex-button-swap inline-flex items-center justify-center rounded-full bg-[#111315] hover:bg-black text-white text-sm sm:text-base font-semibold shadow-md hover:shadow-xl transition-all cursor-pointer h-12 px-6">
                   <NexChipIcon className="w-8 h-8" />
                   <span>Discuss Your Testing Requirements</span>
-                </button>
+                </Link>
 
-                <a
-                  href="#automotive-categories"
-                  className="inline-flex items-center gap-2 px-6 h-12 rounded-full bg-white hover:bg-gray-50 text-gray-800 text-sm sm:text-base font-medium border border-gray-200 transition-all hover:scale-[1.02] shadow-2xs"
-                >
+                <button type="button" onClick={scrollToCategories} className="inline-flex items-center gap-2 px-6 h-12 rounded-full bg-white hover:bg-gray-50 text-gray-800 text-sm sm:text-base font-medium border border-gray-200 transition-all hover:scale-[1.02] shadow-2xs cursor-pointer group">
                   <span>Explore Automotive & EV Products</span>
                   <ArrowRight className="w-4 h-4 text-gray-400 group-hover:translate-x-1 transition-transform" />
-                </a>
+                </button>
               </div>
 
-              {/* Verified Performance Stats Ribbon with Auto-Increment Animation */}
-              <div 
-                ref={statsRef}
-                className="w-full grid grid-cols-3 gap-3 sm:gap-6 pt-6 border-t border-gray-200/80"
-              >
-                {/* Stat 1: 1500V+ High-Voltage Testing */}
-                <div className="p-3.5 sm:p-5 rounded-2xl bg-white/90 border border-gray-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-md hover:border-red-200 transition-all duration-300 group">
-                  <div className="flex items-center gap-1.5 sm:gap-2 text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#AF0202] tracking-tight">
-                    {statsVisible ? (
-                      <CountUp value={1500} suffix="V+" duration={1600} />
-                    ) : (
-                      <span>1500V+</span>
-                    )}
-                  </div>
-                  <div className="text-xs sm:text-sm font-semibold text-gray-900 mt-1 flex items-center gap-1.5">
-                    <span>HV Test Rating</span>
-                    <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-amber-500 hidden sm:inline group-hover:scale-110 transition-transform duration-300" />
-                  </div>
-                  <p className="text-[11px] sm:text-xs text-gray-500 mt-0.5">
-                    Battery, inverter & SiC systems
-                  </p>
-                </div>
-
-                {/* Stat 2: 100% Automotive Grade Support */}
-                <div className="p-3.5 sm:p-5 rounded-2xl bg-white/90 border border-gray-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-md hover:border-red-200 transition-all duration-300 group">
-                  <div className="flex items-center gap-1.5 sm:gap-2 text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#AF0202] tracking-tight">
-                    {statsVisible ? (
-                      <CountUp value={100} suffix="%" duration={1800} />
-                    ) : (
-                      <span>100%</span>
-                    )}
-                  </div>
-                  <div className="text-xs sm:text-sm font-semibold text-gray-900 mt-1 flex items-center gap-1.5">
-                    <span>AEC-Q & ISO Spec</span>
-                    <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 hidden sm:inline group-hover:scale-110 transition-transform duration-300" />
-                  </div>
-                  <p className="text-[11px] sm:text-xs text-gray-500 mt-0.5">
-                    Traceable NABL calibration
-                  </p>
-                </div>
-
-                {/* Stat 3: 48h RFQ Turnaround */}
-                <div className="p-3.5 sm:p-5 rounded-2xl bg-white/90 border border-gray-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-md hover:border-red-200 transition-all duration-300 group">
-                  <div className="flex items-center gap-1.5 sm:gap-2 text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#AF0202] tracking-tight">
-                    {statsVisible ? (
-                      <CountUp value={48} suffix="h" duration={1400} />
-                    ) : (
-                      <span>48h</span>
-                    )}
-                  </div>
-                  <div className="text-xs sm:text-sm font-semibold text-gray-900 mt-1 flex items-center gap-1.5">
-                    <span>RFQ Turnaround</span>
-                    <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500 hidden sm:inline group-hover:scale-110 transition-transform duration-300" />
-                  </div>
-                  <p className="text-[11px] sm:text-xs text-gray-500 mt-0.5">
-                    Complete instrument & probe quote
-                  </p>
-                </div>
               </div>
-
-              {/* Trust Badges */}
-              <div className="flex flex-wrap items-center gap-y-2 gap-x-6 mt-6 text-xs text-gray-500">
-                <span className="flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                  <span>ISO 26262 & High-Voltage Safety</span>
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-blue-600" />
-                  <span>CAN FD, LIN & Automotive Ethernet</span>
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-red-600" />
-                  <span>Lab Setup & End-of-Line Production</span>
-                </span>
-              </div>
-
-            </div>
-
-            {/* Right Column: Interactive Form "Plan Your Automotive & EV Test Setup" */}
-            <div className="lg:col-span-5" ref={formRef}>
-              <div className="bg-white rounded-3xl border border-gray-200/90 p-6 sm:p-8 shadow-[0_8px_30px_rgba(0,0,0,0.06)] relative overflow-hidden">
-                
-                {/* Form Header Accent Bar with Shimmer */}
-                <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-red-600 via-[#AF0202] to-black" />
-
-                <div className="flex items-center justify-between pb-4 mb-5 border-b border-gray-100">
-                  <div>
-                    <h2 className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
-                      Plan Your Automotive & EV Test Setup
-                    </h2>
-                    <p className="text-xs text-gray-500 mt-0.5">
-                      Submit test parameters or upload your instrument list.
-                    </p>
-                  </div>
-                  <div className="w-10 h-10 rounded-2xl bg-red-50 text-[#AF0202] flex items-center justify-center shrink-0 shadow-2xs">
-                    <Car className="w-5 h-5" />
-                  </div>
-                </div>
-
-                <form onSubmit={handleSubmit} className="space-y-3.5">
-                  
-                  {/* Full Name & Company Name */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-xs font-semibold text-gray-700 mb-1">
-                        Full Name <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={fullName}
-                        onChange={(e) => setFullName(e.target.value)}
-                        placeholder="e.g. Alok Verma"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50/70 border border-gray-200 text-xs sm:text-sm text-gray-900 placeholder-gray-400 focus:bg-white focus:border-red-500 focus:ring-2 focus:ring-red-100 transition-all outline-none"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-gray-700 mb-1">
-                        Company Name <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={companyName}
-                        onChange={(e) => setCompanyName(e.target.value)}
-                        placeholder="e.g. Electra Drive Systems"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50/70 border border-gray-200 text-xs sm:text-sm text-gray-900 placeholder-gray-400 focus:bg-white focus:border-red-500 focus:ring-2 focus:ring-red-100 transition-all outline-none"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Business Email & Phone Number */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-xs font-semibold text-gray-700 mb-1">
-                        Business Email <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="email"
-                        required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="testing@company.com"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50/70 border border-gray-200 text-xs sm:text-sm text-gray-900 placeholder-gray-400 focus:bg-white focus:border-red-500 focus:ring-2 focus:ring-red-100 transition-all outline-none"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-gray-700 mb-1">
-                        Phone Number
-                      </label>
-                      <input
-                        type="tel"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        placeholder="+91 98765 43210"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50/70 border border-gray-200 text-xs sm:text-sm text-gray-900 placeholder-gray-400 focus:bg-white focus:border-red-500 focus:ring-2 focus:ring-red-100 transition-all outline-none"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Automotive / EV Application Focus (Chips) */}
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1.5">
-                      Application Focus <span className="text-red-500">*</span>
-                    </label>
-                    <div className="grid grid-cols-2 gap-1.5">
-                      {applicationPresets.map((preset) => {
-                        const isSelected = applicationFocus === preset;
-                        return (
-                          <button
-                            key={preset}
-                            type="button"
-                            onClick={() => setApplicationFocus(preset)}
-                            className={`py-1.5 px-2 rounded-xl text-[11px] font-medium text-left border transition-all cursor-pointer truncate ${
-                              isSelected
-                                ? "bg-red-50 border-red-500 text-red-700 font-semibold shadow-2xs"
-                                : "bg-gray-50/60 border-gray-200 text-gray-600 hover:bg-gray-100/70"
-                            }`}
-                          >
-                            <span className="mr-1">{isSelected ? "●" : "○"}</span>
-                            {preset}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Testing & Equipment Requirements * */}
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">
-                      Testing & Equipment Requirements <span className="text-red-500">*</span>
-                    </label>
-                    <textarea
-                      required
-                      rows={2}
-                      value={testingRequirements}
-                      onChange={(e) => setTestingRequirements(e.target.value)}
-                      placeholder="Specify test equipment (power analyzers, regenerative loads, scopes, DAQ), interfaces, or ECU test procedures..."
-                      className="w-full px-3.5 py-2 rounded-xl bg-gray-50/70 border border-gray-200 text-xs sm:text-sm text-gray-900 placeholder-gray-400 focus:bg-white focus:border-red-500 focus:ring-2 focus:ring-red-100 transition-all outline-none resize-none"
-                    />
-                  </div>
-
-                  {/* Voltage & Power Rating Selection */}
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">
-                      Voltage / Power Operating Range
-                    </label>
-                    <Select value={voltagePowerRating} onValueChange={setVoltagePowerRating}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select voltage / power range" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="12V / 24V / 48V Low Voltage (ECU & Sensors)">12V / 24V / 48V Low Voltage (ECU, Body & Sensors)</SelectItem>
-                        <SelectItem value="400V–800V High Voltage">400V–800V High Voltage (Traction Inverter & Battery Pack)</SelectItem>
-                        <SelectItem value="1000V–1500V Heavy Commercial / Fast Charging">1000V–1500V Heavy Commercial / Fast Charging Infrastructure</SelectItem>
-                        <SelectItem value="Complete Lab / Multi-Voltage Setup">Complete Lab / Multi-Voltage Setup</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Optional Equipment List / Spec Document Upload */}
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">
-                      Attach Equipment List or Test Spec <span className="text-gray-400 font-normal">(Optional)</span>
-                    </label>
-                    {file ? (
-                      <div className="flex items-center justify-between p-2.5 rounded-xl bg-red-50/60 border border-red-200 text-xs">
-                        <div className="flex items-center gap-2 truncate">
-                          <Paperclip className="w-4 h-4 text-red-600 shrink-0" />
-                          <span className="font-semibold text-gray-900 truncate">{file.name}</span>
-                          <span className="text-[11px] text-gray-500 shrink-0">
-                            ({(file.size / (1024 * 1024)).toFixed(2)} MB)
-                          </span>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={removeFile}
-                          className="p-1 rounded-full hover:bg-red-100 text-gray-500 hover:text-red-700 transition-colors cursor-pointer"
-                        >
-                          <X className="w-4 h-4" />
-                        </button>
-                      </div>
-                    ) : (
-                      <div
-                        onClick={() => fileInputRef.current?.click()}
-                        className="border border-dashed border-gray-300 rounded-xl p-2.5 text-center hover:border-red-400 hover:bg-red-50/20 transition-all cursor-pointer flex items-center justify-center gap-2 group"
-                      >
-                        <Upload className="w-4 h-4 text-gray-400 group-hover:text-red-600 transition-colors" />
-                        <span className="text-xs text-gray-600 group-hover:text-gray-900 font-medium">
-                          Upload test BOM, instrument list, or datasheet (.xlsx, .csv, .pdf)
-                        </span>
-                      </div>
-                    )}
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      onChange={handleFileChange}
-                      accept=".xlsx,.xls,.csv,.pdf,.zip"
-                      className="hidden"
-                    />
-                  </div>
-
-                  {/* Submit Button */}
-                  <div className="pt-2">
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full py-3.5 px-6 rounded-full bg-[#111315] hover:bg-black text-white text-sm font-bold shadow-md hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                          <span>Submitting Testing Enquiry...</span>
-                        </>
-                      ) : (
-                        <>
-                          <NexChipIcon className="w-7 h-7" />
-                          <span>Submit Testing Enquiry</span>
-                        </>
-                      )}
-                    </button>
-                    <p className="text-[11px] text-center text-gray-400 mt-2">
-                      🔒 Strictly confidential. Non-disclosure protection for proprietary test protocols.
-                    </p>
-                  </div>
-
-                </form>
-
-              </div>
-            </div>
-
-          </div>
 
         </div>
       </section>
@@ -750,11 +361,11 @@ export default function AutomotiveEvPage() {
       <section 
         id="automotive-categories"
         ref={categoriesRef}
-        className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white border-b border-gray-100"
+        className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 xl:px-12 bg-white border-b border-gray-100"
       >
-        <div className="w-full max-w-[102rem] mx-auto">
+        <div className="w-full max-w-[100rem] mx-auto">
           
-          <div className={`text-center max-w-3xl mx-auto mb-12 sm:mb-16 transition-all duration-700 ${
+          <div className={`text-center max-w-4xl mx-auto flex flex-col items-center mb-12 sm:mb-16 transition-all duration-700 ${
             categoriesVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           }`}>
             <NexBadge label="Instrumentation Portfolio" />
@@ -810,14 +421,10 @@ export default function AutomotiveEvPage() {
 
           {/* Categories Sourcing CTA Button */}
           <div className="text-center">
-            <button
-              type="button"
-              onClick={scrollToForm}
-              className="group nex-button-swap inline-flex items-center justify-center rounded-full bg-[#111315] hover:bg-black text-white text-sm sm:text-base font-semibold shadow-md hover:shadow-xl transition-all cursor-pointer h-12 px-8"
-            >
+            <Link to="/quote?industry=automotive-ev" className="group nex-button-swap inline-flex items-center justify-center rounded-full bg-[#111315] hover:bg-black text-white text-sm sm:text-base font-semibold shadow-md hover:shadow-xl transition-all cursor-pointer h-12 px-8 px-6">
               <NexChipIcon className="w-8 h-8" />
               <span>Enquire About Automotive Test Equipment</span>
-            </button>
+            </Link>
           </div>
 
         </div>
@@ -829,11 +436,11 @@ export default function AutomotiveEvPage() {
           ========================================================================= */}
       <section 
         ref={appsRef}
-        className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-[#fbfcfd] border-b border-gray-100"
+        className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 xl:px-12 bg-[#fbfcfd] border-b border-gray-100"
       >
-        <div className="w-full max-w-[102rem] mx-auto">
+        <div className="w-full max-w-[100rem] mx-auto">
           
-          <div className={`text-center max-w-3xl mx-auto mb-12 sm:mb-16 transition-all duration-700 ${
+          <div className={`text-center max-w-4xl mx-auto flex flex-col items-center mb-12 sm:mb-16 transition-all duration-700 ${
             appsVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           }`}>
             <NexBadge label="Application Specializations" />
@@ -902,11 +509,11 @@ export default function AutomotiveEvPage() {
           ========================================================================= */}
       <section 
         ref={whyVisible ? undefined : whyRef}
-        className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white border-b border-gray-100"
+        className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 xl:px-12 bg-white border-b border-gray-100"
       >
-        <div className="w-full max-w-[102rem] mx-auto">
+        <div className="w-full max-w-[100rem] mx-auto">
           
-          <div className={`text-center max-w-3xl mx-auto mb-12 sm:mb-16 transition-all duration-700 ${
+          <div className={`text-center max-w-4xl mx-auto flex flex-col items-center mb-12 sm:mb-16 transition-all duration-700 ${
             whyVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           }`}>
             <NexBadge label="Automotive Advantage" />
@@ -958,10 +565,10 @@ export default function AutomotiveEvPage() {
       {/* =========================================================================
           SECTION 5: FREQUENTLY ASKED QUESTIONS (FAQ)
           ========================================================================= */}
-      <section className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-[#fbfcfd] border-b border-gray-100">
-        <div className="w-full max-w-4xl mx-auto">
+      <section className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 xl:px-12 bg-[#fbfcfd] border-b border-gray-100">
+        <div className="w-full max-w-[100rem] mx-auto">
           
-          <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
+          <div className="text-center max-w-4xl mx-auto flex flex-col items-center mb-12 sm:mb-16">
             <NexBadge label="Testing Inquiries" />
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0d0f11] tracking-tight mt-4 mb-3">
               Frequently Asked Questions
@@ -971,7 +578,7 @@ export default function AutomotiveEvPage() {
             </p>
           </div>
 
-          <div className="space-y-3.5">
+          <div className="max-w-5xl mx-auto space-y-3.5">
             {faqs.map((faq, idx) => {
               const isOpen = openFaqIndex === idx;
               return (
@@ -1012,15 +619,15 @@ export default function AutomotiveEvPage() {
       {/* =========================================================================
           SECTION 6: FINAL CTA BANNER
           ========================================================================= */}
-      <section className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="w-full max-w-5xl mx-auto">
+      <section className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 xl:px-12 bg-white">
+        <div className="w-full max-w-[100rem] mx-auto">
           <div className="rounded-[36px] bg-gradient-to-br from-[#111315] via-[#1a1d21] to-black p-8 sm:p-12 lg:p-16 text-white text-center relative overflow-hidden shadow-2xl">
             
             {/* Background Ambient Aura */}
             <div className="absolute -top-24 -left-24 w-80 h-80 bg-red-600/20 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute -bottom-24 -right-24 w-80 h-80 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
 
-            <div className="relative z-10 max-w-2xl mx-auto">
+            <div className="relative z-10 max-w-4xl mx-auto">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs font-semibold text-gray-200 mb-6">
                 <Sparkles className="w-3.5 h-3.5 text-red-400" />
                 <span>Automotive & EV Sourcing Infrastructure</span>
@@ -1035,14 +642,10 @@ export default function AutomotiveEvPage() {
               </p>
 
               <div className="flex flex-wrap items-center justify-center gap-4">
-                <button
-                  type="button"
-                  onClick={scrollToForm}
-                  className="group nex-button-swap inline-flex items-center justify-center rounded-full bg-white hover:bg-gray-100 text-[#0d0f11] py-3.5 px-8 font-bold text-sm sm:text-base tracking-wide transition-all cursor-pointer shadow-xl hover:scale-105 active:scale-95"
-                >
+                <Link to="/quote?industry=automotive-ev" className="group nex-button-swap inline-flex items-center justify-center rounded-full bg-white hover:bg-gray-100 text-[#0d0f11] py-3.5 px-8 font-bold text-sm sm:text-base tracking-wide transition-all cursor-pointer shadow-xl hover:scale-105 active:scale-95 px-6">
                   <NexChipIcon className="w-8 h-8" />
                   <span>Submit Your Requirements</span>
-                </button>
+                </Link>
 
                 <Link
                   to="/procurement-solutions/bom-procurement"
@@ -1057,15 +660,6 @@ export default function AutomotiveEvPage() {
           </div>
         </div>
       </section>
-
-      {/* Success Modal */}
-      <SuccessModal
-        isOpen={isSuccessOpen}
-        onClose={() => setIsSuccessOpen(false)}
-        title="Testing Enquiry Received!"
-        message="Thank you for submitting your automotive and EV test equipment requirements. Our automotive application specialists will review your voltage/current parameters and contact you with a tailored technical quotation within 24–48 hours."
-        submitterEmail={submitterEmail}
-      />
 
     </div>
   );

@@ -1,23 +1,16 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { NexChipIcon, NexBadge } from "@/components/ui/NexIcons";
-import CountUp from "@/components/ui/CountUp";
 import { 
-  CheckCircle2, 
   ArrowRight, 
   ShieldCheck, 
-  Clock, 
   ChevronDown, 
   Radio, 
   Activity, 
   Zap, 
   Layers, 
-  Upload, 
-  Paperclip, 
-  X, 
   Sliders,
   BarChart3,
-  FileSpreadsheet,
   Cable,
   Network,
   Sparkles,
@@ -26,15 +19,6 @@ import {
   Wifi,
   Waves
 } from "lucide-react";
-import { FormSubmissionService } from "@/services/formSubmission.service";
-import SuccessModal from "@/components/ui/SuccessModal";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 export default function TelecomRfPage() {
   // Page SEO / Metadata Title & Description
@@ -71,107 +55,10 @@ export default function TelecomRfPage() {
     }
   }, []);
 
-  // Form State
-  const [fullName, setFullName] = useState("");
-  const [companyName, setCompanyName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [applicationFocus, setApplicationFocus] = useState("RF Component Characterisation");
-  const [frequencyRange, setFrequencyRange] = useState("Sub-6 GHz (5G NR FR1, WiFi 6E/7, Cellular)");
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [specifications, setSpecifications] = useState("");
-  const [file, setFile] = useState<File | null>(null);
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
-  const [submitterEmail, setSubmitterEmail] = useState("");
-
   // FAQ Accordion Active State
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
-  const formRef = useRef<HTMLDivElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const scrollToForm = (prefillTask?: string) => {
-    if (prefillTask) {
-      setApplicationFocus(prefillTask);
-    }
-    formRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-    const firstInput = formRef.current?.querySelector("input");
-    firstInput?.focus();
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const selectedFile = e.target.files[0];
-      if (selectedFile.size > 25 * 1024 * 1024) {
-        alert("File size exceeds 25MB limit.");
-        return;
-      }
-      setFile(selectedFile);
-    }
-  };
-
-  const removeFile = () => {
-    setFile(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  };
-
-  const toggleCategory = (cat: string) => {
-    setSelectedCategories((prev) =>
-      prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
-    );
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!fullName.trim() || !companyName.trim() || !email.trim() || !phone.trim()) {
-      alert("Please fill in all required fields (Full Name, Company Name, Business Email, and Phone Number).");
-      return;
-    }
-
-    setIsSubmitting(true);
-    try {
-      await FormSubmissionService.submitForm({
-        form_name: "Telecom & RF Test Equipment Enquiry",
-        form_type: "telecom_rf_sourcing",
-        name: fullName.trim(),
-        company_name: companyName.trim(),
-        email: email.trim(),
-        phone: phone.trim(),
-        subject: `Telecom & RF Sourcing: ${applicationFocus}`,
-        requirement_type: applicationFocus,
-        frequency_range: frequencyRange,
-        product_categories: selectedCategories.length > 0 ? selectedCategories.join(", ") : undefined,
-        message: specifications.trim() 
-          ? `Application Focus: ${applicationFocus}\nFrequency Range: ${frequencyRange}\nCategories: ${selectedCategories.join(", ") || "General RF Setup"}\n\nTechnical Specifications & Equipment List:\n${specifications.trim()}`
-          : `Application Focus: ${applicationFocus}\nFrequency Range: ${frequencyRange}\nCategories: ${selectedCategories.join(", ") || "General RF Setup"}`,
-        file: file || undefined,
-      });
-
-      setSubmitterEmail(email.trim());
-      setIsSuccessOpen(true);
-      // Reset form
-      setFullName("");
-      setCompanyName("");
-      setEmail("");
-      setPhone("");
-      setApplicationFocus("RF Component Characterisation");
-      setFrequencyRange("Sub-6 GHz (5G NR FR1, WiFi 6E/7, Cellular)");
-      setSelectedCategories([]);
-      setSpecifications("");
-      removeFile();
-    } catch (err: any) {
-      console.error("Telecom & RF submission failed:", err);
-      alert(err.message || "Failed to submit request. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
+    
   // 12 Product Categories matching client spec
   const productCategories = [
     {
@@ -336,7 +223,7 @@ export default function TelecomRfPage() {
       number: "05",
       title: "Application-Based Technical Review",
       desc: "Share the RF component, communication technology, or measurement objective to help identify relevant equipment options.",
-      icon: FileSpreadsheet,
+      icon: Activity,
     },
   ];
 
@@ -368,6 +255,17 @@ export default function TelecomRfPage() {
     },
   ];
 
+  
+  const scrollToCategories = () => {
+    const el = document.getElementById("product-categories") || document.getElementById("product-categories") || document.getElementById("categories");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+      if (typeof window !== "undefined" && (window as any).__lenis) {
+        (window as any).__lenis.scrollTo(el);
+      }
+    }
+  };
+
   return (
     <div className="bg-[#fafbfc] min-h-screen text-[#0d0f11] font-sans antialiased overflow-x-hidden selection:bg-red-500 selection:text-white">
       {/* =========================================================================
@@ -375,17 +273,17 @@ export default function TelecomRfPage() {
           ========================================================================= */}
       <section 
         id="telecom-rf-hero"
-        className="w-full relative pt-6 sm:pt-10 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-8 border-b border-gray-100 overflow-hidden bg-gradient-to-b from-[#fbfcfd] via-white to-[#f8f9fa]"
+        className="w-full relative pt-6 sm:pt-10 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-8 xl:px-12 border-b border-gray-100 overflow-hidden bg-gradient-to-b from-[#fbfcfd] via-white to-[#f8f9fa]"
       >
         {/* Soft Ambient Radial Backgrounds */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[650px] bg-[radial-gradient(ellipse_75%_50%_at_50%_0%,rgba(175,2,2,0.07),transparent_70%)] pointer-events-none animate-pulse duration-[6000ms]" />
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-red-100/30 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute top-1/2 -left-32 w-80 h-80 bg-rose-100/20 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="w-full max-w-[102rem] mx-auto relative z-10">
+        <div className="w-full max-w-[100rem] mx-auto relative z-10 flex flex-col items-center text-center">
           
           {/* Breadcrumb Navigation */}
-          <div className="flex items-center gap-2 text-xs font-medium text-gray-500 mb-6 animate-in fade-in slide-in-from-top-2 duration-500">
+          <div className="flex items-center justify-center gap-2 text-xs font-medium text-gray-500 mb-6 animate-in fade-in slide-in-from-top-2 duration-500">
             <Link to="/" className="hover:text-black transition-colors">Home</Link>
             <span>/</span>
             <span className="text-gray-400">Industries</span>
@@ -393,10 +291,7 @@ export default function TelecomRfPage() {
             <span className="text-red-600 font-semibold">Telecom & RF</span>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 xl:gap-12 items-start">
-            
-            {/* Left Column: Heading, Value Prop, Auto-Increment Stats */}
-            <div className="lg:col-span-7 flex flex-col items-start pt-2">
+          <div className="max-w-5xl mx-auto flex flex-col items-center text-center">
               
               {/* Eyebrow Pill with Pulsing Live Dot */}
               <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-red-50/90 border border-red-200/80 text-red-700 text-xs sm:text-[13px] font-semibold tracking-wide mb-6 shadow-2xs hover:scale-[1.02] transition-transform animate-in fade-in slide-in-from-left-4 duration-500">
@@ -408,7 +303,7 @@ export default function TelecomRfPage() {
               </div>
 
               {/* Main Heading */}
-              <h1 className="text-3xl sm:text-4xl md:text-5xl xl:text-[54px] font-extrabold text-[#0d0f11] tracking-tight leading-[1.12] mb-5 animate-in fade-in slide-in-from-left-6 duration-700">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl xl:text-[54px] font-extrabold text-[#0d0f11] tracking-tight leading-[1.12] mb-5 text-center animate-in fade-in slide-in-from-left-6 duration-700">
                 Measure, Analyse and Validate{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#AF0202] via-[#c8102e] to-black">
                   RF Performance
@@ -416,359 +311,28 @@ export default function TelecomRfPage() {
               </h1>
 
               {/* Subtitle & Value Proposition (Exact Client Copy) */}
-              <p className="text-base sm:text-lg md:text-xl text-gray-600 font-normal leading-relaxed max-w-2xl mb-4 animate-in fade-in slide-in-from-left-8 duration-700">
+              <p className="text-base sm:text-lg md:text-xl text-gray-600 font-normal leading-relaxed max-w-4xl mx-auto mb-4 text-center animate-in fade-in slide-in-from-left-8 duration-700">
                 Reliable wireless communication depends on signal quality, frequency performance, and the behaviour of RF components and systems.
               </p>
 
-              <p className="text-sm sm:text-base text-gray-600 leading-relaxed max-w-2xl mb-8 animate-in fade-in slide-in-from-left-8 duration-700">
+              <p className="text-sm sm:text-base text-gray-600 leading-relaxed max-w-4xl mx-auto mb-8 text-center animate-in fade-in slide-in-from-left-8 duration-700">
                 eFocus helps telecom manufacturers, RF engineers, and communication technology teams source test instruments, RF accessories, and measurement equipment for wireless development, component evaluation, and network testing applications.
               </p>
 
               {/* Primary Action Buttons */}
-              <div className="flex flex-wrap items-center gap-4 mb-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
-                <button
-                  type="button"
-                  onClick={() => scrollToForm()}
-                  className="group nex-button-swap inline-flex items-center justify-center rounded-full bg-[#111315] hover:bg-black text-white text-sm sm:text-base font-semibold shadow-md hover:shadow-xl transition-all cursor-pointer h-12"
-                >
+              <div className="flex flex-wrap items-center justify-center gap-4 mb-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                <Link to="/quote?industry=telecom-rf" className="group nex-button-swap inline-flex items-center justify-center rounded-full bg-[#111315] hover:bg-black text-white text-sm sm:text-base font-semibold shadow-md hover:shadow-xl transition-all cursor-pointer h-12 px-6">
                   <NexChipIcon className="w-8 h-8" />
                   <span>Discuss Your RF Requirements</span>
-                </button>
+                </Link>
 
-                <a
-                  href="#product-categories"
-                  className="inline-flex items-center gap-2 px-6 h-12 rounded-full bg-white hover:bg-gray-50 text-gray-800 text-sm sm:text-base font-medium border border-gray-200 transition-all hover:scale-[1.02] shadow-2xs"
-                >
+                <button type="button" onClick={scrollToCategories} className="inline-flex items-center gap-2 px-6 h-12 rounded-full bg-white hover:bg-gray-50 text-gray-800 text-sm sm:text-base font-medium border border-gray-200 transition-all hover:scale-[1.02] shadow-2xs cursor-pointer group">
                   <span>Explore Equipment Categories</span>
                   <ArrowRight className="w-4 h-4 text-gray-400 group-hover:translate-x-1 transition-transform" />
-                </a>
+                </button>
               </div>
 
-              {/* Verified Performance Stats Ribbon */}
-              <div className="w-full grid grid-cols-3 gap-3 sm:gap-6 pt-6 border-t border-gray-200/80">
-                {/* Stat 1: 67+ GHz High-Frequency Bandwidth */}
-                <div className="p-3.5 sm:p-5 rounded-2xl bg-white/90 border border-gray-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-md hover:border-red-200 transition-all duration-300 group">
-                  <div className="flex items-center gap-1.5 sm:gap-2 text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#AF0202] tracking-tight">
-                    <CountUp value={67} suffix=" GHz+" duration={1600} />
-                  </div>
-                  <div className="text-xs sm:text-sm font-semibold text-gray-900 mt-1 flex items-center gap-1.5">
-                    <span>RF Bandwidth</span>
-                    <Radio className="w-4 h-4 sm:w-5 sm:h-5 text-red-500 hidden sm:inline group-hover:scale-110 transition-transform duration-300" />
-                  </div>
-                  <p className="text-[11px] sm:text-xs text-gray-500 mt-0.5">
-                    Sub-6 to mmWave testing
-                  </p>
-                </div>
-
-                {/* Stat 2: 5G & WiFi Protocols */}
-                <div className="p-3.5 sm:p-5 rounded-2xl bg-white/90 border border-gray-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-md hover:border-red-200 transition-all duration-300 group">
-                  <div className="flex items-center gap-1.5 sm:gap-2 text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#AF0202] tracking-tight">
-                    <span>5G / WiFi 7</span>
-                  </div>
-                  <div className="text-xs sm:text-sm font-semibold text-gray-900 mt-1 flex items-center gap-1.5">
-                    <span>Protocol Testing</span>
-                    <Wifi className="w-4 h-4 sm:w-5 sm:h-5 text-red-500 hidden sm:inline group-hover:scale-110 transition-transform duration-300" />
-                  </div>
-                  <p className="text-[11px] sm:text-xs text-gray-500 mt-0.5">
-                    OTA & call-box coverage
-                  </p>
-                </div>
-
-                {/* Stat 3: 24-48h Sourcing Review */}
-                <div className="p-3.5 sm:p-5 rounded-2xl bg-white/90 border border-gray-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-md hover:border-red-200 transition-all duration-300 group">
-                  <div className="flex items-center gap-1.5 sm:gap-2 text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#AF0202] tracking-tight">
-                    <CountUp value={24} suffix="–48h" duration={1400} />
-                  </div>
-                  <div className="text-xs sm:text-sm font-semibold text-gray-900 mt-1 flex items-center gap-1.5">
-                    <span>Fast Turnaround</span>
-                    <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-red-500 hidden sm:inline group-hover:scale-110 transition-transform duration-300" />
-                  </div>
-                  <p className="text-[11px] sm:text-xs text-gray-500 mt-0.5">
-                    Direct OEM instrument RFQ
-                  </p>
-                </div>
               </div>
-
-              {/* Value Badges */}
-              <div className="pt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-gray-600">
-                <span className="flex items-center gap-1.5 font-medium">
-                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                  NABL Traceable Calibration
-                </span>
-                <span className="flex items-center gap-1.5 font-medium">
-                  <CheckCircle2 className="w-4 h-4 text-sky-600" />
-                  Phase-Matched Test Leads & Cal Kits
-                </span>
-                <span className="flex items-center gap-1.5 font-medium">
-                  <Clock className="w-4 h-4 text-red-600" />
-                  Unified Single GST Invoicing
-                </span>
-              </div>
-            </div>
-
-            {/* Right Column: Hero Technical Sourcing Form */}
-            <div ref={formRef} className="lg:col-span-5 w-full">
-              <div className="bg-white rounded-3xl border border-gray-200/90 shadow-xl p-6 sm:p-8 relative overflow-hidden backdrop-blur-xs">
-                {/* Top Brand Accent Line */}
-                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-red-600 via-rose-500 to-red-700" />
-
-                <div className="mb-6">
-                  <div className="flex items-center gap-2 text-xs font-semibold text-red-600 uppercase tracking-wider mb-1.5">
-                    <Sparkles className="w-3.5 h-3.5" />
-                    <span>Technical Sourcing Desk</span>
-                  </div>
-                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
-                    Discuss Your RF Requirements
-                  </h2>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Share your frequency range, modulation format, or instrument list for a tailored technical proposal.
-                  </p>
-                </div>
-
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  {/* Full Name & Company Name */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                    <div>
-                      <label className="block text-xs font-semibold text-gray-700 mb-1.5">
-                        Full Name <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={fullName}
-                        onChange={(e) => setFullName(e.target.value)}
-                        placeholder="e.g. Dr. Rajesh Verma"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50/70 border border-gray-200 text-xs sm:text-sm text-gray-900 placeholder-gray-400 focus:bg-white focus:border-red-500 focus:ring-2 focus:ring-red-100 transition-all outline-none"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-gray-700 mb-1.5">
-                        Company / Lab Name <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={companyName}
-                        onChange={(e) => setCompanyName(e.target.value)}
-                        placeholder="e.g. Bharat Wireless Labs Ltd"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50/70 border border-gray-200 text-xs sm:text-sm text-gray-900 placeholder-gray-400 focus:bg-white focus:border-red-500 focus:ring-2 focus:ring-red-100 transition-all outline-none"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Business Email & Phone Number */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                    <div>
-                      <label className="block text-xs font-semibold text-gray-700 mb-1.5">
-                        Business Email <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="email"
-                        required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="rf-engineering@company.com"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50/70 border border-gray-200 text-xs sm:text-sm text-gray-900 placeholder-gray-400 focus:bg-white focus:border-red-500 focus:ring-2 focus:ring-red-100 transition-all outline-none"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-gray-700 mb-1.5">
-                        Phone Number <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="tel"
-                        required
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        placeholder="+91 98765 43210"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50/70 border border-gray-200 text-xs sm:text-sm text-gray-900 placeholder-gray-400 focus:bg-white focus:border-red-500 focus:ring-2 focus:ring-red-100 transition-all outline-none"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Application Focus Select (Shadcn Select) */}
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1.5">
-                      Primary Application Focus
-                    </label>
-                    <Select value={applicationFocus} onValueChange={setApplicationFocus}>
-                      <SelectTrigger className="w-full h-10 text-xs sm:text-sm">
-                        <SelectValue placeholder="Select application focus" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="RF Component Characterisation">
-                          RF Component Characterisation (Filters, Amplifiers, VNAs)
-                        </SelectItem>
-                        <SelectItem value="Antenna Performance Evaluation">
-                          Antenna Performance Evaluation (VSWR, Return Loss, S11)
-                        </SelectItem>
-                        <SelectItem value="Wireless Transmitter and Receiver Testing">
-                          Wireless Transmitter & Receiver Testing (Tx/Rx, EVM, BER)
-                        </SelectItem>
-                        <SelectItem value="Spectrum Monitoring and Interference Investigation">
-                          Spectrum Monitoring & Interference Investigation
-                        </SelectItem>
-                        <SelectItem value="RF Network and Signal Distribution Testing">
-                          RF Network & Signal Distribution Testing (Cables, Couplers)
-                        </SelectItem>
-                        <SelectItem value="EMI/EMC Pre-Compliance Investigation">
-                          EMI/EMC Pre-Compliance Investigation (Near-field, LISN)
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Frequency Range Select */}
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1.5">
-                      Frequency Range / Band of Interest
-                    </label>
-                    <Select value={frequencyRange} onValueChange={setFrequencyRange}>
-                      <SelectTrigger className="w-full h-10 text-xs sm:text-sm">
-                        <SelectValue placeholder="Select target frequency range" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="9 kHz to 3 GHz (General RF, VHF/UHF, EMC)">
-                          9 kHz to 3 GHz (General RF, VHF/UHF, EMC)
-                        </SelectItem>
-                        <SelectItem value="Sub-6 GHz (5G NR FR1, WiFi 6E/7, Cellular)">
-                          Sub-6 GHz (5G NR FR1, WiFi 6E/7, Cellular)
-                        </SelectItem>
-                        <SelectItem value="6 GHz to 26.5 GHz (Satellite, Radar, X/Ku-Band)">
-                          6 GHz to 26.5 GHz (Satellite, Radar, X/Ku-Band)
-                        </SelectItem>
-                        <SelectItem value="26.5 GHz to 67+ GHz (mmWave, 5G FR2, Ka-Band)">
-                          26.5 GHz to 67+ GHz (mmWave, 5G FR2, Ka-Band)
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Equipment Categories (Multi-select Chips) */}
-                  <div>
-                    <div className="flex items-center justify-between mb-1.5">
-                      <label className="block text-xs font-semibold text-gray-700">
-                        Equipment Categories Needed
-                      </label>
-                      <span className="text-[10px] text-gray-400">Select applicable items</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-1.5">
-                      {[
-                        "Spectrum Analysers",
-                        "Vector Network Analysers (VNAs)",
-                        "RF Signal Generators",
-                        "RF Power Meters & Sensors",
-                        "Antenna Test Equipment",
-                        "Wireless Testers (5G/WiFi)",
-                        "Signal & Modulation Analysers",
-                        "RF Cables & Connectors",
-                      ].map((cat) => {
-                        const isSelected = selectedCategories.includes(cat);
-                        return (
-                          <button
-                            key={cat}
-                            type="button"
-                            onClick={() => toggleCategory(cat)}
-                            className={`py-2 px-2.5 rounded-xl text-[11px] font-medium text-left border transition-all cursor-pointer truncate ${
-                              isSelected
-                                ? "bg-red-50 border-red-500 text-red-700 font-semibold shadow-2xs"
-                                : "bg-gray-50/60 border-gray-200 text-gray-600 hover:bg-gray-100/70"
-                            }`}
-                          >
-                            <span className="mr-1">{isSelected ? "✓" : "+"}</span>
-                            {cat}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Technical Specifications / Target Instruments */}
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1.5">
-                      Technical Specifications / Target Instruments
-                    </label>
-                    <textarea
-                      rows={2}
-                      value={specifications}
-                      onChange={(e) => setSpecifications(e.target.value)}
-                      placeholder="e.g. 2-port 20 GHz VNA, Keysight/Rohde & Schwarz preference, phase noise < -120 dBc/Hz, N-type phase-stable cables..."
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50/70 border border-gray-200 text-xs sm:text-sm text-gray-900 placeholder-gray-400 focus:bg-white focus:border-red-500 focus:ring-2 focus:ring-red-100 transition-all outline-none resize-none"
-                    />
-                  </div>
-
-                  {/* Optional File Upload */}
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1.5">
-                      Attach Spec Sheet / Lab BOM <span className="text-gray-400 font-normal">(Optional)</span>
-                    </label>
-                    {file ? (
-                      <div className="flex items-center justify-between p-2.5 rounded-xl bg-red-50/60 border border-red-200 text-xs">
-                        <div className="flex items-center gap-2 truncate">
-                          <Paperclip className="w-3.5 h-3.5 text-red-600 shrink-0" />
-                          <span className="font-semibold text-gray-900 truncate">{file.name}</span>
-                          <span className="text-gray-500 text-[11px]">
-                            ({(file.size / (1024 * 1024)).toFixed(2)} MB)
-                          </span>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={removeFile}
-                          className="p-1 hover:bg-red-100 text-red-600 rounded-lg transition-colors cursor-pointer"
-                        >
-                          <X className="w-4 h-4" />
-                        </button>
-                      </div>
-                    ) : (
-                      <div
-                        onClick={() => fileInputRef.current?.click()}
-                        className="w-full border-2 border-dashed border-gray-200 hover:border-red-400 rounded-xl p-3 text-center cursor-pointer transition-all bg-gray-50/50 hover:bg-red-50/20 group"
-                      >
-                        <div className="flex items-center justify-center gap-2">
-                          <Upload className="w-4 h-4 text-gray-400 group-hover:text-red-500 transition-colors" />
-                          <span className="text-xs font-medium text-gray-600 group-hover:text-gray-900">
-                            Upload BOM, BOQ or RF Specs (XLSX, CSV, PDF up to 25MB)
-                          </span>
-                        </div>
-                      </div>
-                    )}
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      onChange={handleFileChange}
-                      accept=".xlsx,.xls,.csv,.pdf,.doc,.docx"
-                      className="hidden"
-                    />
-                  </div>
-
-                  {/* Submit Button */}
-                  <div className="pt-2">
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full py-3.5 px-6 rounded-full bg-[#111315] hover:bg-black text-white text-sm font-bold shadow-md hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                          <span>Transmitting Specifications...</span>
-                        </>
-                      ) : (
-                        <>
-                          <NexChipIcon className="w-7 h-7" />
-                          <span>Discuss Your RF Requirements</span>
-                        </>
-                      )}
-                    </button>
-                    <p className="text-[11px] text-center text-gray-400 mt-2">
-                      🔒 Strictly confidential. Non-disclosure protection for proprietary RF designs & laboratory setups.
-                    </p>
-                  </div>
-                </form>
-              </div>
-            </div>
-
-          </div>
         </div>
       </section>
 
@@ -777,12 +341,12 @@ export default function TelecomRfPage() {
           ========================================================================= */}
       <section 
         id="product-categories" 
-        className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white border-b border-gray-100"
+        className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 xl:px-12 bg-white border-b border-gray-100"
       >
-        <div className="w-full max-w-[102rem] mx-auto">
+        <div className="w-full max-w-[100rem] mx-auto">
           
           {/* Section Header */}
-          <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+          <div className="text-center max-w-4xl mx-auto flex flex-col items-center mb-12 sm:mb-16">
             <NexBadge label="Instrumentation Portfolio" />
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0d0f11] tracking-tight mt-4 mb-3">
               Equipment for Telecom & RF Test Engineering
@@ -848,14 +412,10 @@ export default function TelecomRfPage() {
 
           {/* Section CTA Button */}
           <div className="text-center">
-            <button
-              type="button"
-              onClick={() => scrollToForm()}
-              className="group nex-button-swap inline-flex items-center justify-center rounded-full bg-[#111315] hover:bg-black text-white text-sm sm:text-base font-semibold shadow-md hover:shadow-xl transition-all cursor-pointer h-12 px-8"
-            >
+            <Link to="/quote?industry=telecom-rf" className="group nex-button-swap inline-flex items-center justify-center rounded-full bg-[#111315] hover:bg-black text-white text-sm sm:text-base font-semibold shadow-md hover:shadow-xl transition-all cursor-pointer h-12 px-8 px-6">
               <NexChipIcon className="w-8 h-8" />
               <span>Enquire About RF Test Equipment</span>
-            </button>
+            </Link>
           </div>
         </div>
       </section>
@@ -863,9 +423,9 @@ export default function TelecomRfPage() {
       {/* =========================================================================
           SECTION 3: APPLICATIONS (6 CORE WORKFLOWS)
           ========================================================================= */}
-      <section className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-[#fbfcfd] border-b border-gray-100">
-        <div className="w-full max-w-[102rem] mx-auto">
-          <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+      <section className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 xl:px-12 bg-[#fbfcfd] border-b border-gray-100">
+        <div className="w-full max-w-[100rem] mx-auto">
+          <div className="text-center max-w-4xl mx-auto flex flex-col items-center mb-12 sm:mb-16">
             <NexBadge label="Verification Workflows" />
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0d0f11] tracking-tight mt-4 mb-3">
               Applications Across Telecom & RF Engineering
@@ -924,9 +484,9 @@ export default function TelecomRfPage() {
       {/* =========================================================================
           SECTION 4: WHY CHOOSE eFOCUS INDUSTRIAL?
           ========================================================================= */}
-      <section className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white border-b border-gray-100">
-        <div className="w-full max-w-[102rem] mx-auto">
-          <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+      <section className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 xl:px-12 bg-white border-b border-gray-100">
+        <div className="w-full max-w-[100rem] mx-auto">
+          <div className="text-center max-w-4xl mx-auto flex flex-col items-center mb-12 sm:mb-16">
             <NexBadge label="Why Choose Us" />
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0d0f11] tracking-tight mt-4 mb-3">
               Why Choose eFocus Industrial?
@@ -977,7 +537,7 @@ export default function TelecomRfPage() {
               </div>
               <button
                 type="button"
-                onClick={() => scrollToForm()}
+                onClick={() => window.location.href='/quote?industry=telecom-rf'}
                 className="mt-6 w-full py-3 rounded-full bg-red-600 hover:bg-red-700 text-white text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
               >
                 <span>Discuss Your Application</span>
@@ -991,8 +551,8 @@ export default function TelecomRfPage() {
       {/* =========================================================================
           SECTION 5: FREQUENTLY ASKED QUESTIONS
           ========================================================================= */}
-      <section className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-[#fbfcfd] border-b border-gray-100">
-        <div className="w-full max-w-4xl mx-auto">
+      <section className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 xl:px-12 bg-[#fbfcfd] border-b border-gray-100">
+        <div className="w-full max-w-[100rem] mx-auto">
           <div className="text-center mb-12 sm:mb-16">
             <NexBadge label="Questions & Answers" />
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0d0f11] tracking-tight mt-4 mb-3">
@@ -1038,8 +598,8 @@ export default function TelecomRfPage() {
       {/* =========================================================================
           SECTION 6: FINAL CTA BANNER
           ========================================================================= */}
-      <section className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="w-full max-w-[102rem] mx-auto">
+      <section className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 xl:px-12 bg-white">
+        <div className="w-full max-w-[100rem] mx-auto">
           <div className="relative rounded-3xl bg-gradient-to-br from-[#0d0f11] via-[#111315] to-[#1c1f24] p-8 sm:p-14 border border-gray-800 text-white overflow-hidden shadow-2xl">
             {/* Ambient Red Glow */}
             <div className="absolute top-0 right-0 w-96 h-96 bg-red-600/20 rounded-full blur-3xl pointer-events-none" />
@@ -1059,18 +619,14 @@ export default function TelecomRfPage() {
               </p>
 
               <div className="flex flex-wrap items-center gap-4">
-                <button
-                  type="button"
-                  onClick={() => scrollToForm()}
-                  className="group nex-button-swap inline-flex items-center justify-center rounded-full bg-red-600 hover:bg-red-700 text-white text-sm sm:text-base font-semibold shadow-lg hover:shadow-red-600/30 transition-all cursor-pointer h-12 px-8"
-                >
+                <Link to="/quote?industry=telecom-rf" className="group nex-button-swap inline-flex items-center justify-center rounded-full bg-red-600 hover:bg-red-700 text-white text-sm sm:text-base font-semibold shadow-lg hover:shadow-red-600/30 transition-all cursor-pointer h-12 px-8 px-6">
                   <NexChipIcon className="w-8 h-8" />
                   <span>Submit Your RF Requirements</span>
-                </button>
+                </Link>
 
                 <button
                   type="button"
-                  onClick={() => scrollToForm()}
+                  onClick={() => window.location.href='/quote?industry=telecom-rf'}
                   className="inline-flex items-center gap-2 px-6 h-12 rounded-full bg-white/10 hover:bg-white/15 text-white text-sm sm:text-base font-medium border border-white/20 transition-all cursor-pointer"
                 >
                   <span>Discuss Your Application</span>
@@ -1093,18 +649,11 @@ export default function TelecomRfPage() {
                 </span>
               </div>
             </div>
+
           </div>
         </div>
       </section>
 
-      {/* Submission Success Modal */}
-      <SuccessModal
-        isOpen={isSuccessOpen}
-        onClose={() => setIsSuccessOpen(false)}
-        title="Telecom & RF Sourcing Enquiry Received!"
-        message={`Thank you for your enquiry. Your requirement has been logged in our system. Our technical RF team will review your specifications and contact you at ${submitterEmail} within 24 to 48 hours.`}
-        submitterEmail={submitterEmail}
-      />
     </div>
   );
 }

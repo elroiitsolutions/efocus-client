@@ -1,12 +1,11 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { NexChipIcon, NexBadge } from "@/components/ui/NexIcons";
-import CountUp from "@/components/ui/CountUp";
 import { 
-  CheckCircle2, 
   ArrowRight, 
+  CheckCircle2,
+  Clock,
   ShieldCheck, 
-  Clock, 
   ChevronDown, 
   Plane, 
   Radio, 
@@ -16,24 +15,12 @@ import {
   Boxes, 
   Cable, 
   Sparkles, 
-  Upload, 
-  Paperclip, 
-  X, 
   Compass, 
   Layers, 
   Cpu,
   Wrench,
   HelpCircle
 } from "lucide-react";
-import { FormSubmissionService } from "@/services/formSubmission.service";
-import SuccessModal from "@/components/ui/SuccessModal";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 export default function AerospaceDefencePage() {
   // Page SEO / Metadata Title & Description
@@ -74,108 +61,18 @@ export default function AerospaceDefencePage() {
     }
   }, []);
 
-  // Form State
-  const [fullName, setFullName] = useState("");
-  const [companyName, setCompanyName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [applicationFocus, setApplicationFocus] = useState("RF & Microwave Characterisation");
-  const [frequencyRange, setFrequencyRange] = useState("6 GHz to 26.5 GHz (X-Band & Ku-Band Radar)");
-  const [equipmentRequirements, setEquipmentRequirements] = useState("");
-  const [file, setFile] = useState<File | null>(null);
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
-  const [submitterEmail, setSubmitterEmail] = useState("");
-
   // FAQ Accordion Active State
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
   // Stats ribbon animation trigger
-  const [statsVisible, setStatsVisible] = useState(false);
-  const statsRef = useRef<HTMLDivElement>(null);
+  
+    
 
-  const formRef = useRef<HTMLDivElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setStatsVisible(true);
-        }
-      },
-      { threshold: 0.15 }
-    );
-
-    if (statsRef.current) {
-      observer.observe(statsRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
-  const scrollToForm = () => {
-    formRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-    const firstInput = formRef.current?.querySelector("input");
-    firstInput?.focus();
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0]);
-    }
-  };
-
-  const removeFile = () => {
-    setFile(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!fullName.trim() || !companyName.trim() || !email.trim() || !equipmentRequirements.trim()) {
-      alert("Please fill in all required fields (Full Name, Company Name, Business Email, and Equipment Requirements).");
-      return;
-    }
-
-    setIsSubmitting(true);
-    try {
-      await FormSubmissionService.submitForm({
-        form_name: "Aerospace & Defence Test Equipment Enquiry",
-        form_type: "aerospace_defence_sourcing",
-        name: fullName.trim(),
-        company_name: companyName.trim(),
-        email: email.trim(),
-        phone: phone.trim() || undefined,
-        application_focus: applicationFocus,
-        frequency_range: frequencyRange,
-        message: `Application Focus: ${applicationFocus}\nFrequency/Interface Range: ${frequencyRange}\n\nEquipment Requirements & Specs:\n${equipmentRequirements.trim()}`,
-        file: file,
-      });
-
-      setSubmitterEmail(email.trim());
-      setIsSuccessOpen(true);
-      // Reset form
-      setFullName("");
-      setCompanyName("");
-      setEmail("");
-      setPhone("");
-      setApplicationFocus("RF & Microwave Characterisation");
-      setFrequencyRange("6 GHz to 26.5 GHz (X-Band & Ku-Band Radar)");
-      setEquipmentRequirements("");
-      removeFile();
-    } catch (err: any) {
-      console.error("Aerospace & Defence submission failed:", err);
-      alert(err.message || "Failed to submit enquiry. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
+  
+  
+  
+  
   // Section 2: 6 Specialised Product Categories
   const productCategories = [
     {
@@ -355,14 +252,16 @@ export default function AerospaceDefencePage() {
     },
   ];
 
-  const focusOptions = [
-    "RF & Microwave Characterisation",
-    "Avionics (1553 / 429)",
-    "Electronic Signal Analysis",
-    "Power Subsystem Validation",
-    "Test Bench / ATE Integration",
-    "Maintenance & Depot MRO",
-  ];
+  
+  const scrollToCategories = () => {
+    const el = document.getElementById("product-categories") || document.getElementById("product-categories") || document.getElementById("categories");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+      if (typeof window !== "undefined" && (window as any).__lenis) {
+        (window as any).__lenis.scrollTo(el);
+      }
+    }
+  };
 
   return (
     <div className="w-full flex flex-col items-center bg-[#fbfcfd] overflow-x-hidden selection:bg-red-500 selection:text-white">
@@ -372,17 +271,17 @@ export default function AerospaceDefencePage() {
           ========================================================================= */}
       <section 
         id="aerospace-hero"
-        className="w-full relative pt-6 sm:pt-10 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-8 border-b border-gray-100 overflow-hidden"
+        className="w-full relative pt-6 sm:pt-10 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-8 xl:px-12 border-b border-gray-100 overflow-hidden"
       >
         {/* Soft Ambient Radial Backgrounds */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[650px] bg-[radial-gradient(ellipse_75%_50%_at_50%_0%,rgba(175,2,2,0.07),transparent_70%)] pointer-events-none animate-pulse duration-[6000ms]" />
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-red-100/30 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute top-1/2 -left-32 w-80 h-80 bg-rose-100/20 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="w-full max-w-[102rem] mx-auto relative z-10">
+        <div className="w-full max-w-[100rem] mx-auto relative z-10 flex flex-col items-center text-center">
           
           {/* Breadcrumb Navigation */}
-          <div className="flex items-center gap-2 text-xs font-medium text-gray-500 mb-6">
+          <div className="flex items-center justify-center gap-2 text-xs font-medium text-gray-500 mb-6">
             <Link to="/" className="hover:text-black transition-colors">Home</Link>
             <span>/</span>
             <span className="text-gray-400">Industries</span>
@@ -390,10 +289,7 @@ export default function AerospaceDefencePage() {
             <span className="text-red-600 font-semibold">Aerospace & Defence</span>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 xl:gap-12 items-start">
-            
-            {/* Left Column: Heading, Value Prop, Auto-Increment Stats */}
-            <div className="lg:col-span-7 flex flex-col items-start pt-2">
+          <div className="max-w-5xl mx-auto flex flex-col items-center text-center">
               
               {/* Eyebrow Pill with Pulsing Live Dot */}
               <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-red-50/90 border border-red-200/80 text-red-700 text-xs sm:text-[13px] font-semibold tracking-wide mb-6 shadow-2xs hover:scale-[1.02] transition-transform">
@@ -405,7 +301,7 @@ export default function AerospaceDefencePage() {
               </div>
 
               {/* Main Heading */}
-              <h1 className="text-3xl sm:text-4xl md:text-5xl xl:text-[54px] font-extrabold text-[#0d0f11] tracking-tight leading-[1.12] mb-5">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl xl:text-[54px] font-extrabold text-[#0d0f11] tracking-tight leading-[1.12] mb-5 text-center">
                 Precision Test Equipment for{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#AF0202] via-[#c8102e] to-black">
                   Aerospace & Defence Engineering
@@ -413,302 +309,28 @@ export default function AerospaceDefencePage() {
               </h1>
 
               {/* Subtitle & Value Proposition */}
-              <p className="text-base sm:text-lg md:text-xl text-gray-600 font-normal leading-relaxed max-w-2xl mb-4">
+              <p className="text-base sm:text-lg md:text-xl text-gray-600 font-normal leading-relaxed max-w-4xl mx-auto mb-4 text-center">
                 From RF signal analysis to avionics communication testing, aerospace and defence engineering requires instruments suited to specific signals, interfaces, and verification objectives.
               </p>
 
-              <p className="text-sm sm:text-base text-gray-600 leading-relaxed max-w-2xl mb-8">
+              <p className="text-sm sm:text-base text-gray-600 leading-relaxed max-w-4xl mx-auto mb-8 text-center">
                 eFocus helps engineering teams source test and measurement instruments, specialised interface hardware, and accessories for electronic development, system validation, and maintenance applications.
               </p>
 
               {/* Primary Action Buttons */}
-              <div className="flex flex-wrap items-center gap-4 mb-10">
-                <button
-                  type="button"
-                  onClick={scrollToForm}
-                  className="group nex-button-swap inline-flex items-center justify-center rounded-full bg-[#111315] hover:bg-black text-white text-sm sm:text-base font-semibold shadow-md hover:shadow-xl transition-all cursor-pointer h-12"
-                >
+              <div className="flex flex-wrap items-center justify-center gap-4 mb-10">
+                <Link to="/quote?industry=aerospace-defence" className="group nex-button-swap inline-flex items-center justify-center rounded-full bg-[#111315] hover:bg-black text-white text-sm sm:text-base font-semibold shadow-md hover:shadow-xl transition-all cursor-pointer h-12 px-6">
                   <NexChipIcon className="w-8 h-8" />
                   <span>Discuss Your Application</span>
-                </button>
+                </Link>
 
-                <a
-                  href="#product-categories"
-                  className="inline-flex items-center gap-2 px-6 h-12 rounded-full bg-white hover:bg-gray-50 text-gray-800 text-sm sm:text-base font-medium border border-gray-200 transition-all hover:scale-[1.02] shadow-2xs"
-                >
+                <button type="button" onClick={scrollToCategories} className="inline-flex items-center gap-2 px-6 h-12 rounded-full bg-white hover:bg-gray-50 text-gray-800 text-sm sm:text-base font-medium border border-gray-200 transition-all hover:scale-[1.02] shadow-2xs cursor-pointer group">
                   <span>Explore Product Categories</span>
                   <ArrowRight className="w-4 h-4 text-gray-400 group-hover:translate-x-1 transition-transform" />
-                </a>
+                </button>
               </div>
 
-              {/* Verified Performance Stats Ribbon with Auto-Increment Animation */}
-              <div 
-                ref={statsRef}
-                className="w-full grid grid-cols-3 gap-3 sm:gap-6 pt-6 border-t border-gray-200/80"
-              >
-                {/* Stat 1: 67 GHz Frequency Bandwidth */}
-                <div className="p-3.5 sm:p-5 rounded-2xl bg-white/90 border border-gray-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-md hover:border-red-200 transition-all duration-300 group">
-                  <div className="flex items-center gap-1.5 sm:gap-2 text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#AF0202] tracking-tight">
-                    {statsVisible ? (
-                      <CountUp value={67} suffix=" GHz" duration={1600} />
-                    ) : (
-                      <span>67 GHz</span>
-                    )}
-                  </div>
-                  <div className="text-xs sm:text-sm font-semibold text-gray-900 mt-1 flex items-center gap-1.5">
-                    <span>RF Bandwidth</span>
-                    <Radio className="w-4 h-4 sm:w-5 sm:h-5 text-red-500 hidden sm:inline group-hover:scale-110 transition-transform duration-300" />
-                  </div>
-                  <p className="text-[11px] sm:text-xs text-gray-500 mt-0.5">
-                    Microwave & radar signals
-                  </p>
-                </div>
-
-                {/* Stat 2: MIL-STD Protocols */}
-                <div className="p-3.5 sm:p-5 rounded-2xl bg-white/90 border border-gray-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-md hover:border-red-200 transition-all duration-300 group">
-                  <div className="flex items-center gap-1.5 sm:gap-2 text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#AF0202] tracking-tight">
-                    <span>MIL-STD</span>
-                  </div>
-                  <div className="text-xs sm:text-sm font-semibold text-gray-900 mt-1 flex items-center gap-1.5">
-                    <span>1553 & 429 Bus</span>
-                    <Network className="w-4 h-4 sm:w-5 sm:h-5 text-red-500 hidden sm:inline group-hover:scale-110 transition-transform duration-300" />
-                  </div>
-                  <p className="text-[11px] sm:text-xs text-gray-500 mt-0.5">
-                    Avionics interface support
-                  </p>
-                </div>
-
-                {/* Stat 3: 24-48h Response */}
-                <div className="p-3.5 sm:p-5 rounded-2xl bg-white/90 border border-gray-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-md hover:border-red-200 transition-all duration-300 group">
-                  <div className="flex items-center gap-1.5 sm:gap-2 text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#AF0202] tracking-tight">
-                    {statsVisible ? (
-                      <CountUp value={24} suffix="–48h" duration={1400} />
-                    ) : (
-                      <span>24–48h</span>
-                    )}
-                  </div>
-                  <div className="text-xs sm:text-sm font-semibold text-gray-900 mt-1 flex items-center gap-1.5">
-                    <span>Fast Turnaround</span>
-                    <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-red-500 hidden sm:inline group-hover:scale-110 transition-transform duration-300" />
-                  </div>
-                  <p className="text-[11px] sm:text-xs text-gray-500 mt-0.5">
-                    Technical RFQ matching
-                  </p>
-                </div>
               </div>
-
-            </div>
-
-            {/* Right Column: Hero Technical Sourcing Form */}
-            <div ref={formRef} className="lg:col-span-5 w-full">
-              <div className="bg-white rounded-3xl border border-gray-200/90 shadow-xl p-6 sm:p-8 relative overflow-hidden backdrop-blur-xs">
-                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-red-600 via-rose-500 to-red-700" />
-
-                <div className="mb-6">
-                  <div className="flex items-center gap-2 text-xs font-semibold text-red-600 uppercase tracking-wider mb-1.5">
-                    <Sparkles className="w-3.5 h-3.5" />
-                    <span>Technical Sourcing Desk</span>
-                  </div>
-                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
-                    Discuss Your Application
-                  </h2>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Share your frequency range, avionics bus standard, or test specs for a tailored technical proposal.
-                  </p>
-                </div>
-
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  {/* Full Name & Company Name */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                    <div>
-                      <label className="block text-xs font-semibold text-gray-700 mb-1.5">
-                        Full Name <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={fullName}
-                        onChange={(e) => setFullName(e.target.value)}
-                        placeholder="e.g. Dr. Rajesh Verma"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50/70 border border-gray-200 text-xs sm:text-sm text-gray-900 placeholder-gray-400 focus:bg-white focus:border-red-500 focus:ring-2 focus:ring-red-100 transition-all outline-none"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-gray-700 mb-1.5">
-                        Company / Lab Name <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={companyName}
-                        onChange={(e) => setCompanyName(e.target.value)}
-                        placeholder="e.g. AeroSys Dynamics / R&D"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50/70 border border-gray-200 text-xs sm:text-sm text-gray-900 placeholder-gray-400 focus:bg-white focus:border-red-500 focus:ring-2 focus:ring-red-100 transition-all outline-none"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Business Email & Phone Number */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                    <div>
-                      <label className="block text-xs font-semibold text-gray-700 mb-1.5">
-                        Business Email <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="email"
-                        required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="verma@aerosys.in"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50/70 border border-gray-200 text-xs sm:text-sm text-gray-900 placeholder-gray-400 focus:bg-white focus:border-red-500 focus:ring-2 focus:ring-red-100 transition-all outline-none"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-gray-700 mb-1.5">
-                        Phone Number
-                      </label>
-                      <input
-                        type="tel"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        placeholder="+91 98765 43210"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50/70 border border-gray-200 text-xs sm:text-sm text-gray-900 placeholder-gray-400 focus:bg-white focus:border-red-500 focus:ring-2 focus:ring-red-100 transition-all outline-none"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Primary Application Focus (Interactive Chips) */}
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1.5">
-                      Primary Application Focus <span className="text-red-500">*</span>
-                    </label>
-                    <div className="grid grid-cols-2 gap-1.5">
-                      {focusOptions.map((opt) => {
-                        const isSelected = applicationFocus === opt;
-                        return (
-                          <button
-                            key={opt}
-                            type="button"
-                            onClick={() => setApplicationFocus(opt)}
-                            className={`py-2 px-2.5 rounded-xl text-[11px] font-medium text-left border transition-all cursor-pointer truncate ${
-                              isSelected
-                                ? "bg-red-50 border-red-500 text-red-700 font-semibold shadow-2xs"
-                                : "bg-gray-50/60 border-gray-200 text-gray-600 hover:bg-gray-100/70"
-                            }`}
-                          >
-                            <span className="mr-1">{isSelected ? "●" : "○"}</span>
-                            {opt}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Frequency & Interface Standard (Shadcn Select) */}
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1.5">
-                      Frequency & Interface Standard
-                    </label>
-                    <Select value={frequencyRange} onValueChange={setFrequencyRange}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select frequency & interface standard" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="DC to 6 GHz (General Avionics & VHF/UHF Comms)">DC to 6 GHz (General Avionics & VHF/UHF Comms)</SelectItem>
-                        <SelectItem value="6 GHz to 26.5 GHz (X-Band & Ku-Band Radar)">6 GHz to 26.5 GHz (X-Band & Ku-Band Radar)</SelectItem>
-                        <SelectItem value="26.5 GHz to 67+ GHz (Ka-Band & mmWave EW/Satcom)">26.5 GHz to 67+ GHz (Ka-Band & mmWave EW/Satcom)</SelectItem>
-                        <SelectItem value="MIL-STD-1553 & ARINC 429 Bus Interface">MIL-STD-1553 & ARINC 429 Bus Interface</SelectItem>
-                        <SelectItem value="400 Hz Aircraft AC / 28V DC Avionics Power">400 Hz Aircraft AC / 28V DC Avionics Power</SelectItem>
-                        <SelectItem value="Modular PXIe / LXI Automated Test Integration">Modular PXIe / LXI Automated Test Integration</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Equipment Requirements / Specs * */}
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1.5">
-                      Equipment Requirements / Signal Specs <span className="text-red-500">*</span>
-                    </label>
-                    <textarea
-                      required
-                      rows={2}
-                      value={equipmentRequirements}
-                      onChange={(e) => setEquipmentRequirements(e.target.value)}
-                      placeholder="Specify required bandwidth, instrument type, avionics standard, channel count, or target make/model..."
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50/70 border border-gray-200 text-xs sm:text-sm text-gray-900 placeholder-gray-400 focus:bg-white focus:border-red-500 focus:ring-2 focus:ring-red-100 transition-all outline-none resize-none"
-                    />
-                  </div>
-
-                  {/* Optional File Upload */}
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1.5">
-                      Attach Spec Sheet / BOM / BOQ <span className="text-gray-400 font-normal">(Optional)</span>
-                    </label>
-                    {file ? (
-                      <div className="flex items-center justify-between p-2.5 rounded-xl bg-red-50/60 border border-red-200 text-xs">
-                        <div className="flex items-center gap-2 truncate">
-                          <Paperclip className="w-4 h-4 text-red-600 shrink-0" />
-                          <span className="font-medium text-gray-800 truncate">{file.name}</span>
-                          <span className="text-gray-400 shrink-0">({(file.size / 1024).toFixed(0)} KB)</span>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={removeFile}
-                          className="p-1 hover:bg-red-100 rounded-md text-red-600 transition-colors cursor-pointer"
-                        >
-                          <X className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    ) : (
-                      <div
-                        onClick={() => fileInputRef.current?.click()}
-                        className="border border-dashed border-gray-300 hover:border-red-400 bg-gray-50/50 hover:bg-red-50/30 rounded-xl p-2.5 text-center cursor-pointer transition-all"
-                      >
-                        <input
-                          ref={fileInputRef}
-                          type="file"
-                          onChange={handleFileChange}
-                          accept=".pdf,.xlsx,.xls,.csv,.doc,.docx"
-                          className="hidden"
-                        />
-                        <div className="flex items-center justify-center gap-2 text-xs text-gray-600">
-                          <Upload className="w-3.5 h-3.5 text-red-600" />
-                          <span className="font-medium text-gray-700">Click to upload specifications</span>
-                          <span className="text-[10px] text-gray-400">(PDF, Excel up to 10MB)</span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Submit Button */}
-                  <div className="pt-2">
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full py-3.5 px-6 rounded-full bg-[#111315] hover:bg-black text-white text-sm font-bold shadow-md hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                          <span>Transmitting Specifications...</span>
-                        </>
-                      ) : (
-                        <>
-                          <NexChipIcon className="w-7 h-7" />
-                          <span>Discuss Your Application</span>
-                        </>
-                      )}
-                    </button>
-                    <p className="text-[11px] text-center text-gray-400 mt-2">
-                      🔒 Strictly confidential. NDA protection for defence & proprietary protocols.
-                    </p>
-                  </div>
-
-                </form>
-              </div>
-            </div>
-
-          </div>
         </div>
       </section>
 
@@ -717,12 +339,12 @@ export default function AerospaceDefencePage() {
           ========================================================================= */}
       <section 
         id="product-categories" 
-        className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white border-b border-gray-100"
+        className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 xl:px-12 bg-white border-b border-gray-100"
       >
-        <div className="w-full max-w-[102rem] mx-auto">
+        <div className="w-full max-w-[100rem] mx-auto">
           
           {/* Section Header */}
-          <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+          <div className="text-center max-w-4xl mx-auto flex flex-col items-center mb-12 sm:mb-16">
             <NexBadge label="Instrumentation Portfolio" />
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0d0f11] tracking-tight mt-4 mb-3">
               Aerospace & Defence – Product Categories
@@ -791,14 +413,10 @@ export default function AerospaceDefencePage() {
 
           {/* Section CTA Button */}
           <div className="text-center">
-            <button
-              type="button"
-              onClick={scrollToForm}
-              className="group nex-button-swap inline-flex items-center justify-center rounded-full bg-[#111315] hover:bg-black text-white text-sm sm:text-base font-semibold shadow-md hover:shadow-xl transition-all cursor-pointer h-12 px-6"
-            >
+            <Link to="/quote?industry=aerospace-defence" className="group nex-button-swap inline-flex items-center justify-center rounded-full bg-[#111315] hover:bg-black text-white text-sm sm:text-base font-semibold shadow-md hover:shadow-xl transition-all cursor-pointer h-12 px-6 px-6">
               <NexChipIcon className="w-8 h-8" />
               <span>Find Equipment for Your Application</span>
-            </button>
+            </Link>
           </div>
         </div>
       </section>
@@ -806,9 +424,9 @@ export default function AerospaceDefencePage() {
       {/* =========================================================================
           SECTION 3: APPLICATIONS ACROSS WORKFLOWS
           ========================================================================= */}
-      <section className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-[#fbfcfd] border-b border-gray-100">
-        <div className="w-full max-w-[102rem] mx-auto">
-          <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+      <section className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 xl:px-12 bg-[#fbfcfd] border-b border-gray-100">
+        <div className="w-full max-w-[100rem] mx-auto">
+          <div className="text-center max-w-4xl mx-auto flex flex-col items-center mb-12 sm:mb-16">
             <NexBadge label="Verification Workflows" />
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0d0f11] tracking-tight mt-4 mb-3">
               Equipment Requirements Across Aerospace & Defence Workflows
@@ -866,9 +484,9 @@ export default function AerospaceDefencePage() {
       {/* =========================================================================
           SECTION 4: WHY CHOOSE eFOCUS INDUSTRIAL?
           ========================================================================= */}
-      <section className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white border-b border-gray-100">
-        <div className="w-full max-w-[102rem] mx-auto">
-          <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+      <section className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 xl:px-12 bg-white border-b border-gray-100">
+        <div className="w-full max-w-[100rem] mx-auto">
+          <div className="text-center max-w-4xl mx-auto flex flex-col items-center mb-12 sm:mb-16">
             <NexBadge label="Why Choose Us" />
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0d0f11] tracking-tight mt-4 mb-3">
               Equipment Selection Starts with the Test Requirement
@@ -912,9 +530,9 @@ export default function AerospaceDefencePage() {
       {/* =========================================================================
           SECTION 5: FREQUENTLY ASKED QUESTIONS
           ========================================================================= */}
-      <section className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-[#fbfcfd] border-b border-gray-100">
-        <div className="w-full max-w-4xl mx-auto">
-          <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
+      <section className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 xl:px-12 bg-[#fbfcfd] border-b border-gray-100">
+        <div className="w-full max-w-[100rem] mx-auto">
+          <div className="text-center max-w-4xl mx-auto flex flex-col items-center mb-12 sm:mb-16">
             <NexBadge label="Common Inquiries" />
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0d0f11] tracking-tight mt-4 mb-3">
               Frequently Asked Questions
@@ -924,7 +542,7 @@ export default function AerospaceDefencePage() {
             </p>
           </div>
 
-          <div className="space-y-3.5">
+          <div className="max-w-5xl mx-auto space-y-3.5">
             {faqs.map((faq, idx) => {
               const isOpen = openFaqIndex === idx;
               return (
@@ -963,15 +581,15 @@ export default function AerospaceDefencePage() {
       {/* =========================================================================
           SECTION 6: FINAL CTA BANNER
           ========================================================================= */}
-      <section className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="w-full max-w-5xl mx-auto">
+      <section className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 xl:px-12 bg-white">
+        <div className="w-full max-w-[100rem] mx-auto">
           <div className="rounded-[36px] bg-gradient-to-br from-[#111315] via-[#1a1d21] to-black p-8 sm:p-12 lg:p-16 text-white text-center relative overflow-hidden shadow-2xl">
             
             {/* Background Ambient Aura */}
             <div className="absolute -top-24 -left-24 w-80 h-80 bg-red-600/20 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute -bottom-24 -right-24 w-80 h-80 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
 
-            <div className="relative z-10 max-w-2xl mx-auto">
+            <div className="relative z-10 max-w-4xl mx-auto">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs font-semibold text-gray-200 mb-6">
                 <Sparkles className="w-3.5 h-3.5 text-red-400" />
                 <span>Dedicated Aerospace & Defence Desk</span>
@@ -986,18 +604,14 @@ export default function AerospaceDefencePage() {
               </p>
 
               <div className="flex flex-wrap items-center justify-center gap-4">
-                <button
-                  type="button"
-                  onClick={scrollToForm}
-                  className="group nex-button-swap inline-flex items-center justify-center rounded-full bg-white hover:bg-gray-100 text-[#0d0f11] py-3.5 px-8 font-bold text-sm sm:text-base tracking-wide transition-all cursor-pointer shadow-xl hover:scale-105 active:scale-95"
-                >
+                <Link to="/quote?industry=aerospace-defence" className="group nex-button-swap inline-flex items-center justify-center rounded-full bg-white hover:bg-gray-100 text-[#0d0f11] py-3.5 px-8 font-bold text-sm sm:text-base tracking-wide transition-all cursor-pointer shadow-xl hover:scale-105 active:scale-95 px-6">
                   <NexChipIcon className="w-8 h-8" />
                   <span>Submit Your Requirements</span>
-                </button>
+                </Link>
 
                 <button
                   type="button"
-                  onClick={scrollToForm}
+                  onClick={() => window.location.href='/quote?industry=aerospace-defence'}
                   className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm sm:text-base font-semibold border border-white/20 transition-all hover:scale-105 cursor-pointer"
                 >
                   <Radio className="w-4 h-4 text-red-400" />
@@ -1025,14 +639,6 @@ export default function AerospaceDefencePage() {
         </div>
       </section>
 
-      {/* Success Modal */}
-      <SuccessModal
-        isOpen={isSuccessOpen}
-        onClose={() => setIsSuccessOpen(false)}
-        submitterEmail={submitterEmail}
-        title="Aerospace & Defence Sourcing Enquiry Submitted!"
-        message="Our aerospace test engineering desk has received your application specs. A dedicated application engineer will review your interface and frequency requirements and get back to you within 24–48 hours."
-      />
     </div>
   );
 }
